@@ -13,21 +13,11 @@ public class KeyHelper {
     }
 
     /**
-     * Returns players key with submodule and subkey <i>players.[UUID].[subkey]</i>
-     *
-     * @param subkey Subkey at the end of the key
+     * Returns players key with submodule and subkeys <i>players.[UUID].[subkey].[...?]...</i>
+     * @param subkeys Subkeys
      * @return String
      */
-    public String get(String subkey) {
-        return this.getPlayerKey() + "." + subkey;
-    }
-
-    /**
-     * Returns players key with submodule and subkeys <i>players.[UUID].[subkey].[another subkey]...</i>
-     * @param subkeys
-     * @return String
-     */
-    public String get(String[] subkeys) {
+    public String get(String... subkeys) {
         return this.getPlayerKey() + "." + String.join(".", subkeys);
     }
 
