@@ -28,14 +28,19 @@ public class SetHomeCommand implements CommandExecutor {
             return false;
         }
 
-        if (strings == null || strings.length > 1) {
-            commandSender.sendMessage("Correct usage of this command is /sethome <name>");
-            return false;
+        String homeName = "default";
+
+        if (strings != null) {
+            if (strings.length > 1) {
+                commandSender.sendMessage("Correct usage of this command is /sethome <name>");
+                return false;
+            }
+
+            homeName = strings.length < 1
+                    ? "default"
+                    : strings[0].toLowerCase();
         }
 
-        String homeName = strings.length < 1
-                ? "default"
-                : strings[0].toLowerCase();
 
         //TODO: Check whether home with this name is already being used
 
