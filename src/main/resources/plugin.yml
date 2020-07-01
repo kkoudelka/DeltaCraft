@@ -1,3 +1,10 @@
 name: DeltaCraft
 version: 1.0
 main: eu.quantumsociety.DeltaCraft.DeltaCraft
+commands:
+  home:
+    description: Bla bla bla
+    usage: /home
+  c:
+    description: Bla bla bla
+    usage: /c
