@@ -1,6 +1,8 @@
 package eu.quantumsociety.DeltaCraft.commands.home;
 
 import eu.quantumsociety.DeltaCraft.DataManager;
+import eu.quantumsociety.DeltaCraft.utils.KeyHelper;
+import eu.quantumsociety.DeltaCraft.utils.PluginSubmodule;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,26 +28,28 @@ public class SetHomeCommand implements CommandExecutor {
             return false;
         }
 
-        if (strings == null || strings.length > 0) {
+        if (strings == null || strings.length > 1) {
             commandSender.sendMessage("Correct usage of this command is /sethome <name>");
             return false;
         }
 
         String homeName = strings.length < 1
                 ? "default"
-                : strings[0];
+                : strings[0].toLowerCase();
+
+        //TODO: Check whether home with this name is already being used
 
         Player p = (Player) commandSender;
         Location l = p.getLocation();
 
-        String pKeyHome = "player." + p.getUniqueId().toString() + "." + homeName;
+        KeyHelper kh = new KeyHelper(p.getUniqueId(), PluginSubmodule.HOME);
 
-        String x = pKeyHome + ".x";
-        String y = pKeyHome + ".y";
-        String z = pKeyHome + ".z";
-        String pitch = pKeyHome + ".pitch";
-        String yaw = pKeyHome + ".yaw";
-        String world = pKeyHome + ".world";
+        String x = kh.get("x");
+        String y = kh.get("y");
+        String z = kh.get("z");
+        String pitch = kh.get("pitch");
+        String yaw = kh.get("yaw");
+        String world = kh.get("world");
 
 
         homeManager.getConfig().set(x, l.getX());
