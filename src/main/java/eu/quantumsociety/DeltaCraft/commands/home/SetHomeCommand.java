@@ -25,7 +25,7 @@ public class SetHomeCommand implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (!(commandSender instanceof Player)) {
             commandSender.sendMessage("Only players can use this command");
-            return false;
+            return true;
         }
 
         String homeName = "default";
@@ -33,7 +33,7 @@ public class SetHomeCommand implements CommandExecutor {
         if (strings != null) {
             if (strings.length > 1) {
                 commandSender.sendMessage("Correct usage of this command is /sethome <name>");
-                return false;
+                return true;
             }
 
             homeName = strings.length < 1
@@ -49,12 +49,12 @@ public class SetHomeCommand implements CommandExecutor {
 
         KeyHelper kh = new KeyHelper(p.getUniqueId(), PluginSubmodule.HOME);
 
-        String x = kh.get("x");
-        String y = kh.get("y");
-        String z = kh.get("z");
-        String pitch = kh.get("pitch");
-        String yaw = kh.get("yaw");
-        String world = kh.get("world");
+        String x = kh.get(homeName, "x");
+        String y = kh.get(homeName, "y");
+        String z = kh.get(homeName, "z");
+        String pitch = kh.get(homeName, "pitch");
+        String yaw = kh.get(homeName, "yaw");
+        String world = kh.get(homeName, "world");
 
 
         homeManager.getConfig().set(x, l.getX());
