@@ -1,5 +1,6 @@
-package eu.quantumsociety.DeltaCraft;
+package eu.quantumsociety.DeltaCraft.managers;
 
+import eu.quantumsociety.DeltaCraft.DeltaCraft;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -11,13 +12,13 @@ import java.util.logging.Level;
 
 import static org.bukkit.Bukkit.getLogger;
 
-public class DataManager {
+public class ConfigManager {
     private DeltaCraft plugin;
     private FileConfiguration dataConfig = null;
     private File configFile = null;
     private String fileName;
 
-    public DataManager(DeltaCraft plugin, String fileName) {
+    public ConfigManager(DeltaCraft plugin, String fileName) {
         this.plugin = plugin;
         this.fileName = fileName;
 

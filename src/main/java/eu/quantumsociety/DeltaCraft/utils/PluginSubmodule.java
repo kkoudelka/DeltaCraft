@@ -10,7 +10,7 @@ public enum PluginSubmodule {
     SPECTATE("spectate");
 
     private final String value;
-    private static final Map<String, PluginSubmodule> BY_ID = Maps.newHashMap();
+    private static final Map<String, PluginSubmodule> BY_NAME = Maps.newHashMap();
 
     PluginSubmodule(final String value) {
         this.value = value;
@@ -19,7 +19,7 @@ public enum PluginSubmodule {
 
     static {
         for (PluginSubmodule submodule : values()) {
-            BY_ID.put(submodule.value, submodule);
+            BY_NAME.put(submodule.value, submodule);
         }
     }
 }

@@ -1,24 +1,20 @@
 package eu.quantumsociety.DeltaCraft.commands.home;
 
-import eu.quantumsociety.DeltaCraft.DataManager;
+import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
 import eu.quantumsociety.DeltaCraft.utils.KeyHelper;
 import eu.quantumsociety.DeltaCraft.utils.PluginSubmodule;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
-import java.io.File;
 
 public class SetHomeCommand implements CommandExecutor {
 
-    private DataManager homeManager;
+    private ConfigManager configManager;
 
-    public SetHomeCommand(DataManager homeManager) {
-        this.homeManager = homeManager;
+    public SetHomeCommand(ConfigManager homeManager) {
+        this.configManager = homeManager;
     }
 
 
@@ -57,14 +53,14 @@ public class SetHomeCommand implements CommandExecutor {
         String world = kh.get(homeName, "world");
 
 
-        homeManager.getConfig().set(x, l.getX());
-        homeManager.getConfig().set(y, l.getY());
-        homeManager.getConfig().set(z, l.getZ());
-        homeManager.getConfig().set(pitch, l.getPitch());
-        homeManager.getConfig().set(yaw, l.getYaw());
-        homeManager.getConfig().set(world, l.getWorld().getName());
+        configManager.getConfig().set(x, l.getX());
+        configManager.getConfig().set(y, l.getY());
+        configManager.getConfig().set(z, l.getZ());
+        configManager.getConfig().set(pitch, l.getPitch());
+        configManager.getConfig().set(yaw, l.getYaw());
+        configManager.getConfig().set(world, l.getWorld().getName());
 
-        homeManager.saveConfig();
+        configManager.saveConfig();
 
         String output = "Home " + homeName + "has been saved successfully!";
         commandSender.sendMessage(output);

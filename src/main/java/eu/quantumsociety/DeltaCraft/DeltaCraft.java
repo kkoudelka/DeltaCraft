@@ -3,20 +3,21 @@ package eu.quantumsociety.DeltaCraft;
 import eu.quantumsociety.DeltaCraft.commands.home.HomeCommand;
 import eu.quantumsociety.DeltaCraft.commands.home.SetHomeCommand;
 import eu.quantumsociety.DeltaCraft.commands.spectate.SpectateCommand;
+import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
 
 public class DeltaCraft extends JavaPlugin {
-    public DataManager spectateManager;
-    public DataManager homeManager;
+    public ConfigManager spectateManager;
+    public ConfigManager homeManager;
 
     @Override
     public void onEnable() {
         final Logger logger = getLogger();
 
-        this.spectateManager = new DataManager(this, "spectate.yml");
-        this.homeManager = new DataManager(this, "home.yml");
+        this.spectateManager = new ConfigManager(this, "spectate.yml");
+        this.homeManager = new ConfigManager(this, "home.yml");
 
         // Commands
         this.getCommand("sethome").setExecutor(new SetHomeCommand(homeManager));

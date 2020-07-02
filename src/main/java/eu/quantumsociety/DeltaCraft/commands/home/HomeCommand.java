@@ -1,16 +1,16 @@
 package eu.quantumsociety.DeltaCraft.commands.home;
 
-import eu.quantumsociety.DeltaCraft.DataManager;
+import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class HomeCommand implements CommandExecutor {
-    private DataManager homeManager;
+    private ConfigManager configManager;
 
-    public HomeCommand(DataManager homeManager) {
-        this.homeManager = homeManager;
+    public HomeCommand(ConfigManager configManager) {
+        this.configManager = configManager;
     }
 
 

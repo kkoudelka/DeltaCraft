@@ -1,6 +1,6 @@
 package eu.quantumsociety.DeltaCraft.commands.spectate;
 
-import eu.quantumsociety.DeltaCraft.DataManager;
+import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
 import eu.quantumsociety.DeltaCraft.utils.KeyHelper;
 import eu.quantumsociety.DeltaCraft.utils.PluginSubmodule;
 import org.bukkit.ChatColor;
@@ -15,14 +15,13 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-import static org.bukkit.Bukkit.getLogger;
 import static org.bukkit.Bukkit.getWorld;
 
 public class SpectateCommand implements CommandExecutor {
-    final DataManager dataMgr;
+    final ConfigManager configManager;
 
-    public SpectateCommand(DataManager dataMgr) {
-        this.dataMgr = dataMgr;
+    public SpectateCommand(ConfigManager dataMgr) {
+        this.configManager = dataMgr;
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -34,7 +33,7 @@ public class SpectateCommand implements CommandExecutor {
         GameMode currentMode = p.getGameMode();
 
         boolean isSpec = currentMode == GameMode.SPECTATOR;
-        FileConfiguration config = dataMgr.getConfig();
+        FileConfiguration config = configManager.getConfig();
         if (isSpec) {
             return switchBack(p, config);
         }
@@ -60,7 +59,7 @@ public class SpectateCommand implements CommandExecutor {
         config.set(worldKey, l.getWorld().getName());
         config.set(modeKey, gm);
 
-        dataMgr.saveConfig();
+        configManager.saveConfig();
 
         return true;
     }
@@ -70,7 +69,7 @@ public class SpectateCommand implements CommandExecutor {
 
         config.set(keys.getPlayerKey(), null);
 
-        dataMgr.saveConfig();
+        configManager.saveConfig();
     }
 
     private Location getLocation(KeyHelper keys, FileConfiguration config) {
