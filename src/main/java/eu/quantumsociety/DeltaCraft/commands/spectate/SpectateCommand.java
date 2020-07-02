@@ -13,6 +13,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 import static org.bukkit.Bukkit.getLogger;
 import static org.bukkit.Bukkit.getWorld;
 
@@ -34,11 +36,10 @@ public class SpectateCommand implements CommandExecutor {
         boolean isSpec = currentMode == GameMode.SPECTATOR;
         FileConfiguration config = dataMgr.getConfig();
         if (isSpec) {
-            switchBack(p, config);
+            return switchBack(p, config);
         }
 
-
-        return false;
+        return switchToSpectate(p, config);
     }
 
     private boolean save(KeyHelper keys, Location l, GameMode gm, FileConfiguration config) {
@@ -62,6 +63,14 @@ public class SpectateCommand implements CommandExecutor {
         dataMgr.saveConfig();
 
         return true;
+    }
+
+    private void delete(UUID id, FileConfiguration config) {
+        KeyHelper keys = new KeyHelper(id, PluginSubmodule.SPECTATE);
+
+        config.set(keys.getPlayerKey(), null);
+
+        dataMgr.saveConfig();
     }
 
     private Location getLocation(KeyHelper keys, FileConfiguration config) {
@@ -108,9 +117,11 @@ public class SpectateCommand implements CommandExecutor {
     }
 
     private boolean switchBack(Player p, Location l, GameMode gm, FileConfiguration config) {
-        p.teleport(p);
+        p.teleport(l);
 
         p.setGameMode(gm);
+
+        delete(p.getUniqueId(), config);
 
         return true;
     }
@@ -127,6 +138,7 @@ public class SpectateCommand implements CommandExecutor {
         }
 
         p.setGameMode(GameMode.SPECTATOR);
+
         return true;
     }
 }

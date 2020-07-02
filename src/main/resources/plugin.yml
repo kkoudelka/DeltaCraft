@@ -2,6 +2,9 @@ name: DeltaCraft
 version: 1.0
 main: eu.quantumsociety.DeltaCraft.DeltaCraft
 commands:
+  sethome:
+    description: Bla bla bla
+    usage: /sethome
   home:
     description: Bla bla bla
     usage: /home
