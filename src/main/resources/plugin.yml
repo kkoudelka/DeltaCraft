@@ -11,3 +11,17 @@ commands:
   c:
     description: Bla bla bla
     usage: /c
+permissions:
+  delta.*:
+    default: op
+    children:
+      spectate.*:
+        default: op
+        children:
+          use:
+            description: Test
+            default: op
+          unlimiteddistance:
+            description: Test
+            default: op
+

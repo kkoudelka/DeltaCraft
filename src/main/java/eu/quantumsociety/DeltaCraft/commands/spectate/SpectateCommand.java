@@ -1,8 +1,11 @@
 package eu.quantumsociety.DeltaCraft.commands.spectate;
 
+import eu.quantumsociety.DeltaCraft.DeltaCraft;
 import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
+import eu.quantumsociety.DeltaCraft.managers.DeltaCraftManager;
 import eu.quantumsociety.DeltaCraft.utils.KeyHelper;
-import eu.quantumsociety.DeltaCraft.utils.PluginSubmodule;
+import eu.quantumsociety.DeltaCraft.utils.enums.Permissions;
+import eu.quantumsociety.DeltaCraft.utils.enums.PluginSubmodule;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -18,10 +21,17 @@ import java.util.UUID;
 import static org.bukkit.Bukkit.getWorld;
 
 public class SpectateCommand implements CommandExecutor {
-    final ConfigManager configManager;
+    private final ConfigManager configManager;
+    private final DeltaCraft plugin;
 
-    public SpectateCommand(ConfigManager dataMgr) {
+    private DeltaCraftManager getMgr() {
+        return this.plugin.getManager();
+    }
+
+    public SpectateCommand(ConfigManager dataMgr, DeltaCraft plugin) {
+
         this.configManager = dataMgr;
+        this.plugin = plugin;
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -30,6 +40,12 @@ public class SpectateCommand implements CommandExecutor {
             return false;
         }
         Player p = (Player) sender;
+
+        if (!p.hasPermission(Permissions.USESPECTATE.getName())) {
+            p.sendMessage(ChatColor.RED + "You don't have permission to use spectator mode!");
+            return true;
+        }
+
         GameMode currentMode = p.getGameMode();
 
         boolean isSpec = currentMode == GameMode.SPECTATOR;
@@ -120,7 +136,10 @@ public class SpectateCommand implements CommandExecutor {
 
         p.setGameMode(gm);
 
-        delete(p.getUniqueId(), config);
+        UUID id = p.getUniqueId();
+
+        this.getMgr().removeCachePlayer(id);
+        delete(id, config);
 
         return true;
     }
@@ -135,6 +154,8 @@ public class SpectateCommand implements CommandExecutor {
         if (!suc) {
             return false;
         }
+
+        this.getMgr().addCachePlayer(p, loc, gm);
 
         p.setGameMode(GameMode.SPECTATOR);
 

@@ -2,7 +2,7 @@ package eu.quantumsociety.DeltaCraft.commands.home;
 
 import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
 import eu.quantumsociety.DeltaCraft.utils.KeyHelper;
-import eu.quantumsociety.DeltaCraft.utils.PluginSubmodule;
+import eu.quantumsociety.DeltaCraft.utils.enums.PluginSubmodule;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

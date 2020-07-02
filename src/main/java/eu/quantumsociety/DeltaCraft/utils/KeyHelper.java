@@ -1,5 +1,7 @@
 package eu.quantumsociety.DeltaCraft.utils;
 
+import eu.quantumsociety.DeltaCraft.utils.enums.PluginSubmodule;
+
 import java.util.UUID;
 
 public class KeyHelper {
