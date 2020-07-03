@@ -1,6 +1,7 @@
 package eu.quantumsociety.DeltaCraft.commands.home;
 
 import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
+import eu.quantumsociety.DeltaCraft.managers.HomesManager;
 import eu.quantumsociety.DeltaCraft.utils.KeyHelper;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -10,9 +11,9 @@ import org.bukkit.entity.Player;
 
 public class SetHomeCommand implements CommandExecutor {
 
-    private ConfigManager configManager;
+    private HomesManager configManager;
 
-    public SetHomeCommand(ConfigManager homeManager) {
+    public SetHomeCommand(HomesManager homeManager) {
         this.configManager = homeManager;
     }
 
@@ -40,11 +41,12 @@ public class SetHomeCommand implements CommandExecutor {
         //TODO: Check whether home with this name is already being used
 
         Player p = (Player) commandSender;
-        Location l = p.getLocation();
 
-        KeyHelper kh = new KeyHelper(p.getUniqueId());
 
-        String x = kh.get(homeName, "x");
+
+        configManager.setHome(p, homeName);
+
+       /* String x = kh.get(homeName, "x");
         String y = kh.get(homeName, "y");
         String z = kh.get(homeName, "z");
         String pitch = kh.get(homeName, "pitch");
@@ -59,7 +61,7 @@ public class SetHomeCommand implements CommandExecutor {
         configManager.getConfig().set(yaw, l.getYaw());
         configManager.getConfig().set(world, l.getWorld().getName());
 
-        configManager.saveConfig();
+        configManager.saveConfig();*/
 
         String output = "Home " + homeName + " has been saved successfully!";
         commandSender.sendMessage(output);

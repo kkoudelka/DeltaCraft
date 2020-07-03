@@ -9,6 +9,7 @@ import eu.quantumsociety.DeltaCraft.listeners.MoveListener;
 import eu.quantumsociety.DeltaCraft.listeners.SpectateMoveListener;
 import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
 import eu.quantumsociety.DeltaCraft.managers.DeltaCraftManager;
+import eu.quantumsociety.DeltaCraft.managers.HomesManager;
 import eu.quantumsociety.DeltaCraft.utils.enums.Settings;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,7 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 
 public class DeltaCraft extends JavaPlugin {
-    private ConfigManager homeConfigManager;
+    private HomesManager homeConfigManager;
     private ConfigManager spectateConfigManager;
     private ConfigManager kelpConfigManager;
     private DeltaCraftManager manager;
@@ -27,7 +28,7 @@ public class DeltaCraft extends JavaPlugin {
     public void onEnable() {
         // Create managers
         this.manager = new DeltaCraftManager(this);
-        this.homeConfigManager = new ConfigManager(this, "home.yml");
+        this.homeConfigManager = new HomesManager(this);
         this.spectateConfigManager = new ConfigManager(this, "spectate.yml");
         this.kelpConfigManager = new ConfigManager(this, "kelp.yml");
 

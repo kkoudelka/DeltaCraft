@@ -1,15 +1,16 @@
 package eu.quantumsociety.DeltaCraft.classes;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class PlayerHome {
-    private Player player;
+    private UUID playerId;
     private String homeName;
     private Location location;
 
-    public PlayerHome(Player player, String homeName, Location location) {
-        this.player = player;
+    public PlayerHome(UUID playerId, String homeName, Location location) {
+        this.playerId = playerId;
         this.homeName = homeName;
         this.location = location;
     }

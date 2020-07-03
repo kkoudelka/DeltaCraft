@@ -31,11 +31,11 @@ public class HomesCommand implements CommandExecutor {
         ComponentBuilder b = new ComponentBuilder("=====================================").color(ChatColor.BOLD).color(ChatColor.GOLD);
 
         List<PlayerHome> homes = new ArrayList<PlayerHome>();
-        
+
 
         b.append("=====================================").color(ChatColor.BOLD).color(ChatColor.GOLD);
 
-        ComponentBuilder b2 = new ComponentBuilder("Hello").append(new TextComponent("a").setClickEvent());
+        ComponentBuilder b2 = new ComponentBuilder("Hello").append(new TextComponent("a"));
 
         return true;
     }
