@@ -1,6 +1,7 @@
 package eu.quantumsociety.DeltaCraft.managers;
 
 import eu.quantumsociety.DeltaCraft.DeltaCraft;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -64,5 +65,19 @@ public class ConfigManager {
         if (!configFile.exists()) {
             plugin.saveResource(fileName, false);
         }
+    }
+
+    public void setLocation(String path, Location l) {
+        FileConfiguration config = this.getConfig();
+
+        config.set(path, l);
+    }
+
+    public Location getLocation(String path) {
+        FileConfiguration config = this.getConfig();
+        if (!config.contains(path)) {
+            return null;
+        }
+        return (Location) config.get(path);
     }
 }
