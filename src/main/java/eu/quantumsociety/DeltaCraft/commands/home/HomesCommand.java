@@ -52,6 +52,7 @@ public class HomesCommand implements CommandExecutor {
                     .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Teleport to '" + ph.homeName + "'").create()))
                     .append("]").color(ChatColor.DARK_AQUA).bold(true)
                     .append("\n").reset().bold(true);
+            
 
         }
         text.append(divider).color(ChatColor.DARK_GRAY);
