@@ -60,25 +60,10 @@ public class SpectateCommand implements CommandExecutor {
     }
 
     private boolean save(KeyHelper keys, Location l, GameMode gm, FileConfiguration config) {
-        String xKey = keys.get("x");
-        String yKey = keys.get("y");
-        String zKey = keys.get("z");
-        String pitchKey = keys.get("pitch");
-        String yawKey = keys.get("yaw");
-        String worldKey = keys.get("world");
-        String modeKey = keys.get("mode");
-
-
-        config.set(xKey, l.getX());
-        config.set(yKey, l.getY());
-        config.set(zKey, l.getZ());
-        config.set(pitchKey, l.getPitch());
-        config.set(yawKey, l.getYaw());
-        config.set(worldKey, l.getWorld().getName());
-        config.set(modeKey, gm);
+        config.set(keys.get("location"), l);
+        config.set(keys.get("mode"), gm);
 
         configManager.saveConfig();
-
         return true;
     }
 
@@ -91,23 +76,12 @@ public class SpectateCommand implements CommandExecutor {
     }
 
     private Location getLocation(KeyHelper keys, FileConfiguration config) {
-        String worldKey = keys.get("world");
-        String xKey = keys.get("x");
-        String yKey = keys.get("y");
-        String zKey = keys.get("z");
-        String yawKey = keys.get("yaw");
-        String pitchKey = keys.get("pitch");
+        String path = keys.get("location");
+        if (!config.contains(path)) {
+            return null;
+        }
 
-        String worldName = config.getString(worldKey);
-        double x = config.getDouble(xKey);
-        double y = config.getDouble(yKey);
-        double z = config.getDouble(zKey);
-        float yaw = (float) config.getDouble(yawKey);
-        float pitch = (float) config.getDouble(pitchKey);
-
-        World world = getWorld(worldName);
-
-        return new Location(world, x, y, z, yaw, pitch);
+        return (Location) config.get(path);
     }
 
     private GameMode getGamemode(KeyHelper keys, FileConfiguration config) {
