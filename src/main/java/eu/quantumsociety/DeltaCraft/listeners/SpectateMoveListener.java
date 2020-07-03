@@ -3,8 +3,10 @@ package eu.quantumsociety.DeltaCraft.listeners;
 import eu.quantumsociety.DeltaCraft.DeltaCraft;
 import eu.quantumsociety.DeltaCraft.classes.CachePlayer;
 import eu.quantumsociety.DeltaCraft.managers.DeltaCraftManager;
+import eu.quantumsociety.DeltaCraft.utils.MathHelper;
 import eu.quantumsociety.DeltaCraft.utils.enums.Permissions;
 import eu.quantumsociety.DeltaCraft.utils.enums.Settings;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,10 +36,6 @@ public class SpectateMoveListener implements Listener {
             return;
         }
 
-//        if (p.isOp()) {
-//            return;
-//        }
-
         if (p.hasPermission(Permissions.UNLIMITEDDISTANCE.getName())) {
             return;
         }
@@ -48,23 +46,19 @@ public class SpectateMoveListener implements Listener {
         Location origin = cache.getOriginalLocation();
         Location curr = p.getLocation();
 
-        // d = sqrt((x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2)
-
-        double xDiff = curr.getX() - origin.getX();
-        double yDiff = curr.getY() - origin.getY();
-        double zDiff = curr.getZ() - origin.getZ();
-
-        double x = xDiff * xDiff;
-        double y = yDiff * yDiff;
-        double z = zDiff * zDiff;
-
-        double distance = Math.sqrt(x + y + z);
+        double distance = 0;
+        try {
+            distance = MathHelper.calcDistance(origin, curr);
+        } catch (Exception ex) {
+            plugin.getLogger().warning(ex.toString());
+            p.sendMessage(ChatColor.RED + "ERROR in calculating distance: " + ex.toString());
+            return;
+        }
 
         if (distance < maxDistance) {
             return;
         }
-        p.sendMessage("Distance: " + distance);
-        p.sendMessage("You've reached maximum distance (" + maxDistance + ")");
+        p.sendMessage(ChatColor.RED + "You've reached maximum distance (" + maxDistance + ")");
         p.teleport(origin);
 //        e.setCancelled(true);
     }

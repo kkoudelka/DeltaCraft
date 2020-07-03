@@ -2,7 +2,6 @@ package eu.quantumsociety.DeltaCraft.commands.home;
 
 import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
 import eu.quantumsociety.DeltaCraft.utils.KeyHelper;
-import eu.quantumsociety.DeltaCraft.utils.enums.PluginSubmodule;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -43,7 +42,7 @@ public class SetHomeCommand implements CommandExecutor {
         Player p = (Player) commandSender;
         Location l = p.getLocation();
 
-        KeyHelper kh = new KeyHelper(p.getUniqueId(), PluginSubmodule.HOME);
+        KeyHelper kh = new KeyHelper(p.getUniqueId());
 
         String x = kh.get(homeName, "x");
         String y = kh.get(homeName, "y");

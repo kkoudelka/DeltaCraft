@@ -5,7 +5,6 @@ import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
 import eu.quantumsociety.DeltaCraft.managers.DeltaCraftManager;
 import eu.quantumsociety.DeltaCraft.utils.KeyHelper;
 import eu.quantumsociety.DeltaCraft.utils.enums.Permissions;
-import eu.quantumsociety.DeltaCraft.utils.enums.PluginSubmodule;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -45,16 +44,19 @@ public class SpectateCommand implements CommandExecutor {
             p.sendMessage(ChatColor.RED + "You don't have permission to use spectator mode!");
             return true;
         }
+        return executeSwitch(p);
+    }
 
-        GameMode currentMode = p.getGameMode();
-
-        boolean isSpec = currentMode == GameMode.SPECTATOR;
+    private boolean executeSwitch(Player p) {
+        KeyHelper keys = new KeyHelper(p.getUniqueId());
         FileConfiguration config = configManager.getConfig();
-        if (isSpec) {
-            return switchBack(p, config);
+
+        boolean exists = config.contains(keys.getPlayerKey());
+        if (!exists) {
+            return switchToSpectate(p, config);
         }
 
-        return switchToSpectate(p, config);
+        return switchBack(p, config, keys);
     }
 
     private boolean save(KeyHelper keys, Location l, GameMode gm, FileConfiguration config) {
@@ -81,7 +83,7 @@ public class SpectateCommand implements CommandExecutor {
     }
 
     private void delete(UUID id, FileConfiguration config) {
-        KeyHelper keys = new KeyHelper(id, PluginSubmodule.SPECTATE);
+        KeyHelper keys = new KeyHelper(id);
 
         config.set(keys.getPlayerKey(), null);
 
@@ -116,15 +118,7 @@ public class SpectateCommand implements CommandExecutor {
         return GameMode.valueOf(gameModeVal);
     }
 
-    private boolean switchBack(Player p, FileConfiguration config) {
-        KeyHelper keys = new KeyHelper(p.getUniqueId(), PluginSubmodule.SPECTATE);
-
-        boolean exists = config.contains(keys.getPlayerKey());
-        if (!exists) {
-            p.sendMessage(ChatColor.RED + "Neexstuje. A co když tu je?");
-            return false;
-        }
-
+    private boolean switchBack(Player p, FileConfiguration config, KeyHelper keys) {
         Location l = getLocation(keys, config);
         GameMode g = getGamemode(keys, config);
 
@@ -141,11 +135,13 @@ public class SpectateCommand implements CommandExecutor {
         this.getMgr().removeCachePlayer(id);
         delete(id, config);
 
+        p.sendMessage(ChatColor.YELLOW + "You are no longer Spectating!");
+
         return true;
     }
 
     private boolean switchToSpectate(Player p, FileConfiguration config) {
-        KeyHelper keys = new KeyHelper(p.getUniqueId(), PluginSubmodule.SPECTATE);
+        KeyHelper keys = new KeyHelper(p.getUniqueId());
 
         Location loc = p.getLocation();
         GameMode gm = p.getGameMode();
@@ -158,6 +154,8 @@ public class SpectateCommand implements CommandExecutor {
         this.getMgr().addCachePlayer(p, loc, gm);
 
         p.setGameMode(GameMode.SPECTATOR);
+
+        p.sendMessage(ChatColor.GREEN + "You are now Spectating!");
 
         return true;
     }

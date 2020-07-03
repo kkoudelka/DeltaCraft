@@ -7,15 +7,14 @@ import java.util.UUID;
 public class KeyHelper {
 
     private final UUID pUid;
-    private final PluginSubmodule submodule;
 
-    public KeyHelper(UUID pUid, PluginSubmodule submodule) {
+    public KeyHelper(UUID pUid) {
         this.pUid = pUid;
-        this.submodule = submodule;
     }
 
     /**
      * Returns players key with submodule and subkeys <i>players.[UUID].[subkey].[...?]...</i>
+     *
      * @param subkeys Subkeys
      * @return String
      */
@@ -24,11 +23,12 @@ public class KeyHelper {
     }
 
     /**
-     * Returns players key with submodule <i>players.[UUID].</i>
+     * Returns players key <i>players.[UUID].</i>
+     *
      * @return String
      */
     public String getPlayerKey() {
-        String key = "players." + this.pUid.toString() + "." + this.submodule.toString();
+        String key = "players." + this.pUid.toString();
         return key;
     }
 }
