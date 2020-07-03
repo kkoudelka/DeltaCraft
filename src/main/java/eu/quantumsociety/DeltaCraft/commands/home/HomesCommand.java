@@ -49,7 +49,7 @@ public class HomesCommand implements CommandExecutor {
                     .append("✗").color(ChatColor.DARK_RED)
                     .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/delhome " + ph.homeName)))
                     .append("]").color(ChatColor.DARK_GRAY)
-                    .append("\n").bold(true);
+                    .append("\n").reset().bold(true);
 
         }
         text.append(divider).color(ChatColor.DARK_GRAY);
