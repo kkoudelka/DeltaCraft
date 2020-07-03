@@ -39,16 +39,18 @@ public class HomesCommand implements CommandExecutor {
 
 
             text
-                    .append(" - ")
-                    .append("[").color(ChatColor.DARK_AQUA).bold(true)
-                    .append(ph.homeName).color(ChatColor.GOLD).bold(true)
-                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/home " + ph.homeName)))
-                    .append("]").color(ChatColor.DARK_AQUA).bold(true)
-                    .append("   ")
+                    .append(" - ").color(ChatColor.DARK_GRAY)
                     .append("[").color(ChatColor.DARK_GRAY).bold(false)
                     .append("✗").color(ChatColor.DARK_RED)
                     .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/delhome " + ph.homeName)))
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Delete '" + ph.homeName + "'").create()))
                     .append("]").color(ChatColor.DARK_GRAY)
+                    .append("   ")
+                    .append("[").color(ChatColor.DARK_AQUA).bold(true)
+                    .append(ph.homeName).color(ChatColor.GOLD).bold(true)
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/home " + ph.homeName)))
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Teleport to '" + ph.homeName + "'").create()))
+                    .append("]").color(ChatColor.DARK_AQUA).bold(true)
                     .append("\n").reset().bold(true);
 
         }
