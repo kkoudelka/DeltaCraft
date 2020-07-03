@@ -4,7 +4,9 @@ import eu.quantumsociety.DeltaCraft.classes.PlayerHome;
 import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
 import eu.quantumsociety.DeltaCraft.managers.HomesManager;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,16 +31,24 @@ public class HomesCommand implements CommandExecutor {
         }
 
         Player p = (Player) commandSender;
+        List<PlayerHome> list = configManager.getPlayerHomes(p);
+
+        for (PlayerHome ph: list) {
+
+        }
+        ComponentBuilder t = new ComponentBuilder( "Hello " )
+                .color( net.md_5.bungee.api.ChatColor.RED ).bold( true ).append( "world" )
+                .color( net.md_5.bungee.api.ChatColor.DARK_RED ).append( "!" )
+                .color( net.md_5.bungee.api.ChatColor.RED );
         ComponentBuilder b = new ComponentBuilder("=====================================").color(ChatColor.BOLD).color(ChatColor.GOLD);
 
-        List<PlayerHome> homes = new ArrayList<PlayerHome>();
+        p.spigot().sendMessage(t.create());
+
+
 
 
         b.append("=====================================").color(ChatColor.BOLD).color(ChatColor.GOLD);
 
-        ComponentBuilder b2 = new ComponentBuilder("Hello").append(new TextComponent("a"));
-
-        List<PlayerHome> list = configManager.getPlayerHomes(p);
 
         p.sendMessage(list.get(0).location.toString());
 
