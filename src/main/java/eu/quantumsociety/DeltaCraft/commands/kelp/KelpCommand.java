@@ -98,13 +98,14 @@ public class KelpCommand implements CommandExecutor {
     }
 
     private boolean createFarm(Player p, String name) {
-        String farmId = UUID.randomUUID().toString();
-        UUID id = p.getUniqueId();
-        KeyHelper keys = new KeyHelper(id);
+        UUID farmId = UUID.randomUUID();
+        UUID playerId = p.getUniqueId();
+        KeyHelper keys = new KeyHelper(farmId, "farms");
+        KeyHelper tempKeys = new KeyHelper(playerId);
 
-        String tempKey = keys.get(TempKey);
-        String tempKeyOne = keys.get(TempKey, PointOneKey);
-        String tempKeyTwo = keys.get(TempKey, PointTwoKey);
+        String tempKey = tempKeys.get(TempKey);
+        String tempKeyOne = tempKeys.get(TempKey, PointOneKey);
+        String tempKeyTwo = tempKeys.get(TempKey, PointTwoKey);
 
         Location one = this.configManager.getLocation(tempKeyOne);
         if (one == null) {
@@ -116,18 +117,23 @@ public class KelpCommand implements CommandExecutor {
             p.sendMessage(ChatColor.RED + "Point 2 is not set");
             return true;
         }
-        String keyOne = keys.get(farmId, PointOneKey);
-        String keyTwo = keys.get(farmId, PointTwoKey);
-        String nameKey = keys.get(farmId, "name");
+
+        String keyOne = keys.get(PointOneKey);
+        String keyTwo = keys.get(PointTwoKey);
+        String nameKey = keys.get("name");
+        String ownerKey = keys.get("owner");
 
         FileConfiguration config = this.configManager.getConfig();
 
         config.set(keyOne, one);
         config.set(keyTwo, two);
         config.set(nameKey, name);
+        config.set(ownerKey, playerId.toString());
         config.set(tempKey, null);
 
         this.configManager.saveConfig();
+
+        this.getMgr().addCacheRegion(farmId, one, two);
 
         p.sendMessage(ChatColor.GREEN + "Farm successfully created");
         return true;

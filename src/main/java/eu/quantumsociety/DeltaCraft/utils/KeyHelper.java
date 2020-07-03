@@ -7,9 +7,15 @@ import java.util.UUID;
 public class KeyHelper {
 
     private final UUID pUid;
+    private final String prefix;
+
+    public KeyHelper(UUID id, String prefix) {
+        this.pUid = id;
+        this.prefix = prefix;
+    }
 
     public KeyHelper(UUID pUid) {
-        this.pUid = pUid;
+        this(pUid, "players");
     }
 
     /**
@@ -28,7 +34,7 @@ public class KeyHelper {
      * @return String
      */
     public String getPlayerKey() {
-        String key = "players." + this.pUid.toString();
+        String key = prefix + "." + this.pUid.toString();
         return key;
     }
 }

@@ -32,7 +32,7 @@ public class SpectateMoveListener implements Listener {
 
         DeltaCraftManager manager = this.plugin.getManager();
 
-        if (!manager.isInCache(id)) {
+        if (!manager.isPlayerInCache(id)) {
             return;
         }
 
