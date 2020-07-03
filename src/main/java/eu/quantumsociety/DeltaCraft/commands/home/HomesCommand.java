@@ -33,24 +33,21 @@ public class HomesCommand implements CommandExecutor {
         Player p = (Player) commandSender;
         List<PlayerHome> list = configManager.getPlayerHomes(p);
 
-        for (PlayerHome ph: list) {
+        ComponentBuilder t = new ComponentBuilder("====================================").color(ChatColor.DARK_GRAY).append("\n");
+
+        for (PlayerHome ph : list) {
+            t
+                    .append("       ")
+                    .append("[").color(ChatColor.DARK_AQUA).bold(true)
+                    .append(ph.homeName).color(ChatColor.GOLD).bold(true)
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/home " + ph.homeName)))
+                    .append("]").color(ChatColor.DARK_AQUA).bold(true)
+                    .append("\n");
 
         }
-        ComponentBuilder t = new ComponentBuilder( "Hello " )
-                .color( net.md_5.bungee.api.ChatColor.RED ).bold( true ).append( "world" )
-                .color( net.md_5.bungee.api.ChatColor.DARK_RED ).append( "!" )
-                .color( net.md_5.bungee.api.ChatColor.RED );
-        ComponentBuilder b = new ComponentBuilder("=====================================").color(ChatColor.BOLD).color(ChatColor.GOLD);
+        t.append("====================================").color(ChatColor.DARK_GRAY))
 
         p.spigot().sendMessage(t.create());
-
-
-
-
-        b.append("=====================================").color(ChatColor.BOLD).color(ChatColor.GOLD);
-
-
-        p.sendMessage(list.get(0).location.toString());
 
         return true;
     }
