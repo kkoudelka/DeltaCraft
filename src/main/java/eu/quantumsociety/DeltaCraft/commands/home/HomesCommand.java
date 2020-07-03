@@ -45,7 +45,7 @@ public class HomesCommand implements CommandExecutor {
                     .append("\n");
 
         }
-        t.append("====================================").color(ChatColor.DARK_GRAY))
+        t.append("====================================").color(ChatColor.DARK_GRAY);
 
         p.spigot().sendMessage(t.create());
 
