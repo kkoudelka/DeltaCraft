@@ -1,6 +1,7 @@
 package eu.quantumsociety.DeltaCraft;
 
 import eu.quantumsociety.DeltaCraft.commands.home.HomeCommand;
+import eu.quantumsociety.DeltaCraft.commands.home.HomesCommand;
 import eu.quantumsociety.DeltaCraft.commands.home.SetHomeCommand;
 import eu.quantumsociety.DeltaCraft.commands.spectate.SpectateCommand;
 import eu.quantumsociety.DeltaCraft.listeners.SpectateMoveListener;
@@ -34,11 +35,13 @@ public class DeltaCraft extends JavaPlugin {
             this.debugMsg("Debugging enabled");
         }
 
-        // Commands
+        // Home commands
         this.getCommand("sethome").setExecutor(new SetHomeCommand(homeConfigManager));
-        logger.info("SetHome loaded");
         this.getCommand("home").setExecutor(new HomeCommand(homeConfigManager));
-        logger.info("Home loaded");
+        this.getCommand("homes").setExecutor(new HomesCommand(homeConfigManager));
+        logger.info("Home submodule loaded");
+
+        // Spectate commands
         this.getCommand("c").setExecutor(new SpectateCommand(spectateConfigManager, this));
         logger.info("Spectate loaded");
 

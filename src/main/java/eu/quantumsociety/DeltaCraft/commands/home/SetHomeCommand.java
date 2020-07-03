@@ -61,7 +61,7 @@ public class SetHomeCommand implements CommandExecutor {
 
         configManager.saveConfig();
 
-        String output = "Home " + homeName + "has been saved successfully!";
+        String output = "Home " + homeName + " has been saved successfully!";
         commandSender.sendMessage(output);
 
         return true;

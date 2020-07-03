@@ -3,11 +3,14 @@ version: 1.0
 main: eu.quantumsociety.DeltaCraft.DeltaCraft
 commands:
   sethome:
-    description: Bla bla bla
-    usage: /sethome
+    description: Set new home
+    usage: /sethome <name>
   home:
-    description: Bla bla bla
-    usage: /home
+    description: Teleport home
+    usage: /home <name>
+  homes:
+    description: List all homes
+    usage: /homes
   c:
     description: Bla bla bla
     usage: /c
@@ -15,6 +18,24 @@ permissions:
   delta.*:
     default: op
     children:
+      home.*:
+        default: op
+        children:
+          set:
+            description: Set home
+            default: op
+          use:
+            description: Teleport to home
+            default: op
+          list.*:
+            default: op
+            children:
+              self:
+                description: List own homes
+                default: op
+              all:
+                description: List anyones homes
+                default: op
       spectate.*:
         default: op
         children:
