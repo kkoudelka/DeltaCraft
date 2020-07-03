@@ -1,15 +1,23 @@
 package eu.quantumsociety.DeltaCraft.utils;
 
-import eu.quantumsociety.DeltaCraft.utils.enums.PluginSubmodule;
-
 import java.util.UUID;
 
 public class KeyHelper {
 
-    private final UUID pUid;
+    private final String pUid;
+    private final String prefix;
+
+    public KeyHelper(String id, String prefix) {
+        this.pUid = id;
+        this.prefix = prefix;
+    }
+
+    public KeyHelper(UUID id, String prefix) {
+        this(id.toString(), prefix);
+    }
 
     public KeyHelper(UUID pUid) {
-        this.pUid = pUid;
+        this(pUid, "players");
     }
 
     /**
@@ -28,7 +36,7 @@ public class KeyHelper {
      * @return String
      */
     public String getPlayerKey() {
-        String key = "players." + this.pUid.toString();
+        String key = prefix + "." + this.pUid;
         return key;
     }
 }

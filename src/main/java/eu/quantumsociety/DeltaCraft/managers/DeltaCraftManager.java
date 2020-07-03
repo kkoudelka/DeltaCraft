@@ -2,6 +2,7 @@ package eu.quantumsociety.DeltaCraft.managers;
 
 import eu.quantumsociety.DeltaCraft.DeltaCraft;
 import eu.quantumsociety.DeltaCraft.classes.CachePlayer;
+import eu.quantumsociety.DeltaCraft.classes.CacheRegion;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -14,10 +15,12 @@ public class DeltaCraftManager {
     private final DeltaCraft plugin;
 
     private HashMap<UUID, CachePlayer> spectateCache;
+    private HashMap<String, CacheRegion> kelpCache;
 
     public DeltaCraftManager(DeltaCraft plugin) {
         this.plugin = plugin;
-        this.spectateCache = new HashMap<UUID, CachePlayer>();
+        this.spectateCache = new HashMap<>();
+        this.kelpCache = new HashMap<>();
     }
 
     public CachePlayer addCachePlayer(Player player, Location origin, GameMode gm) {
@@ -41,12 +44,39 @@ public class DeltaCraftManager {
         return this.spectateCache.get(find);
     }
 
-    public boolean isInCache(UUID uuid) {
+    public boolean isPlayerInCache(UUID uuid) {
         return this.spectateCache.containsKey(uuid);
     }
 
     public CachePlayer removeCachePlayer(UUID find) {
         this.plugin.debugMsg("Removing player: " + find);
         return this.spectateCache.remove(find);
+    }
+
+    public CacheRegion addCacheRegion(Location one, Location two,
+                                      String name, UUID ownerId) {
+        CacheRegion region = new CacheRegion(one, two, name, ownerId);
+
+        return this.addCacheRegion(name, region);
+    }
+
+    public CacheRegion addCacheRegion(String name, CacheRegion region) {
+        this.plugin.debugMsg("Adding region: " + name);
+
+        this.kelpCache.put(name, region);
+        return this.getCacheRegion(name);
+    }
+
+    public CacheRegion getCacheRegion(String find) {
+        return this.kelpCache.get(find);
+    }
+
+    public CacheRegion getCacheRegion(Location l) {
+        for (CacheRegion region : kelpCache.values()) {
+            if (region.contains(l)) {
+                return region;
+            }
+        }
+        return null;
     }
 }

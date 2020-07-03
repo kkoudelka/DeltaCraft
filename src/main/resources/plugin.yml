@@ -14,20 +14,23 @@ commands:
   c:
     description: Bla bla bla
     usage: /c
+  kelp:
+    description: Aaaa
+    usage: /kelp
 permissions:
   delta.*:
     default: op
     children:
-      home.*:
+      delta.home.*:
         default: op
         children:
-          set:
+          delta.home.set:
             description: Set home
             default: op
-          use:
+          delta.home.use:
             description: Teleport to home
             default: op
-          list.*:
+          delta.home.list.*:
             default: op
             children:
               self:
@@ -36,13 +39,25 @@ permissions:
               all:
                 description: List anyones homes
                 default: op
-      spectate.*:
+      delta.spectate.*:
         default: op
         children:
-          use:
+          delta.spectate.use:
             description: Test
             default: op
-          unlimiteddistance:
+          delta.spectate.unlimiteddistance:
+            description: Test
+            default: op
+      delta.kelp.*:
+        default: op
+        children:
+          delta.kelp.use:
+            description: Test
+            default: op
+          delta.kelp.create:
+            description: Test
+            default: op
+          delta.kelp.remove:
             description: Test
             default: op
 
