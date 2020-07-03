@@ -33,7 +33,7 @@ public class HomesCommand implements CommandExecutor {
         Player p = (Player) commandSender;
         List<PlayerHome> list = configManager.getPlayerHomes(p);
 
-        ComponentBuilder t = new ComponentBuilder("====================================").color(ChatColor.DARK_GRAY).append("\n");
+        ComponentBuilder t = new ComponentBuilder("====================================").color(ChatColor.DARK_GRAY).append("\n").bold(true);
 
         for (PlayerHome ph : list) {
             t
