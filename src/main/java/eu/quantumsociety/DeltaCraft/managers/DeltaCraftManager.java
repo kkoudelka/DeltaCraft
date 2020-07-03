@@ -15,7 +15,7 @@ public class DeltaCraftManager {
     private final DeltaCraft plugin;
 
     private HashMap<UUID, CachePlayer> spectateCache;
-    private HashMap<UUID, CacheRegion> kelpCache;
+    private HashMap<String, CacheRegion> kelpCache;
 
     public DeltaCraftManager(DeltaCraft plugin) {
         this.plugin = plugin;
@@ -53,20 +53,30 @@ public class DeltaCraftManager {
         return this.spectateCache.remove(find);
     }
 
-    public CacheRegion addCacheRegion(UUID id, Location one, Location two) {
-        CacheRegion region = new CacheRegion(one, two);
+    public CacheRegion addCacheRegion(Location one, Location two,
+                                      String name, UUID ownerId) {
+        CacheRegion region = new CacheRegion(one, two, name, ownerId);
 
-        return this.addCacheRegion(id, region);
+        return this.addCacheRegion(name, region);
     }
 
-    public CacheRegion addCacheRegion(UUID id, CacheRegion region) {
-        this.plugin.debugMsg("Adding region: " + id);
+    public CacheRegion addCacheRegion(String name, CacheRegion region) {
+        this.plugin.debugMsg("Adding region: " + name);
 
-        this.kelpCache.put(id, region);
-        return this.getCacheRegion(id);
+        this.kelpCache.put(name, region);
+        return this.getCacheRegion(name);
     }
 
-    public CacheRegion getCacheRegion(UUID find) {
+    public CacheRegion getCacheRegion(String find) {
         return this.kelpCache.get(find);
+    }
+
+    public CacheRegion getCacheRegion(Location l) {
+        for (CacheRegion region : kelpCache.values()) {
+            if (region.contains(l)) {
+                return region;
+            }
+        }
+        return null;
     }
 }

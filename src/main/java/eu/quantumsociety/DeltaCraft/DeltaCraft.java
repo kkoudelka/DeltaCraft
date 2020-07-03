@@ -4,6 +4,7 @@ import eu.quantumsociety.DeltaCraft.commands.home.HomeCommand;
 import eu.quantumsociety.DeltaCraft.commands.home.SetHomeCommand;
 import eu.quantumsociety.DeltaCraft.commands.kelp.KelpCommand;
 import eu.quantumsociety.DeltaCraft.commands.spectate.SpectateCommand;
+import eu.quantumsociety.DeltaCraft.listeners.MoveListener;
 import eu.quantumsociety.DeltaCraft.listeners.SpectateMoveListener;
 import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
 import eu.quantumsociety.DeltaCraft.managers.DeltaCraftManager;
@@ -49,6 +50,8 @@ public class DeltaCraft extends JavaPlugin {
         // Events
         PluginManager plm = this.getServer().getPluginManager();
         plm.registerEvents(new SpectateMoveListener(this), this);
+        plm.registerEvents(new MoveListener(this), this);
+        debugMsg("2. listener loaded");
 
 //        super.onEnable();
     }
