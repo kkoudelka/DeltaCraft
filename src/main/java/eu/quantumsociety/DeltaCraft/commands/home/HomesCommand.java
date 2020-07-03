@@ -36,8 +36,6 @@ public class HomesCommand implements CommandExecutor {
         ComponentBuilder text = new ComponentBuilder(divider).color(ChatColor.DARK_GRAY).append("\n").bold(true);
 
         for (PlayerHome ph : list) {
-
-
             text
                     .append(" - ").color(ChatColor.DARK_GRAY)
                     .append("[").color(ChatColor.DARK_GRAY).bold(false)
@@ -45,6 +43,7 @@ public class HomesCommand implements CommandExecutor {
                     .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/delhome " + ph.homeName)))
                     .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Delete '" + ph.homeName + "'").create()))
                     .append("]").color(ChatColor.DARK_GRAY)
+                    .reset()
                     .append("   ")
                     .append("[").color(ChatColor.DARK_AQUA).bold(true)
                     .append(ph.homeName).color(ChatColor.GOLD).bold(true)
@@ -52,8 +51,6 @@ public class HomesCommand implements CommandExecutor {
                     .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Teleport to '" + ph.homeName + "'").create()))
                     .append("]").color(ChatColor.DARK_AQUA).bold(true)
                     .append("\n").reset().bold(true);
-            
-
         }
         text.append(divider).color(ChatColor.DARK_GRAY);
 
