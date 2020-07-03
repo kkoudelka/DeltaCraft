@@ -43,7 +43,7 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("SetHome loaded");
         this.getCommand("home").setExecutor(new HomeCommand(homeConfigManager));
         this.getCommand("homes").setExecutor(new HomesCommand(homeConfigManager));
-        logger.info("Home submodule loaded");
+        debugMsg("Home submodule loaded");
         this.getCommand("c").setExecutor(new SpectateCommand(spectateConfigManager, this));
         debugMsg("Spectate loaded");
         this.getCommand("kelp").setExecutor(new KelpCommand(kelpConfigManager, this));

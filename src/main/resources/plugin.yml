@@ -21,16 +21,16 @@ permissions:
   delta.*:
     default: op
     children:
-      home.*:
+      delta.home.*:
         default: op
         children:
-          set:
+          delta.home.set:
             description: Set home
             default: op
-          use:
+          delta.home.use:
             description: Teleport to home
             default: op
-          list.*:
+          delta.home.list.*:
             default: op
             children:
               self:
@@ -39,7 +39,7 @@ permissions:
               all:
                 description: List anyones homes
                 default: op
-      spectate.*:
+      delta.spectate.*:
         default: op
         children:
           delta.spectate.use:
