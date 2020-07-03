@@ -36,18 +36,20 @@ public class HomesCommand implements CommandExecutor {
         ComponentBuilder text = new ComponentBuilder(divider).color(ChatColor.DARK_GRAY).append("\n").bold(true);
 
         for (PlayerHome ph : list) {
-            String spaces = "";
-            for (int i = 0; i < divider.length() / 2 - ph.homeName.length() / 2; i++) {
-                spaces += " ";
-            }
+
 
             text
-                    .append(spaces)
+                    .append(" - ")
                     .append("[").color(ChatColor.DARK_AQUA).bold(true)
                     .append(ph.homeName).color(ChatColor.GOLD).bold(true)
                     .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/home " + ph.homeName)))
                     .append("]").color(ChatColor.DARK_AQUA).bold(true)
-                    .append("\n");
+                    .append("   ")
+                    .append("[").color(ChatColor.DARK_GRAY).bold(false)
+                    .append("✗").color(ChatColor.DARK_RED)
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/delhome " + ph.homeName)))
+                    .append("]").color(ChatColor.DARK_GRAY)
+                    .append("\n").bold(true);
 
         }
         text.append(divider).color(ChatColor.DARK_GRAY);
