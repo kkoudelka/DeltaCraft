@@ -2,6 +2,7 @@ package eu.quantumsociety.DeltaCraft.commands.home;
 
 import eu.quantumsociety.DeltaCraft.classes.PlayerHome;
 import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
+import eu.quantumsociety.DeltaCraft.managers.HomesManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -14,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomesCommand implements CommandExecutor {
-    private ConfigManager configManager;
+    private HomesManager configManager;
 
-    public HomesCommand(ConfigManager configManager) {
+    public HomesCommand(HomesManager configManager) {
         this.configManager = configManager;
     }
 
@@ -27,7 +28,7 @@ public class HomesCommand implements CommandExecutor {
             return true;
         }
 
-        Player p = (Player)commandSender;
+        Player p = (Player) commandSender;
         ComponentBuilder b = new ComponentBuilder("=====================================").color(ChatColor.BOLD).color(ChatColor.GOLD);
 
         List<PlayerHome> homes = new ArrayList<PlayerHome>();
@@ -36,6 +37,10 @@ public class HomesCommand implements CommandExecutor {
         b.append("=====================================").color(ChatColor.BOLD).color(ChatColor.GOLD);
 
         ComponentBuilder b2 = new ComponentBuilder("Hello").append(new TextComponent("a"));
+
+        List<PlayerHome> list = configManager.getPlayerHomes(p);
+
+        p.sendMessage(list.get(0).location.toString());
 
         return true;
     }
