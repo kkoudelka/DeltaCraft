@@ -2,7 +2,10 @@ package eu.quantumsociety.DeltaCraft.utils.enums;
 
 public enum Permissions {
     USESPECTATE("spectate.use"),
-    UNLIMITEDDISTANCE("spectate.unlimiteddistance");
+    UNLIMITEDDISTANCE("spectate.unlimiteddistance"),
+    KELPFARMCREATE("kelp.create"),
+    KELPFARMUSE("kelp.use"),
+    KELPFARMREMOVE("kelp.remove");
 
     private String path;
     private final String prefix = "delta.";

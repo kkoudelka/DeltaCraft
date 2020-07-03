@@ -2,6 +2,7 @@ package eu.quantumsociety.DeltaCraft;
 
 import eu.quantumsociety.DeltaCraft.commands.home.HomeCommand;
 import eu.quantumsociety.DeltaCraft.commands.home.SetHomeCommand;
+import eu.quantumsociety.DeltaCraft.commands.kelp.KelpCommand;
 import eu.quantumsociety.DeltaCraft.commands.spectate.SpectateCommand;
 import eu.quantumsociety.DeltaCraft.listeners.SpectateMoveListener;
 import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
@@ -13,19 +14,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 
 public class DeltaCraft extends JavaPlugin {
-    private ConfigManager spectateConfigManager;
     private ConfigManager homeConfigManager;
+    private ConfigManager spectateConfigManager;
+    private ConfigManager kelpConfigManager;
     private DeltaCraftManager manager;
 
     private boolean isDebug;
 
     @Override
     public void onEnable() {
-        final Logger logger = getLogger();
-
+        // Create managers
         this.manager = new DeltaCraftManager(this);
-        this.spectateConfigManager = new ConfigManager(this, "spectate.yml");
         this.homeConfigManager = new ConfigManager(this, "home.yml");
+        this.spectateConfigManager = new ConfigManager(this, "spectate.yml");
+        this.kelpConfigManager = new ConfigManager(this, "kelp.yml");
 
         // Load config
         this.loadConfig();
@@ -36,11 +38,13 @@ public class DeltaCraft extends JavaPlugin {
 
         // Commands
         this.getCommand("sethome").setExecutor(new SetHomeCommand(homeConfigManager));
-        logger.info("SetHome loaded");
+        debugMsg("SetHome loaded");
         this.getCommand("home").setExecutor(new HomeCommand(homeConfigManager));
-        logger.info("Home loaded");
+        debugMsg("Home loaded");
         this.getCommand("c").setExecutor(new SpectateCommand(spectateConfigManager, this));
-        logger.info("Spectate loaded");
+        debugMsg("Spectate loaded");
+        this.getCommand("kelp").setExecutor(new KelpCommand(kelpConfigManager, this));
+        debugMsg("Kelp farms loaded");
 
         // Events
         PluginManager plm = this.getServer().getPluginManager();
