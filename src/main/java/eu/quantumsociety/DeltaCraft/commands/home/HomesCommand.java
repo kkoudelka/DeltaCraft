@@ -32,12 +32,17 @@ public class HomesCommand implements CommandExecutor {
 
         Player p = (Player) commandSender;
         List<PlayerHome> list = configManager.getPlayerHomes(p);
-
-        ComponentBuilder t = new ComponentBuilder("====================================").color(ChatColor.DARK_GRAY).append("\n").bold(true);
+        String divider = "====================================";
+        ComponentBuilder text = new ComponentBuilder(divider).color(ChatColor.DARK_GRAY).append("\n").bold(true);
 
         for (PlayerHome ph : list) {
-            t
-                    .append("       ")
+            String spaces = "";
+            for (int i = 0; i < divider.length() / 2 - ph.homeName.length() / 2; i++) {
+                spaces += " ";
+            }
+
+            text
+                    .append(spaces)
                     .append("[").color(ChatColor.DARK_AQUA).bold(true)
                     .append(ph.homeName).color(ChatColor.GOLD).bold(true)
                     .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/home " + ph.homeName)))
@@ -45,9 +50,9 @@ public class HomesCommand implements CommandExecutor {
                     .append("\n");
 
         }
-        t.append("====================================").color(ChatColor.DARK_GRAY);
+        text.append(divider).color(ChatColor.DARK_GRAY);
 
-        p.spigot().sendMessage(t.create());
+        p.spigot().sendMessage(text.create());
 
         return true;
     }
