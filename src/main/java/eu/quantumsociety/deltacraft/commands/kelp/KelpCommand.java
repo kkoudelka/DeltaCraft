@@ -90,10 +90,6 @@ public class KelpCommand implements CommandExecutor {
         Location loc = p.getLocation();
         UUID id = p.getUniqueId();
 
-        loc.setX(Math.floor(loc.getX()));
-        loc.setY(Math.floor(loc.getY() - 1));
-        loc.setZ(Math.floor(loc.getZ()));
-
         loc.setYaw(0);
         loc.setPitch(0);
 
