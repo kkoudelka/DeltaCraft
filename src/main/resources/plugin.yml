@@ -1,6 +1,6 @@
 name: DeltaCraft
 version: 1.0
-main: eu.quantumsociety.DeltaCraft.DeltaCraft
+main: eu.quantumsociety.deltacraft.DeltaCraft
 commands:
   sethome:
     description: Set new home
