@@ -1,6 +1,7 @@
 name: DeltaCraft
 version: 1.0
 main: eu.quantumsociety.deltacraft.DeltaCraft
+api-version: 1.16
 commands:
   sethome:
     description: Set new home
