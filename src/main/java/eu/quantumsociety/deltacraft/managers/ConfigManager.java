@@ -1,6 +1,6 @@
-package eu.quantumsociety.DeltaCraft.managers;
+package eu.quantumsociety.deltacraft.managers;
 
-import eu.quantumsociety.DeltaCraft.DeltaCraft;
+import eu.quantumsociety.deltacraft.DeltaCraft;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

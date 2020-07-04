@@ -1,11 +1,11 @@
-package eu.quantumsociety.DeltaCraft.listeners;
+package eu.quantumsociety.deltacraft.listeners;
 
-import eu.quantumsociety.DeltaCraft.DeltaCraft;
-import eu.quantumsociety.DeltaCraft.classes.CachePlayer;
-import eu.quantumsociety.DeltaCraft.managers.DeltaCraftManager;
-import eu.quantumsociety.DeltaCraft.utils.MathHelper;
-import eu.quantumsociety.DeltaCraft.utils.enums.Permissions;
-import eu.quantumsociety.DeltaCraft.utils.enums.Settings;
+import eu.quantumsociety.deltacraft.DeltaCraft;
+import eu.quantumsociety.deltacraft.classes.CachePlayer;
+import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
+import eu.quantumsociety.deltacraft.utils.MathHelper;
+import eu.quantumsociety.deltacraft.utils.enums.Permissions;
+import eu.quantumsociety.deltacraft.utils.enums.Settings;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
