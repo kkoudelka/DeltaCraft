@@ -16,28 +16,40 @@ class HomesCommand(private val configManager: HomesManager) : CommandExecutor {
             commandSender.sendMessage("Only players can use this command")
             return true;
         }
-        val p = commandSender
+        val p = commandSender as Player
         val list = configManager.getPlayerHomes(p)
+
         val divider = "===================================="
         val text = ComponentBuilder(divider).color(ChatColor.DARK_GRAY).append("\n").bold(true)
-        for (ph in list) {
+
+        if (list.isEmpty()) {
             text
-                    .append(" - ").color(ChatColor.DARK_GRAY)
-                    .append("[").color(ChatColor.DARK_GRAY).bold(false)
-                    .append("✗").color(ChatColor.DARK_RED)
-                    .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/delhome " + ph.homeName))
-                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Delete '" + ph.homeName + "'").create()))
-                    .append("]").color(ChatColor.DARK_GRAY)
-                    .reset()
-                    .append("   ")
-                    .append("[").color(ChatColor.DARK_AQUA).bold(true)
-                    .append(ph.homeName).color(ChatColor.GOLD).bold(true)
-                    .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/home " + ph.homeName))
-                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Teleport to '" + ph.homeName + "'").create()))
-                    .append("]").color(ChatColor.DARK_AQUA).bold(true)
-                    .append("\n").reset().bold(true)
+                    .append("You have no homes")
+                    .color(ChatColor.DARK_RED)
+                    .bold(true)
+                    .append("\n")
+        } else {
+            for (ph in list) {
+                text
+                        .append(" - ").color(ChatColor.DARK_GRAY)
+                        .append("[").color(ChatColor.DARK_GRAY).bold(false)
+                        .append("✗").color(ChatColor.DARK_RED)
+                        .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/delhome " + ph.homeName))
+                        .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Delete '" + ph.homeName + "'").create()))
+                        .append("]").color(ChatColor.DARK_GRAY)
+                        .append("   ")
+                        .reset()
+                        .append("[ ").color(ChatColor.DARK_AQUA).bold(true)
+                        .append(ph.homeName).color(ChatColor.GOLD).bold(true)
+                        .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/home " + ph.homeName))
+                        .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Teleport to '${ph.homeName}' in ${ph.location.world?.name}").create()))
+                        .append(" ]").color(ChatColor.DARK_AQUA).bold(true)
+                        .append("\n").reset().bold(true)
+            }
         }
-        text.append(divider).color(ChatColor.DARK_GRAY)
+        text
+                .reset()
+                .append(divider).color(ChatColor.DARK_GRAY)
         p.spigot().sendMessage(*text.create())
         return true
     }

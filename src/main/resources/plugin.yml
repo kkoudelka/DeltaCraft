@@ -11,6 +11,9 @@ commands:
   homes:
     description: List all homes
     usage: /homes
+  delhome:
+    description: Delete home
+    usage: /delhome <name>
   c:
     description: Bla bla bla
     usage: /c

@@ -1,5 +1,6 @@
 package eu.quantumsociety.deltacraft;
 
+import eu.quantumsociety.deltacraft.commands.home.DelHomeCommand;
 import eu.quantumsociety.deltacraft.commands.home.HomeCommand;
 import eu.quantumsociety.deltacraft.commands.home.HomesCommand;
 import eu.quantumsociety.deltacraft.commands.home.SetHomeCommand;
@@ -42,6 +43,7 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("SetHome loaded");
         this.getCommand("home").setExecutor(new HomeCommand(homeConfigManager));
         this.getCommand("homes").setExecutor(new HomesCommand(homeConfigManager));
+        this.getCommand("delhome").setExecutor(new DelHomeCommand(homeConfigManager));
         debugMsg("Home submodule loaded");
         this.getCommand("c").setExecutor(new SpectateCommand(spectateConfigManager, this));
         debugMsg("Spectate loaded");
