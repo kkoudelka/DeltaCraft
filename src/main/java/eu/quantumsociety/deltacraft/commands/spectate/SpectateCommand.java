@@ -1,14 +1,13 @@
-package eu.quantumsociety.DeltaCraft.commands.spectate;
+package eu.quantumsociety.deltacraft.commands.spectate;
 
-import eu.quantumsociety.DeltaCraft.DeltaCraft;
-import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
-import eu.quantumsociety.DeltaCraft.managers.DeltaCraftManager;
-import eu.quantumsociety.DeltaCraft.utils.KeyHelper;
-import eu.quantumsociety.DeltaCraft.utils.enums.Permissions;
+import eu.quantumsociety.deltacraft.DeltaCraft;
+import eu.quantumsociety.deltacraft.managers.ConfigManager;
+import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
+import eu.quantumsociety.deltacraft.utils.KeyHelper;
+import eu.quantumsociety.deltacraft.utils.enums.Permissions;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

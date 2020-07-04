@@ -1,4 +1,4 @@
-package eu.quantumsociety.DeltaCraft.utils.enums;
+package eu.quantumsociety.deltacraft.utils.enums;
 
 public enum Settings {
     DEBUG("system.debug"),

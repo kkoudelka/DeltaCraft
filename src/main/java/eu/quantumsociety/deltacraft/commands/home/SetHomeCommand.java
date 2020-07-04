@@ -1,9 +1,6 @@
-package eu.quantumsociety.DeltaCraft.commands.home;
+package eu.quantumsociety.deltacraft.commands.home;
 
-import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
-import eu.quantumsociety.DeltaCraft.managers.HomesManager;
-import eu.quantumsociety.DeltaCraft.utils.KeyHelper;
-import org.bukkit.Location;
+import eu.quantumsociety.deltacraft.managers.HomesManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
