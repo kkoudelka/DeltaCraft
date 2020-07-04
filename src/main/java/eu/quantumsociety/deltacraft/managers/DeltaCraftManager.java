@@ -79,4 +79,18 @@ public class DeltaCraftManager {
         }
         return null;
     }
+
+    public CacheRegion removeCacheRegion(String name) {
+        this.plugin.debugMsg("Removing region: " + name);
+        return this.kelpCache.remove(name);
+    }
+
+    public boolean loadRegions(HashMap<String, CacheRegion> regions) {
+        this.kelpCache = regions;
+        return true;
+    }
+
+    public int getKelpCacheSize() {
+        return this.kelpCache.size();
+    }
 }

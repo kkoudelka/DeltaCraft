@@ -1,8 +1,8 @@
 package eu.quantumsociety.deltacraft.commands.kelp;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
-import eu.quantumsociety.deltacraft.managers.ConfigManager;
 import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
+import eu.quantumsociety.deltacraft.managers.KelpManager;
 import eu.quantumsociety.deltacraft.utils.KeyHelper;
 import eu.quantumsociety.deltacraft.utils.enums.Permissions;
 import org.bukkit.ChatColor;
@@ -16,22 +16,22 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class KelpCommand implements CommandExecutor {
-    private final ConfigManager configManager;
+    private final KelpManager configManager;
     private final DeltaCraft plugin;
 
     private final String TempKey = "temp";
-    private final String PointOneKey = "pointOne";
-    private final String PointTwoKey = "pointTwo";
-    private final String FarmPrefix = "farms";
 
     private DeltaCraftManager getMgr() {
         return this.plugin.getManager();
     }
 
-    public KelpCommand(ConfigManager dataMgr, DeltaCraft plugin) {
-
+    public KelpCommand(KelpManager dataMgr, DeltaCraft plugin) {
         this.configManager = dataMgr;
         this.plugin = plugin;
+
+        FileConfiguration config = this.configManager.getConfig();
+        config.set("players", null);
+        this.configManager.saveConfig();
     }
 
     @Override
@@ -79,20 +79,19 @@ public class KelpCommand implements CommandExecutor {
     }
 
     private boolean setPointOne(Player p) {
-        return saveTempLoc(p, PointOneKey, "1");
+        return saveTempLoc(p, this.configManager.PointOneKey, "1");
     }
 
     private boolean setPointTwo(Player p) {
-        return saveTempLoc(p, PointTwoKey, "2");
+        return saveTempLoc(p, this.configManager.PointTwoKey, "2");
     }
 
     private boolean saveTempLoc(Player p, String key, String pointName) {
         Location loc = p.getLocation();
         UUID id = p.getUniqueId();
 
-        loc.setX(Math.floor(loc.getX()));
-        loc.setY(Math.floor(loc.getY() - 1));
-        loc.setZ(Math.floor(loc.getZ()));
+        loc.setYaw(0);
+        loc.setPitch(0);
 
         KeyHelper keys = new KeyHelper(id);
 
@@ -106,12 +105,12 @@ public class KelpCommand implements CommandExecutor {
 
     private boolean createFarm(Player p, String name) {
         UUID playerId = p.getUniqueId();
-        KeyHelper keys = new KeyHelper(name, FarmPrefix);
+        KeyHelper keys = new KeyHelper(name, this.configManager.FarmPrefix);
         KeyHelper tempKeys = new KeyHelper(playerId);
 
         String tempKey = tempKeys.get(TempKey);
-        String tempKeyOne = tempKeys.get(TempKey, PointOneKey);
-        String tempKeyTwo = tempKeys.get(TempKey, PointTwoKey);
+        String tempKeyOne = tempKeys.get(TempKey, this.configManager.PointOneKey);
+        String tempKeyTwo = tempKeys.get(TempKey, this.configManager.PointTwoKey);
 
         Location one = this.configManager.getLocation(tempKeyOne);
         if (one == null) {
@@ -124,9 +123,9 @@ public class KelpCommand implements CommandExecutor {
             return true;
         }
 
-        String keyOne = keys.get(PointOneKey);
-        String keyTwo = keys.get(PointTwoKey);
-        String ownerKey = keys.get("owner");
+        String keyOne = keys.get(this.configManager.PointOneKey);
+        String keyTwo = keys.get(this.configManager.PointTwoKey);
+        String ownerKey = keys.get(this.configManager.OwnerKey);
 
         FileConfiguration config = this.configManager.getConfig();
 
@@ -139,17 +138,17 @@ public class KelpCommand implements CommandExecutor {
 
         this.getMgr().addCacheRegion(one, two, name, playerId);
 
-        p.sendMessage(ChatColor.GREEN + "Farm successfully created");
+        p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully created");
         return true;
     }
 
     private boolean deleteFarm(Player p, String name) {
         UUID playerId = p.getUniqueId();
-        KeyHelper farmKeys = new KeyHelper(name, FarmPrefix);
+        KeyHelper farmKeys = new KeyHelper(name, this.configManager.FarmPrefix);
 
         FileConfiguration config = this.configManager.getConfig();
 
-        String ownerId = config.getString(farmKeys.get("owner"));
+        String ownerId = config.getString(farmKeys.get(this.configManager.OwnerKey));
 
         if (!playerId.toString().equalsIgnoreCase(ownerId)) {
             p.sendMessage(ChatColor.RED + "You are not owner");
@@ -160,7 +159,9 @@ public class KelpCommand implements CommandExecutor {
 
         this.configManager.saveConfig();
 
-        p.sendMessage(ChatColor.GREEN + "Farm successfully deleted");
+        this.getMgr().removeCacheRegion(name);
+
+        p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully deleted");
 
         return true;
     }

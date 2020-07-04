@@ -11,6 +11,7 @@ import eu.quantumsociety.deltacraft.listeners.SpectateMoveListener;
 import eu.quantumsociety.deltacraft.managers.ConfigManager;
 import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
 import eu.quantumsociety.deltacraft.managers.HomesManager;
+import eu.quantumsociety.deltacraft.managers.KelpManager;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,19 +19,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class DeltaCraft extends JavaPlugin {
     private HomesManager homeConfigManager;
     private ConfigManager spectateConfigManager;
-    private ConfigManager kelpConfigManager;
+    private KelpManager kelpConfigManager;
     private DeltaCraftManager manager;
 
     private boolean isDebug;
 
     @Override
     public void onEnable() {
-        // Create managers
-        this.manager = new DeltaCraftManager(this);
-        this.homeConfigManager = new HomesManager(this);
-        this.spectateConfigManager = new ConfigManager(this, "spectate.yml");
-        this.kelpConfigManager = new ConfigManager(this, "kelp.yml");
-
         // Load config
         this.loadConfig();
         this.isDebug = getConfig().getBoolean(Settings.DEBUG.getPath());
@@ -38,13 +33,21 @@ public class DeltaCraft extends JavaPlugin {
             this.debugMsg("Debugging enabled");
         }
 
+        // Create managers
+        this.manager = new DeltaCraftManager(this);
+        this.homeConfigManager = new HomesManager(this);
+        this.spectateConfigManager = new ConfigManager(this, "spectate.yml");
+        this.kelpConfigManager = new KelpManager(this);
+
         // Home commands
         this.getCommand("sethome").setExecutor(new SetHomeCommand(homeConfigManager));
         debugMsg("SetHome loaded");
         this.getCommand("home").setExecutor(new HomeCommand(homeConfigManager));
+        debugMsg("Home loaded");
         this.getCommand("homes").setExecutor(new HomesCommand(homeConfigManager));
+        debugMsg("Homes loaded");
         this.getCommand("delhome").setExecutor(new DelHomeCommand(homeConfigManager));
-        debugMsg("Home submodule loaded");
+        debugMsg("DelHome loaded");
         this.getCommand("c").setExecutor(new SpectateCommand(spectateConfigManager, this));
         debugMsg("Spectate loaded");
         this.getCommand("kelp").setExecutor(new KelpCommand(kelpConfigManager, this));
@@ -53,8 +56,11 @@ public class DeltaCraft extends JavaPlugin {
         // Events
         PluginManager plm = this.getServer().getPluginManager();
         plm.registerEvents(new SpectateMoveListener(this), this);
+        debugMsg("Spectate listener loaded");
         plm.registerEvents(new MoveListener(this), this);
-        debugMsg("2. listener loaded");
+        debugMsg("Move listener loaded");
+
+        debugMsg("Loaded " + manager.getKelpCacheSize() + " kelp regions");
 
 //        super.onEnable();
     }
