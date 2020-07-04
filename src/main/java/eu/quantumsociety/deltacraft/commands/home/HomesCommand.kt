@@ -16,7 +16,7 @@ class HomesCommand(private val configManager: HomesManager) : CommandExecutor {
             commandSender.sendMessage("Only players can use this command")
             return true;
         }
-        val p = commandSender as Player
+        val p: Player = commandSender
         val list = configManager.getPlayerHomes(p)
 
         val divider = "===================================="

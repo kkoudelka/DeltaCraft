@@ -13,7 +13,7 @@ class DelHomeCommand(private val homeConfigManager: HomesManager) : CommandExecu
             return true;
         }
 
-        val p = sender as Player
+        val p: Player = sender
 
 
         val homeName = if (params.isEmpty()) "default" else params[0].toLowerCase()
