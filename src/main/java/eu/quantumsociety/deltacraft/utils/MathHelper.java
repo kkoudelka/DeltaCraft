@@ -1,4 +1,4 @@
-package eu.quantumsociety.DeltaCraft.utils;
+package eu.quantumsociety.deltacraft.utils;
 
 import org.bukkit.Location;
 

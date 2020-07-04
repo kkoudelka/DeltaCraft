@@ -1,8 +1,8 @@
-package eu.quantumsociety.DeltaCraft.managers;
+package eu.quantumsociety.deltacraft.managers;
 
-import eu.quantumsociety.DeltaCraft.DeltaCraft;
-import eu.quantumsociety.DeltaCraft.classes.CachePlayer;
-import eu.quantumsociety.DeltaCraft.classes.CacheRegion;
+import eu.quantumsociety.deltacraft.DeltaCraft;
+import eu.quantumsociety.deltacraft.classes.CachePlayer;
+import eu.quantumsociety.deltacraft.classes.CacheRegion;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

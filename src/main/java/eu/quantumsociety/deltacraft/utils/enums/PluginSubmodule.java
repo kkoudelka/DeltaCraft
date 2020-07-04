@@ -1,8 +1,4 @@
-package eu.quantumsociety.DeltaCraft.utils.enums;
-
-import com.google.common.collect.Maps;
-
-import java.util.Map;
+package eu.quantumsociety.deltacraft.utils.enums;
 
 public enum PluginSubmodule {
     HOME("home"),

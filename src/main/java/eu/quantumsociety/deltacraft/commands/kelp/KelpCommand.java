@@ -1,10 +1,10 @@
-package eu.quantumsociety.DeltaCraft.commands.kelp;
+package eu.quantumsociety.deltacraft.commands.kelp;
 
-import eu.quantumsociety.DeltaCraft.DeltaCraft;
-import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
-import eu.quantumsociety.DeltaCraft.managers.DeltaCraftManager;
-import eu.quantumsociety.DeltaCraft.utils.KeyHelper;
-import eu.quantumsociety.DeltaCraft.utils.enums.Permissions;
+import eu.quantumsociety.deltacraft.DeltaCraft;
+import eu.quantumsociety.deltacraft.managers.ConfigManager;
+import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
+import eu.quantumsociety.deltacraft.utils.KeyHelper;
+import eu.quantumsociety.deltacraft.utils.enums.Permissions;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -12,9 +12,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
 
-import java.io.File;
 import java.util.UUID;
 
 public class KelpCommand implements CommandExecutor {

@@ -1,4 +1,4 @@
-package eu.quantumsociety.DeltaCraft.classes;
+package eu.quantumsociety.deltacraft.classes;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;

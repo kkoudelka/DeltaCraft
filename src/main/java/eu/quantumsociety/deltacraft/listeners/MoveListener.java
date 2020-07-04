@@ -1,9 +1,9 @@
-package eu.quantumsociety.DeltaCraft.listeners;
+package eu.quantumsociety.deltacraft.listeners;
 
 
-import eu.quantumsociety.DeltaCraft.DeltaCraft;
-import eu.quantumsociety.DeltaCraft.classes.CacheRegion;
-import eu.quantumsociety.DeltaCraft.managers.DeltaCraftManager;
+import eu.quantumsociety.deltacraft.DeltaCraft;
+import eu.quantumsociety.deltacraft.classes.CacheRegion;
+import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

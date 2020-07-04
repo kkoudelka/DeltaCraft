@@ -1,20 +1,19 @@
-package eu.quantumsociety.DeltaCraft;
+package eu.quantumsociety.deltacraft;
 
-import eu.quantumsociety.DeltaCraft.commands.home.HomeCommand;
-import eu.quantumsociety.DeltaCraft.commands.home.HomesCommand;
-import eu.quantumsociety.DeltaCraft.commands.home.SetHomeCommand;
-import eu.quantumsociety.DeltaCraft.commands.kelp.KelpCommand;
-import eu.quantumsociety.DeltaCraft.commands.spectate.SpectateCommand;
-import eu.quantumsociety.DeltaCraft.listeners.MoveListener;
-import eu.quantumsociety.DeltaCraft.listeners.SpectateMoveListener;
-import eu.quantumsociety.DeltaCraft.managers.ConfigManager;
-import eu.quantumsociety.DeltaCraft.managers.DeltaCraftManager;
-import eu.quantumsociety.DeltaCraft.managers.HomesManager;
-import eu.quantumsociety.DeltaCraft.utils.enums.Settings;
+import eu.quantumsociety.deltacraft.commands.home.DelHomeCommand;
+import eu.quantumsociety.deltacraft.commands.home.HomeCommand;
+import eu.quantumsociety.deltacraft.commands.home.HomesCommand;
+import eu.quantumsociety.deltacraft.commands.home.SetHomeCommand;
+import eu.quantumsociety.deltacraft.commands.kelp.KelpCommand;
+import eu.quantumsociety.deltacraft.commands.spectate.SpectateCommand;
+import eu.quantumsociety.deltacraft.listeners.MoveListener;
+import eu.quantumsociety.deltacraft.listeners.SpectateMoveListener;
+import eu.quantumsociety.deltacraft.managers.ConfigManager;
+import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
+import eu.quantumsociety.deltacraft.managers.HomesManager;
+import eu.quantumsociety.deltacraft.utils.enums.Settings;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.logging.Logger;
 
 public class DeltaCraft extends JavaPlugin {
     private HomesManager homeConfigManager;
@@ -44,6 +43,7 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("SetHome loaded");
         this.getCommand("home").setExecutor(new HomeCommand(homeConfigManager));
         this.getCommand("homes").setExecutor(new HomesCommand(homeConfigManager));
+        this.getCommand("delhome").setExecutor(new DelHomeCommand(homeConfigManager));
         debugMsg("Home submodule loaded");
         this.getCommand("c").setExecutor(new SpectateCommand(spectateConfigManager, this));
         debugMsg("Spectate loaded");
