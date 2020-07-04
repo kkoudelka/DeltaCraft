@@ -12,16 +12,14 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor {
             sender.sendMessage("Only players can use this command")
             return false
         }
-        val p = sender as Player
+        val p: Player = sender
 
         var homeName = "default"
-        if (args != null) {
-            if (args.size > 1) {
-                sender.sendMessage("Correct usage of this command is /home <name>")
-                return false
-            }
-            homeName = if (args.size < 1) "default" else args[0].toLowerCase()
+        if (args.size > 1) {
+            sender.sendMessage("Correct usage of this command is /home <name>")
+            return false
         }
+        homeName = if (args.size < 1) "default" else args[0].toLowerCase()
 
         val homeLocation = configManager.getHome(p, homeName)
 
