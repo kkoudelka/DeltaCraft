@@ -34,6 +34,12 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
         return section.getLocation("$homeName.location")
     }
 
+    fun homeExists(p: Player, homeName: String): Boolean {
+        val kh = KeyHelper(p.uniqueId)
+
+        return config.contains(kh[homeName])
+    }
+
     fun isObstructed(location: Location): Pair<Boolean, String> {
         val blockUnder = location.subtract(0.0, 1.0, 0.0).block
         if (blockUnder.isEmpty) {
@@ -63,14 +69,15 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
         return true
     }
 
-    fun delHome(p: Player, homeName: String): Boolean {
+    fun delHome(p: Player, homeName: String): Pair<Boolean, Location?> {
         val kh = KeyHelper(p.uniqueId)
 
-        if (!config.contains(kh[homeName]))
-            return false
+        if (!homeExists(p, homeName))
+            return Pair(false, null)
+        val location = getHome(p, homeName)
         config[kh[homeName]] = null
         saveConfig()
-        return true
+        return Pair(true, location)
 
     }
 }

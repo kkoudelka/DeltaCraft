@@ -3,3 +3,5 @@ system:
 settings:
   spectate:
     maxdistance: 30
+  home:
+    maxhomes: 10

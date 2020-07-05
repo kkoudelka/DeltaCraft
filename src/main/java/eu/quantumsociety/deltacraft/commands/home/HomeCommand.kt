@@ -6,6 +6,7 @@ import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
 import org.bukkit.Effect
+import org.bukkit.Particle
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -73,7 +74,8 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
 
         p.teleport(homeLocation)
         p.sendMessage("Welcome home!")
-        p.location.world?.playEffect(p.location, Effect.SMOKE, 0)
+
+        p.location.world?.spawnParticle(Particle.EXPLOSION_NORMAL, p.location.add(0.0,0.1,0.0), 1)
 
         return true
     }
