@@ -58,8 +58,6 @@ public class DeltaCraft extends JavaPlugin {
         PluginManager plm = this.getServer().getPluginManager();
         plm.registerEvents(new SpectateMoveListener(this), this);
         debugMsg("Spectate listener loaded");
-        plm.registerEvents(new MoveListener(this), this);
-        debugMsg("Move listener loaded");
         plm.registerEvents(new KelpGrowListener(this), this);
         debugMsg("Kelp listener loaded");
 

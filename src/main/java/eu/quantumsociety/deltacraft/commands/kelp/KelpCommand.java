@@ -7,13 +7,18 @@ import eu.quantumsociety.deltacraft.utils.KeyHelper;
 import eu.quantumsociety.deltacraft.utils.enums.Permissions;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Ageable;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
+import java.util.*;
 
 public class KelpCommand implements CommandExecutor {
     private final KelpManager configManager;
@@ -47,12 +52,22 @@ public class KelpCommand implements CommandExecutor {
             return true;
         }
 
+        if (args.length < 1) {
+            p.sendMessage(ChatColor.YELLOW + "You must pass some arguments");
+            return true;
+        }
+        String cmd = args[0];
+
         if (args.length < 2) {
+            if (cmd.equalsIgnoreCase("age")) {
+                this.getAge(p);
+                return true;
+            }
+
             p.sendMessage(ChatColor.YELLOW + "You must pass some arguments");
             return true;
         }
 
-        String cmd = args[0];
         if (cmd.equalsIgnoreCase("set")) {
             switch (args[1]) {
                 case "1":
@@ -73,6 +88,12 @@ public class KelpCommand implements CommandExecutor {
         if (cmd.equalsIgnoreCase("delete") || cmd.equalsIgnoreCase("remove")) {
             String name = args[1];
             return this.deleteFarm(p, name);
+        }
+
+        if (cmd.equalsIgnoreCase("age")) {
+            String ageS = args[1];
+            int age = Integer.parseInt(ageS);
+            this.setAge(p, age);
         }
 
         return true;
@@ -164,5 +185,45 @@ public class KelpCommand implements CommandExecutor {
         p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully deleted");
 
         return true;
+    }
+
+    private void getAge(Player p) {
+        Block b = this.getBlock(p);
+        BlockData bd = b.getBlockData();
+        if (b == null || !(bd instanceof Ageable)) {
+            return;
+        }
+        Ageable a = (Ageable) bd;
+
+        p.sendMessage("Age: " + a.getAge());
+    }
+
+    private Block getTop(Block b) {
+        if (b.getType() == Material.KELP) {
+            return b;
+        }
+        if (b.getType() != Material.KELP_PLANT) {
+            return b;
+        }
+        return this.getTop(b.getRelative(BlockFace.UP));
+    }
+
+    private Block getBlock(Player p) {
+        Set<Material> ignore = new HashSet<Material>(Arrays.asList(Material.OAK_SIGN, Material.OAK_WALL_SIGN, Material.WATER, Material.WATER_BUCKET));
+        Block b = p.getTargetBlock(ignore, 4);
+        return this.getTop(b);
+    }
+
+    private void setAge(Player p, int age) {
+        Block b = this.getBlock(p);
+        BlockData bd = b.getBlockData();
+        if (b == null || !(bd instanceof Ageable)) {
+            return;
+        }
+        Ageable a = (Ageable) bd;
+        a.setAge(age);
+
+        b.setBlockData(a);
+        p.sendMessage("Set age: " + age);
     }
 }
