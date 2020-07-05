@@ -7,7 +7,6 @@ import eu.quantumsociety.deltacraft.commands.home.SetHomeCommand;
 import eu.quantumsociety.deltacraft.commands.kelp.KelpCommand;
 import eu.quantumsociety.deltacraft.commands.spectate.SpectateCommand;
 import eu.quantumsociety.deltacraft.listeners.KelpGrowListener;
-import eu.quantumsociety.deltacraft.listeners.MoveListener;
 import eu.quantumsociety.deltacraft.listeners.SpectateMoveListener;
 import eu.quantumsociety.deltacraft.managers.ConfigManager;
 import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;

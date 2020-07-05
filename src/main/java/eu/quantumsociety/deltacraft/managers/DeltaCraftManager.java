@@ -7,9 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class DeltaCraftManager {
     private final DeltaCraft plugin;
@@ -92,5 +90,9 @@ public class DeltaCraftManager {
 
     public int getKelpCacheSize() {
         return this.kelpCache.size();
+    }
+
+    public Collection<CacheRegion> getRegions() {
+        return this.kelpCache.values();
     }
 }

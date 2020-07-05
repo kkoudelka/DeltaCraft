@@ -1,6 +1,7 @@
 package eu.quantumsociety.deltacraft.commands.kelp;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
+import eu.quantumsociety.deltacraft.classes.CacheRegion;
 import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
 import eu.quantumsociety.deltacraft.managers.KelpManager;
 import eu.quantumsociety.deltacraft.utils.KeyHelper;
@@ -15,12 +16,17 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class KelpCommand implements CommandExecutor {
+public class KelpCommand implements CommandExecutor, TabCompleter {
     private final KelpManager configManager;
     private final DeltaCraft plugin;
 
@@ -40,7 +46,7 @@ public class KelpCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("Only players can use this commands");
             return false;
@@ -190,7 +196,7 @@ public class KelpCommand implements CommandExecutor {
     private void getAge(Player p) {
         Block b = this.getBlock(p);
         BlockData bd = b.getBlockData();
-        if (b == null || !(bd instanceof Ageable)) {
+        if (!(bd instanceof Ageable)) {
             return;
         }
         Ageable a = (Ageable) bd;
@@ -209,7 +215,7 @@ public class KelpCommand implements CommandExecutor {
     }
 
     private Block getBlock(Player p) {
-        Set<Material> ignore = new HashSet<Material>(Arrays.asList(Material.OAK_SIGN, Material.OAK_WALL_SIGN, Material.WATER, Material.WATER_BUCKET));
+        Set<Material> ignore = new HashSet<>(Arrays.asList(Material.OAK_SIGN, Material.OAK_WALL_SIGN, Material.WATER, Material.WATER_BUCKET));
         Block b = p.getTargetBlock(ignore, 4);
         return this.getTop(b);
     }
@@ -217,7 +223,7 @@ public class KelpCommand implements CommandExecutor {
     private void setAge(Player p, int age) {
         Block b = this.getBlock(p);
         BlockData bd = b.getBlockData();
-        if (b == null || !(bd instanceof Ageable)) {
+        if (!(bd instanceof Ageable)) {
             return;
         }
         Ageable a = (Ageable) bd;
@@ -225,5 +231,49 @@ public class KelpCommand implements CommandExecutor {
 
         b.setBlockData(a);
         p.sendMessage("Set age: " + age);
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        List<String> list = new ArrayList<>();
+        if (!(sender instanceof Player)) {
+            return list;
+        }
+
+        if (!command.getName().equalsIgnoreCase("kelp")) {
+            return list;
+        }
+
+        if (args.length < 1 || args[0].isEmpty()) {
+            list.add("set");
+            list.add("age");
+            list.add("create");
+            list.add("remove");
+            return list;
+        }
+
+        String first = args[0];
+
+        switch (first.toLowerCase()) {
+            case "set":
+                list.add("1");
+                list.add("2");
+                break;
+            case "remove":
+                Player p = (Player) sender;
+                UUID id = p.getUniqueId();
+
+                Collection<CacheRegion> regs = this.getMgr().getRegions();
+
+                Stream<String> r = regs.stream()
+                        .filter(i -> i.ownerId.equals(id))
+                        .map(x -> x.name);
+
+                list = r.collect(Collectors.toList());
+                break;
+        }
+
+        return list;
     }
 }
