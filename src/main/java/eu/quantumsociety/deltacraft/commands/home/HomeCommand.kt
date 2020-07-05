@@ -84,14 +84,22 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
     override fun onTabComplete(sender: CommandSender, cmd: Command, p2: String, p3: Array<out String>): MutableList<String> {
         val list = mutableListOf<String>()
 
-        if (cmd.name.equals("home", true) && p3.size >= 0) {
+        if (sender !is Player) {
+            return list
+        }
+
+        val player: Player = sender
+
+        if (cmd.name.equals("home", true) && p3.isNotEmpty() && p3.size < 2) {
 
 
-            if (sender !is Player) {
-                return list
+
+
+
+            if (configManager.homeExists(player, "default")) {
+                list.add("default")
             }
 
-            val player: Player = sender
 
             val homes = configManager.getPlayerHomes(player)
 

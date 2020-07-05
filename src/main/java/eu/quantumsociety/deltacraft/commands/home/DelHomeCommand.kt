@@ -27,7 +27,7 @@ class DelHomeCommand(private val homeConfigManager: HomesManager) : CommandExecu
 
         val location = success.second
 
-        location?.world?.spawnParticle(Particle.VILLAGER_ANGRY, location.add(0.0,0.5,0.0), 1)
+        location?.world?.spawnParticle(Particle.VILLAGER_ANGRY, location.add(0.0, 0.5, 0.0), 1)
 
         return true
     }
@@ -35,14 +35,19 @@ class DelHomeCommand(private val homeConfigManager: HomesManager) : CommandExecu
     override fun onTabComplete(sender: CommandSender, cmd: Command, p2: String, p3: Array<out String>): MutableList<String> {
         val list = mutableListOf<String>()
 
-        if (cmd.name.equals("delhome", true) && p3.size >= 0) {
+        if (sender !is Player) {
+            return list
+        }
+        val player: Player = sender
+
+        // first argument autocomplete
+        if (cmd.name.equals("delhome", true) && p3.isNotEmpty() && p3.size < 2) {
 
 
-            if (sender !is Player) {
-                return list
+
+            if (homeConfigManager.homeExists(player, "default")) {
+                list.add("default")
             }
-
-            val player: Player = sender
 
             val homes = homeConfigManager.getPlayerHomes(player)
 
