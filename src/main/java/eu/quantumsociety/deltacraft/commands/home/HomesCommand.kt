@@ -1,6 +1,7 @@
 package eu.quantumsociety.deltacraft.commands.home
 
 import eu.quantumsociety.deltacraft.managers.HomesManager
+import eu.quantumsociety.deltacraft.utils.TextHelper
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
@@ -9,6 +10,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import java.awt.Component
 
 class HomesCommand(private val configManager: HomesManager) : CommandExecutor {
     override fun onCommand(commandSender: CommandSender, command: Command, s: String, strings: Array<String>): Boolean {
@@ -19,8 +21,10 @@ class HomesCommand(private val configManager: HomesManager) : CommandExecutor {
         val p: Player = commandSender
         val list = configManager.getPlayerHomes(p)
 
-        val divider = "===================================="
-        val text = ComponentBuilder(divider).color(ChatColor.DARK_GRAY).append("\n").bold(true)
+
+        val text = ComponentBuilder()
+                .append(TextHelper.getDivider())
+                .append("\n").bold(true)
 
         if (list.isEmpty()) {
             text
@@ -49,7 +53,7 @@ class HomesCommand(private val configManager: HomesManager) : CommandExecutor {
         }
         text
                 .reset()
-                .append(divider).color(ChatColor.DARK_GRAY)
+                .append(TextHelper.getDivider())
         p.spigot().sendMessage(*text.create())
         return true
     }

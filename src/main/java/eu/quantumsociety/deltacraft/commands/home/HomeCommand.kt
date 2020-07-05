@@ -1,17 +1,21 @@
 package eu.quantumsociety.deltacraft.commands.home
 
 import eu.quantumsociety.deltacraft.managers.HomesManager
+import eu.quantumsociety.deltacraft.utils.TextHelper
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
 import org.bukkit.Effect
 import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
+import java.awt.Component
 
 class HomeCommand(private val configManager: HomesManager) : CommandExecutor, TabCompleter {
 
@@ -60,12 +64,14 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
                     .color(ChatColor.DARK_RED)
                     .bold(true)
                     .append("\n")
+                    .append(ComponentBuilder("").create())
                     .append("\n")
-                    .append("[ CLICK HERE TO TELEPORT ANYWAY ]")
-                    .color(ChatColor.DARK_AQUA)
-                    .bold(false)
-                    .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/home $homeName$overrideString"))
-                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Proceed to teleport to '$homeName' anyway").create()))
+                    .append(TextHelper.createActionButton(ComponentBuilder("TELEPORT ANYWAY")
+                            .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/home $homeName$overrideString"))
+                            .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Proceed to teleport to '$homeName' anyway")
+                                    .create()))
+                            .create()))
+
 
             p.spigot().sendMessage(*text.create())
             return true;
@@ -74,9 +80,14 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
 
         p.teleport(homeLocation)
         p.sendMessage("Welcome home!")
-        p.location.world?.playEffect(p.location, Effect.SMOKE, 0)
 
-        p.location.world?.spawnParticle(Particle.EXPLOSION_NORMAL, p.location.add(0.0,0.1,0.0), 1)
+
+        // Effects on teleport
+        val world = p.location.world!!
+
+        world.spawnParticle(Particle.EXPLOSION_NORMAL, p.location.add(0.0, 0.1, 0.0), 10)
+        world.playSound(p.location, Sound.UI_TOAST_IN, SoundCategory.MASTER, 10f, 1f)
+
 
         return true
     }
@@ -91,9 +102,6 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
         val player: Player = sender
 
         if (cmd.name.equals("home", true) && p3.isNotEmpty() && p3.size < 2) {
-
-
-
 
 
             if (configManager.homeExists(player, "default")) {
