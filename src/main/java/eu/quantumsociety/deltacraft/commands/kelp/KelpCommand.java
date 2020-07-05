@@ -19,6 +19,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -87,16 +88,30 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
 
         if (cmd.equalsIgnoreCase("create")) {
+            if (!p.hasPermission(Permissions.KELPFARMCREATE.getName())) {
+                p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+                return true;
+            }
             String name = args[1];
             return this.createFarm(p, name);
         }
 
         if (cmd.equalsIgnoreCase("delete") || cmd.equalsIgnoreCase("remove")) {
+            if (!p.hasPermission(Permissions.KELPFARMREMOVE.getName())) {
+                p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+                return true;
+            }
+
             String name = args[1];
             return this.deleteFarm(p, name);
         }
 
         if (cmd.equalsIgnoreCase("age")) {
+            if (!p.hasPermission(Permissions.KELPFARMSETAGE.getName())) {
+                p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+                return true;
+            }
+
             String ageS = args[1];
             int age = Integer.parseInt(ageS);
             this.setAge(p, age);

@@ -5,9 +5,10 @@ public enum Permissions {
     UNLIMITEDDISTANCE("spectate.unlimiteddistance"),
     KELPFARMCREATE("kelp.create"),
     KELPFARMUSE("kelp.use"),
+    KELPFARMSETAGE("kelp.setage"),
     KELPFARMREMOVE("kelp.remove");
 
-    private String path;
+    private final String path;
     private final String prefix = "delta.";
 
     private Permissions(String path) {
