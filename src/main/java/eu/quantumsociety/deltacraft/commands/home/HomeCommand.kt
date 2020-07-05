@@ -74,6 +74,7 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
 
         p.teleport(homeLocation)
         p.sendMessage("Welcome home!")
+        p.location.world?.playEffect(p.location, Effect.SMOKE, 0)
 
         p.location.world?.spawnParticle(Particle.EXPLOSION_NORMAL, p.location.add(0.0,0.1,0.0), 1)
 
