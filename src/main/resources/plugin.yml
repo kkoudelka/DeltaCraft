@@ -1,6 +1,7 @@
 name: DeltaCraft
 version: 1.0
 main: eu.quantumsociety.deltacraft.DeltaCraft
+api-version: 1.16
 commands:
   sethome:
     description: Set new home
@@ -15,11 +16,11 @@ commands:
     description: Delete home
     usage: /delhome <name>
   c:
-    description: Bla bla bla
+    description: Switch to/from spectating gamemode
     usage: /c
   kelp:
-    description: Aaaa
-    usage: /kelp
+    description: Kelp farms
+    usage: /kelp ?
 permissions:
   delta.*:
     default: op
@@ -29,38 +30,41 @@ permissions:
         children:
           delta.home.set:
             description: Set home
-            default: op
+            default: true
           delta.home.use:
             description: Teleport to home
-            default: op
+            default: true
           delta.home.list.*:
             default: op
             children:
-              self:
+              delta.home.list.self:
                 description: List own homes
-                default: op
-              all:
+                default: true
+              delta.home.list.all:
                 description: List anyones homes
                 default: op
       delta.spectate.*:
         default: op
         children:
           delta.spectate.use:
-            description: Test
-            default: op
-          delta.spectate.unlimiteddistance:
-            description: Test
+            description: Use spectate
+            default: true
+          delta.spectate.unlimited:
+            description: Has unlimited spectate range
             default: op
       delta.kelp.*:
         default: op
         children:
           delta.kelp.use:
-            description: Test
-            default: op
+            description: Use kelp farms
+            default: true
           delta.kelp.create:
-            description: Test
+            description: Create kelp farm
+            default: true
+          delta.kelp.setage:
+            description: Set age of a kelp
             default: op
           delta.kelp.remove:
-            description: Test
-            default: op
+            description: Remove kelp farm
+            default: true
 

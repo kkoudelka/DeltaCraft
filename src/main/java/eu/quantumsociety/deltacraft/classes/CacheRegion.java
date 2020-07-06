@@ -1,6 +1,8 @@
 package eu.quantumsociety.deltacraft.classes;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 
 import java.util.UUID;
 
@@ -39,6 +41,14 @@ public class CacheRegion {
                 && loc.getX() > minX && loc.getX() <= maxX
                 && loc.getY() > minY - 0.5 && loc.getY() < maxY
                 && loc.getZ() > minZ && loc.getZ() <= maxZ;
+    }
+
+    public OfflinePlayer getOwner() {
+        return Bukkit.getOfflinePlayer(this.ownerId);
+    }
+
+    public String getOwnerName() {
+        return this.getOwner().getName();
     }
 
 }

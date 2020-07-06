@@ -2,6 +2,8 @@ system:
   debug: false
 settings:
   spectate:
-    maxdistance: 30
+    maxdistance: 100
+  kelp:
+    maxdistance: 300
   home:
     maxhomes: 10

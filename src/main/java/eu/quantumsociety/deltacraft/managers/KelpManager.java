@@ -35,10 +35,9 @@ public class KelpManager extends ConfigManager {
         this.loadRegions();
     }
 
-    public boolean loadRegions() {
+    public void loadRegions() {
         HashMap<String, CacheRegion> regions = this.getRegions();
         this.getMgr().loadRegions(regions);
-        return true;
     }
 
     public HashMap<String, CacheRegion> getRegions() {
@@ -59,6 +58,10 @@ public class KelpManager extends ConfigManager {
             Location one = config.getLocation(kh.get(this.PointOneKey));
             Location two = config.getLocation(kh.get(this.PointTwoKey));
             String id = config.getString(kh.get(this.OwnerKey));
+
+            if (one == null || two == null || id == null) {
+                return new HashMap<>();
+            }
             UUID uid = UUID.fromString(id);
 
             CacheRegion region = new CacheRegion(one, two, key, uid);
