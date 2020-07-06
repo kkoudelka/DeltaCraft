@@ -10,6 +10,7 @@ import net.md_5.bungee.api.chat.HoverEvent
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import java.util.*
 import kotlin.collections.ArrayList
@@ -55,7 +56,7 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
     }
 
     fun isObstructed(location: Location): Pair<Boolean, Array<BaseComponent>?> {
-        val blockUnder = location.subtract(0.0, 1.0, 0.0).block
+        val blockUnder = location.block.getRelative(BlockFace.DOWN)
         if (blockUnder.isEmpty) {
             return Pair(true, TextHelper.attentionText("A block is missing under the home location!"))
         }
@@ -64,16 +65,16 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
             return Pair(true, TextHelper.attentionText("There is a lava under the home position"))
         }
 
-        val upperBlock = location.add(0.0,1.0,0.0).block
         val block = location.block
+        val up = block.getRelative(BlockFace.UP)
 
-        if (upperBlock.isEmpty && block.isEmpty) {
+        if (up.isEmpty && block.isEmpty) {
             return Pair(false, null)
         }
 
         return Pair(true, ComponentBuilder()
                 .append(TextHelper.attentionText("Home location is obstructed"))
-                .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Obstructed by: '${block.type} and ${upperBlock.type}'").create()))
+                .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Obstructed by: '${block.type} and ${up.type}'").create()))
                 .create())
     }
 
