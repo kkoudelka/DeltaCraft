@@ -3,6 +3,7 @@ package eu.quantumsociety.deltacraft.utils.enums;
 public enum Settings {
     DEBUG("system.debug"),
     SPECTATEMAXDISTANCE("settings.spectate.maxdistance"),
+    HOMEMAXHOMES("settings.home.maxhomes"),
     KELPMAXDISTANCE("settins.kelp.maxdistance");
 
     private String path;

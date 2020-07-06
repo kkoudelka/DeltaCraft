@@ -1,8 +1,10 @@
 package eu.quantumsociety.deltacraft.commands.home
 
+import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.managers.HomesManager
 import eu.quantumsociety.deltacraft.utils.TextHelper
 import eu.quantumsociety.deltacraft.utils.enums.Permissions
+import eu.quantumsociety.deltacraft.utils.enums.Settings
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
@@ -14,7 +16,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import java.awt.Component
 
-class SetHomeCommand(private val configManager: HomesManager) : CommandExecutor {
+class SetHomeCommand(private val configManager: HomesManager, val deltaCraft: DeltaCraft) : CommandExecutor {
 
     private val overrideString: String = "::override::"
 
@@ -31,6 +33,16 @@ class SetHomeCommand(private val configManager: HomesManager) : CommandExecutor 
             player.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.HOMESET.value))
             return true
         }
+
+        val maxHomes = deltaCraft.config.getInt(Settings.HOMEMAXHOMES.path)
+
+        if (configManager.getPlayerHomesCount(player) > (maxHomes - 1)) {
+
+            player.spigot().sendMessage(*TextHelper.infoText("You have reached quota of $maxHomes homes"))
+
+            return true
+        }
+
 
         var overrideSave: Boolean = false
 

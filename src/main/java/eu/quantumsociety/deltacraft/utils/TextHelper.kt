@@ -31,5 +31,17 @@ class TextHelper {
                     .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Missing permission: '$permission'").create()))
                     .create()
         }
+
+        fun infoText(text: String): Array<BaseComponent> {
+            return ComponentBuilder(text)
+                    .color(ChatColor.YELLOW)
+                    .create()
+        }
+
+        fun varText(text: String): Array<BaseComponent> {
+            return ComponentBuilder(text)
+                    .color(ChatColor.WHITE)
+                    .create()
+        }
     }
 }

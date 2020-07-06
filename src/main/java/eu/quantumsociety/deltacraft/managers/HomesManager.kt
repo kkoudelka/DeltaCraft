@@ -26,6 +26,15 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
         return list
     }
 
+    fun getPlayerHomesCount(p: Player): Int {
+        val kh = KeyHelper(p.uniqueId)
+        if (!config.contains(kh.playerKey))
+            return 0
+        val section = config.getConfigurationSection(kh.playerKey)!!
+
+        return section.getKeys(false).size
+    }
+
     fun getHome(p: Player, homeName: String): Location? {
         val kh = KeyHelper(p.uniqueId)
 
