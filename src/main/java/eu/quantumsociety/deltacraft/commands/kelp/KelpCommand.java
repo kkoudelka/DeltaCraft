@@ -65,9 +65,19 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
         String cmd = args[0].trim();
 
+        if (cmd.equalsIgnoreCase("test")) {
+            this.isInFarm(p);
+            return true;
+        }
+
         if (args.length < 2) {
             if (cmd.equalsIgnoreCase("age")) {
                 this.getAge(p);
+                return true;
+            }
+
+            if (cmd.equalsIgnoreCase("?") || cmd.equalsIgnoreCase("help")) {
+                this.sendHelp(p);
                 return true;
             }
 
@@ -291,6 +301,30 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         p.sendMessage(ChatColor.GREEN + "Age set to: " + ChatColor.YELLOW + age);
     }
 
+    private void sendHelp(Player p) {
+        String text = "Kelp farms =========================\n";
+        text += ChatColor.YELLOW + "/kelp set <1 or 2> " + ChatColor.GREEN + " Set first and second point of a farm \n";
+        text += ChatColor.YELLOW + "/kelp create <name> " + ChatColor.GREEN + " Create a farm \n";
+        text += ChatColor.YELLOW + "/kelp remove <name> " + ChatColor.GREEN + " Remove a farm \n";
+        text += ChatColor.YELLOW + "/kelp test" + ChatColor.GREEN + " Check if you are standing in a farm \n";
+        text += ChatColor.WHITE + "====================================";
+        p.sendMessage(text);
+    }
+
+    private void isInFarm(Player p) {
+        Location l = p.getLocation();
+
+        CacheRegion reg = this.getMgr().getCacheRegion(l);
+
+        if (reg != null) {
+            p.sendMessage("You " + ChatColor.GREEN + "are " + ChatColor.WHITE + "in a kelp farm "
+                    + ChatColor.YELLOW + reg.name + ChatColor.WHITE + " owner by "
+                    + ChatColor.YELLOW + reg.getOwnerName());
+            return;
+        }
+        p.sendMessage("You " + ChatColor.RED + "are not " + ChatColor.WHITE + "in a kelp farm");
+    }
+
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> list = new ArrayList<>();
@@ -304,7 +338,8 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
 
         if (args.length < 1 || args[0].isEmpty() || args[0].length() < 3) {
             list.add("set");
-            list.add("age");
+//            list.add("age");
+            list.add("test");
             list.add("create");
             list.add("remove");
             return list;
