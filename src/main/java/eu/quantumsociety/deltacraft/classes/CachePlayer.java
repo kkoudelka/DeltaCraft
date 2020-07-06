@@ -4,34 +4,33 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.Date;
+import java.util.UUID;
 
 public class CachePlayer {
-    private Player p;
+    private UUID id;
     private Location originalLocation;
     private GameMode prevGameMode;
-    private Date changed;
 
-    public CachePlayer(Player p, Location originalLocation, GameMode prevGameMode, Date changed) {
-        this.p = p;
-        this.originalLocation = originalLocation;
-        this.prevGameMode = prevGameMode;
-        this.changed = changed;
+    public CachePlayer(Player p, Location originalLocation, GameMode prevGameMode) {
+        this(p.getUniqueId(), originalLocation, prevGameMode);
     }
 
-    public Player getPlayer() {
-        return this.p;
+    public CachePlayer(UUID id, Location originalLocation, GameMode prevGameMode) {
+        this.id = id;
+        this.originalLocation = originalLocation;
+        this.prevGameMode = prevGameMode;
     }
 
     public Location getOriginalLocation() {
         return this.originalLocation;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public GameMode getPrevGameMode() {
         return this.prevGameMode;
     }
 
-    public Date getChanged() {
-        return this.changed;
-    }
 }

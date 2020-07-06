@@ -21,21 +21,19 @@ public class DeltaCraftManager {
         this.kelpCache = new HashMap<>();
     }
 
-    public CachePlayer addCachePlayer(Player player, Location origin, GameMode gm) {
-
-        return this.addCachePlayer(new CachePlayer(player,
+    public void addCachePlayer(Player player, Location origin, GameMode gm) {
+        this.addCachePlayer(new CachePlayer(player,
                 origin,
-                gm,
-                new Date()
+                gm
         ));
     }
 
-    public CachePlayer addCachePlayer(CachePlayer toAdd) {
-        UUID id = toAdd.getPlayer().getUniqueId();
+    public void addCachePlayer(CachePlayer toAdd) {
+        UUID id = toAdd.getId();
         this.plugin.debugMsg("Adding player: " + id);
 
         this.spectateCache.put(id, toAdd);
-        return this.getCachePlayer(id);
+        this.getCachePlayer(id);
     }
 
     public CachePlayer getCachePlayer(UUID find) {
@@ -46,27 +44,27 @@ public class DeltaCraftManager {
         return this.spectateCache.containsKey(uuid);
     }
 
-    public CachePlayer removeCachePlayer(UUID find) {
+    public void removeCachePlayer(UUID find) {
         this.plugin.debugMsg("Removing player: " + find);
-        return this.spectateCache.remove(find);
+        this.spectateCache.remove(find);
     }
 
-    public CacheRegion addCacheRegion(Location one, Location two,
-                                      String name, UUID ownerId) {
+    public void addCacheRegion(Location one, Location two,
+                               String name, UUID ownerId) {
         CacheRegion region = new CacheRegion(one, two, name, ownerId);
 
-        return this.addCacheRegion(name, region);
+        this.addCacheRegion(name, region);
     }
 
-    public CacheRegion addCacheRegion(String name, CacheRegion region) {
+    public void addCacheRegion(String name, CacheRegion region) {
         this.plugin.debugMsg("Adding region: " + name);
 
         this.kelpCache.put(name, region);
-        return this.getCacheRegion(name);
+        this.getCacheRegion(name);
     }
 
-    public CacheRegion getCacheRegion(String find) {
-        return this.kelpCache.get(find);
+    public void getCacheRegion(String find) {
+        this.kelpCache.get(find);
     }
 
     public CacheRegion getCacheRegion(Location l) {
@@ -78,15 +76,19 @@ public class DeltaCraftManager {
         return null;
     }
 
-    public CacheRegion removeCacheRegion(String name) {
+    public void removeCacheRegion(String name) {
         this.plugin.debugMsg("Removing region: " + name);
-        return this.kelpCache.remove(name);
+        this.kelpCache.remove(name);
     }
 
-    public boolean loadRegions(HashMap<String, CacheRegion> regions) {
-        this.kelpCache = regions;
-        return true;
+    public void loadSpectators(HashMap<UUID, CachePlayer> players) {
+        this.spectateCache = players;
     }
+
+    public void loadRegions(HashMap<String, CacheRegion> regions) {
+        this.kelpCache = regions;
+    }
+
 
     public int getKelpCacheSize() {
         return this.kelpCache.size();

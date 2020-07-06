@@ -20,6 +20,10 @@ public class KeyHelper {
         this(pUid, "players");
     }
 
+    public KeyHelper(String id) {
+        this(id, "players");
+    }
+
     /**
      * Returns players key with submodule and subkeys <i>players.[UUID].[subkey].[...?]...</i>
      *

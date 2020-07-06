@@ -1,8 +1,8 @@
 package eu.quantumsociety.deltacraft.commands.spectate;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
-import eu.quantumsociety.deltacraft.managers.ConfigManager;
 import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
+import eu.quantumsociety.deltacraft.managers.SpectateManager;
 import eu.quantumsociety.deltacraft.utils.KeyHelper;
 import eu.quantumsociety.deltacraft.utils.enums.Permissions;
 import org.bukkit.ChatColor;
@@ -11,22 +11,19 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-import static org.bukkit.Bukkit.getWorld;
-
 public class SpectateCommand implements CommandExecutor {
-    private final ConfigManager configManager;
+    private final SpectateManager configManager;
     private final DeltaCraft plugin;
 
     private DeltaCraftManager getMgr() {
         return this.plugin.getManager();
     }
 
-    public SpectateCommand(ConfigManager dataMgr, DeltaCraft plugin) {
+    public SpectateCommand(SpectateManager dataMgr, DeltaCraft plugin) {
 
         this.configManager = dataMgr;
         this.plugin = plugin;
@@ -48,57 +45,23 @@ public class SpectateCommand implements CommandExecutor {
 
     private boolean executeSwitch(Player p) {
         KeyHelper keys = new KeyHelper(p.getUniqueId());
-        FileConfiguration config = configManager.getConfig();
 
-        boolean exists = config.contains(keys.getPlayerKey());
+        boolean exists = this.configManager.exists(keys);
         if (!exists) {
-            return switchToSpectate(p, config);
+            return switchToSpectate(p, keys);
         }
 
-        return switchBack(p, config, keys);
+        return switchBack(p, keys);
     }
 
-    private boolean save(KeyHelper keys, Location l, GameMode gm, FileConfiguration config) {
-        config.set(keys.get("location"), l);
-        config.set(keys.get("mode"), gm);
+    private boolean switchBack(Player p, KeyHelper keys) {
+        Location l = this.configManager.getLocation(keys);
+        GameMode g = this.configManager.getGamemode(keys);
 
-        configManager.saveConfig();
-        return true;
+        return switchBack(p, l, g);
     }
 
-    private void delete(UUID id, FileConfiguration config) {
-        KeyHelper keys = new KeyHelper(id);
-
-        config.set(keys.getPlayerKey(), null);
-
-        configManager.saveConfig();
-    }
-
-    private Location getLocation(KeyHelper keys, FileConfiguration config) {
-        String path = keys.get("location");
-        if (!config.contains(path)) {
-            return null;
-        }
-
-        return (Location) config.get(path);
-    }
-
-    private GameMode getGamemode(KeyHelper keys, FileConfiguration config) {
-        String modeKey = keys.get("mode");
-
-        String gameModeVal = config.getString(modeKey);
-
-        return GameMode.valueOf(gameModeVal);
-    }
-
-    private boolean switchBack(Player p, FileConfiguration config, KeyHelper keys) {
-        Location l = getLocation(keys, config);
-        GameMode g = getGamemode(keys, config);
-
-        return switchBack(p, l, g, config);
-    }
-
-    private boolean switchBack(Player p, Location l, GameMode gm, FileConfiguration config) {
+    private boolean switchBack(Player p, Location l, GameMode gm) {
         p.teleport(l);
 
         p.setGameMode(gm);
@@ -106,23 +69,19 @@ public class SpectateCommand implements CommandExecutor {
         UUID id = p.getUniqueId();
 
         this.getMgr().removeCachePlayer(id);
-        delete(id, config);
+        this.configManager.delete(id);
 
         p.sendMessage(ChatColor.YELLOW + "You are no longer Spectating!");
 
         return true;
     }
 
-    private boolean switchToSpectate(Player p, FileConfiguration config) {
-        KeyHelper keys = new KeyHelper(p.getUniqueId());
+    private boolean switchToSpectate(Player p, KeyHelper keys) {
 
         Location loc = p.getLocation();
         GameMode gm = p.getGameMode();
 
-        boolean suc = this.save(keys, loc, gm, config);
-        if (!suc) {
-            return false;
-        }
+        this.configManager.save(keys, loc, gm);
 
         this.getMgr().addCachePlayer(p, loc, gm);
 
