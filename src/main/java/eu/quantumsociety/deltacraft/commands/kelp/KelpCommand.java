@@ -211,7 +211,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
 
         if (distance > maxDistance) {
-            p.sendMessage(ChatColor.RED + "Maximum distance between blocks is :" + maxDistance + ". Your distance is " + distance);
+            p.sendMessage(ChatColor.RED + "Maximum distance between blocks is " + maxDistance + ". Your distance is " + distance);
             return true;
         }
 
