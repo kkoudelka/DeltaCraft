@@ -65,16 +65,19 @@ class SetHomeCommand(private val configManager: HomesManager, val deltaCraft: De
         if (configManager.homeExists(player, homeName) && !overrideSave) {
             val text = ComponentBuilder()
                     .append(TextHelper.getDivider())
-                    .append("Home ").color(ChatColor.YELLOW)
-                    .append(homeName).color(ChatColor.WHITE)
-                    .append(" already exists.").color(ChatColor.YELLOW)
+                    .append(TextHelper.infoText("Home "))
+                    .append(TextHelper.varText(homeName))
+                    .append(TextHelper.infoText(" already exists."))
                     .append("\n")
                     .append("\n")
                     .append("\n")
                     .append(TextHelper.createActionButton(
                             ComponentBuilder("OVERWRITE")
                                     .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sethome $homeName$overrideString"))
-                                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Proceed to teleport to '$homeName' anyway").create()))
+                                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder()
+                                            .append(TextHelper.infoText("Proceed to create home "))
+                                            .append(TextHelper.varText(homeName))
+                                            .append(TextHelper.infoText(".")).create()))
                                     .create(), ChatColor.DARK_GREEN
                     ))
                     .append("")
@@ -90,9 +93,9 @@ class SetHomeCommand(private val configManager: HomesManager, val deltaCraft: De
         configManager.setHome(player, homeName)
 
         val output = ComponentBuilder()
-                .append("Home ").color(ChatColor.YELLOW)
-                .append(homeName).color(ChatColor.WHITE)
-                .append(" has been saved successfully!").color(ChatColor.YELLOW)
+                .append(TextHelper.infoText("Home "))
+                .append(TextHelper.varText(homeName))
+                .append(TextHelper.infoText(" has been saved successfully!"))
         player.spigot().sendMessage(*output.create())
         player.location.world?.spawnParticle(Particle.HEART, player.location.add((player.location.direction.multiply(2))).add(0.0, 1.0, 0.0), 1)
         return true

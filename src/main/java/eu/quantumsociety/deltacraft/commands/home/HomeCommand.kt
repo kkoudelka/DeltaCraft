@@ -67,11 +67,11 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
         }
 
 
-
         val isObstructed = configManager.isObstructed(homeLocation);
 
         if (isObstructed.first && !overrideTp) {
-            val text = ComponentBuilder(isObstructed.second)
+            val text = ComponentBuilder()
+                    .append(isObstructed.second)
                     .color(ChatColor.DARK_RED)
                     .bold(true)
                     .append("\n")
@@ -79,8 +79,10 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
                     .append("\n")
                     .append(TextHelper.createActionButton(ComponentBuilder("TELEPORT ANYWAY")
                             .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/home $homeName$overrideString"))
-                            .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Proceed to teleport to '$homeName' anyway")
-                                    .create()))
+                            .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder()
+                                    .append(TextHelper.infoText("Proceed to teleport to "))
+                                    .append(TextHelper.varText(homeName))
+                                    .append(TextHelper.infoText(" anyway.")).create()))
                             .create()))
 
 

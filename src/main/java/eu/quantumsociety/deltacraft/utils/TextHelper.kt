@@ -38,6 +38,12 @@ class TextHelper {
                     .create()
         }
 
+        fun attentionText(text: String): Array<BaseComponent> {
+            return ComponentBuilder().append(infoText(text))
+                    .bold(true)
+                    .create()
+        }
+
         fun varText(text: String): Array<BaseComponent> {
             return ComponentBuilder(text)
                     .color(ChatColor.WHITE)

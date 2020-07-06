@@ -3,6 +3,10 @@ package eu.quantumsociety.deltacraft.managers
 import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.classes.PlayerHome
 import eu.quantumsociety.deltacraft.utils.KeyHelper
+import eu.quantumsociety.deltacraft.utils.TextHelper
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.ComponentBuilder
+import net.md_5.bungee.api.chat.HoverEvent
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -50,24 +54,27 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
         return config.contains(kh[homeName])
     }
 
-    fun isObstructed(location: Location): Pair<Boolean, String> {
+    fun isObstructed(location: Location): Pair<Boolean, Array<BaseComponent>?> {
         val blockUnder = location.subtract(0.0, 1.0, 0.0).block
         if (blockUnder.isEmpty) {
-            return Pair(true, "There is a block missing under the home position")
+            return Pair(true, TextHelper.attentionText("A block is missing under the home location!"))
         }
 
         if (blockUnder.type == Material.LAVA || blockUnder.type == Material.LAVA_BUCKET) {
-            return Pair(true, "There is a lava under the home position")
+            return Pair(true, TextHelper.attentionText("There is a lava under the home position"))
         }
 
         val upperBlock = location.add(0.0,1.0,0.0).block
         val block = location.block
 
         if (upperBlock.isEmpty && block.isEmpty) {
-            return Pair(false, "")
+            return Pair(false, null)
         }
 
-        return Pair(true, "Home location is obstructed")
+        return Pair(true, ComponentBuilder()
+                .append(TextHelper.attentionText("Home location is obstructed"))
+                .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Obstructed by: '${block.type} and ${upperBlock.type}'").create()))
+                .create())
     }
 
     fun setHome(p: Player, homeName: String): Boolean {
