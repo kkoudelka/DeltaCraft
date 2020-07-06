@@ -1,6 +1,7 @@
 package eu.quantumsociety.deltacraft.managers;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
+import eu.quantumsociety.deltacraft.classes.CacheAfk;
 import eu.quantumsociety.deltacraft.classes.CachePlayer;
 import eu.quantumsociety.deltacraft.classes.CacheRegion;
 import org.bukkit.GameMode;
@@ -14,11 +15,13 @@ public class DeltaCraftManager {
 
     private HashMap<UUID, CachePlayer> spectateCache;
     private HashMap<String, CacheRegion> kelpCache;
+    private HashMap<UUID, CacheAfk> afkCache;
 
     public DeltaCraftManager(DeltaCraft plugin) {
         this.plugin = plugin;
         this.spectateCache = new HashMap<>();
         this.kelpCache = new HashMap<>();
+        this.afkCache = new HashMap<>();
     }
 
     public CachePlayer addCachePlayer(Player player, Location origin, GameMode gm) {
@@ -95,4 +98,29 @@ public class DeltaCraftManager {
     public Collection<CacheRegion> getRegions() {
         return this.kelpCache.values();
     }
+
+
+    public CacheAfk addAfkPlayer(Player player) {
+        return this.addAfkPlayer(new CacheAfk(player));
+    }
+
+    public CacheAfk addAfkPlayer(CacheAfk toAdd) {
+        UUID id = toAdd.getId();
+        this.afkCache.put(id, toAdd);
+        return this.getAfkPlayer(id);
+    }
+
+    public CacheAfk getAfkPlayer(UUID find) {
+        return this.afkCache.get(find);
+    }
+
+    public boolean isPlayerAfk(UUID uuid) {
+        return this.afkCache.containsKey(uuid);
+    }
+
+    public CacheAfk removeAfkPlayer(UUID find) {
+        this.plugin.debugMsg("Removing player: " + find);
+        return this.afkCache.remove(find);
+    }
+
 }
