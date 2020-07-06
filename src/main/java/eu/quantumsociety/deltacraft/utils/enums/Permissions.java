@@ -6,7 +6,13 @@ public enum Permissions {
     KELPFARMCREATE("kelp.create"),
     KELPFARMUSE("kelp.use"),
     KELPFARMSETAGE("kelp.setage"),
-    KELPFARMREMOVE("kelp.remove");
+    KELPFARMREMOVE("kelp.remove"),
+
+    HOMESET("home.set"),
+    HOMEUSE("home.use"),
+    HOMELISTSELF("home.list.self"),
+    HOMELISTANYONE("home.list.all"),
+    HOMEDELETE("home.delete");
 
     private final String path;
 

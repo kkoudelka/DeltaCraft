@@ -34,6 +34,9 @@ permissions:
           delta.home.use:
             description: Teleport to home
             default: true
+          delta.home.delete:
+            description: Delete home
+            default: true
           delta.home.list.*:
             default: op
             children:
