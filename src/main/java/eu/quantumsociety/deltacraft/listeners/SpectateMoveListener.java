@@ -40,7 +40,7 @@ public class SpectateMoveListener implements Listener {
             return;
         }
 
-        double maxDistance = this.plugin.getConfig().getDouble(Settings.MAXDISTANCE.getPath());
+        double maxDistance = this.plugin.getConfig().getDouble(Settings.SPECTATEMAXDISTANCE.getPath());
 
         CachePlayer cache = manager.getCachePlayer(id);
         Location origin = cache.getOriginalLocation();

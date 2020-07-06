@@ -5,7 +5,9 @@ import eu.quantumsociety.deltacraft.classes.CacheRegion;
 import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
 import eu.quantumsociety.deltacraft.managers.KelpManager;
 import eu.quantumsociety.deltacraft.utils.KeyHelper;
+import eu.quantumsociety.deltacraft.utils.MathHelper;
 import eu.quantumsociety.deltacraft.utils.enums.Permissions;
+import eu.quantumsociety.deltacraft.utils.enums.Settings;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -188,6 +190,21 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             p.sendMessage(ChatColor.RED + "Point 2 is not set");
             return true;
         }
+
+        double maxDistance = this.plugin.getConfig().getDouble(Settings.KELPMAXDISTANCE.getPath());
+        double distance;
+        try {
+            distance = MathHelper.calcDistance(one, two);
+        } catch (Exception ex) {
+            p.sendMessage(ChatColor.RED + "Points cannot be in a different worlds!");
+            return true;
+        }
+
+        if (distance > maxDistance) {
+            p.sendMessage(ChatColor.RED + "Maximum distance between blocks is :" + maxDistance + ". Your distance is " + distance);
+            return true;
+        }
+
         KeyHelper keys = new KeyHelper(name, this.configManager.FarmPrefix);
         String tempKey = tempKeys.get(TempKey);
 
