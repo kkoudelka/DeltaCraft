@@ -10,14 +10,18 @@ class TextHelper {
         @JvmStatic
         fun getDivider(): Array<BaseComponent> {
             val divider = "===================================="
-            return ComponentBuilder(divider).color(ChatColor.GRAY).create();
+            return ComponentBuilder()
+                    .append("\n")
+                    .append(divider).color(ChatColor.GRAY)
+                    .append("\n")
+                    .create();
         }
 
         fun createActionButton(button: Array<BaseComponent>, color: ChatColor = ChatColor.DARK_AQUA): Array<BaseComponent> {
             return ComponentBuilder("")
-                    .append("[ ").color(ChatColor.DARK_GRAY).bold(true)
+                    .append("[ ").color(ChatColor.WHITE).bold(true)
                     .append(button).color(color).bold(false)
-                    .append(" ]").color(ChatColor.DARK_GRAY).bold(true)
+                    .append(" ]").color(ChatColor.WHITE).bold(true)
                     .create()
         }
 
