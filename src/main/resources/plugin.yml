@@ -49,7 +49,7 @@ permissions:
           delta.spectate.use:
             description: Test
             default: op
-          delta.spectate.unlimiteddistance:
+          delta.spectate.unlimited:
             description: Test
             default: op
       delta.kelp.*:

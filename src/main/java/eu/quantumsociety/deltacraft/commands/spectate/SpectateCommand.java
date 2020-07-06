@@ -39,7 +39,7 @@ public class SpectateCommand implements CommandExecutor {
         }
         Player p = (Player) sender;
 
-        if (!p.hasPermission(Permissions.USESPECTATE.getName())) {
+        if (!p.hasPermission(Permissions.SPECTATEUSE.getName())) {
             p.sendMessage(ChatColor.RED + "You don't have permission to use spectator mode!");
             return true;
         }

@@ -36,7 +36,7 @@ public class SpectateMoveListener implements Listener {
             return;
         }
 
-        if (p.hasPermission(Permissions.UNLIMITEDDISTANCE.getName())) {
+        if (p.hasPermission(Permissions.SPECTATEUNLIMITED.getName())) {
             return;
         }
 

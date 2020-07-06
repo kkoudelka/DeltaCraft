@@ -19,9 +19,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,7 +45,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("Only players can use this commands");
             return false;
@@ -59,11 +57,11 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        if (args.length < 1) {
-            p.sendMessage(ChatColor.YELLOW + "You must pass some arguments");
+        if (args.length < 1 || args[0].isEmpty()) {
+            p.sendMessage(ChatColor.GREEN + "Use " + ChatColor.YELLOW + "/kelp ? " + ChatColor.GREEN + "for help");
             return true;
         }
-        String cmd = args[0];
+        String cmd = args[0].trim();
 
         if (args.length < 2) {
             if (cmd.equalsIgnoreCase("age")) {
@@ -75,16 +73,28 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        String arg = args[1].trim();
         if (cmd.equalsIgnoreCase("set")) {
-            switch (args[1]) {
+            switch (arg) {
                 case "1":
-                    return setPointOne(p);
+                case "one":
+                case "first":
+                    setPointOne(p);
+                    break;
                 case "2":
-                    return setPointTwo(p);
+                case "two":
+                case "second":
+                    setPointTwo(p);
+                    break;
                 default:
-                    p.sendMessage(ChatColor.YELLOW + "Only 1 or 2");
+                    p.sendMessage(ChatColor.YELLOW + "You can only set point '1' or '2'");
                     return true;
             }
+
+            if (pointsAreSet(p)) {
+                p.sendMessage(ChatColor.GREEN + "Well done! You can now create farm by " + ChatColor.YELLOW + "/kelp create <name of the farm>");
+            }
+            return true;
         }
 
         if (cmd.equalsIgnoreCase("create")) {
@@ -92,8 +102,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
                 p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
                 return true;
             }
-            String name = args[1];
-            return this.createFarm(p, name);
+            return this.createFarm(p, arg);
         }
 
         if (cmd.equalsIgnoreCase("delete") || cmd.equalsIgnoreCase("remove")) {
@@ -102,8 +111,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            String name = args[1];
-            return this.deleteFarm(p, name);
+            return this.deleteFarm(p, arg);
         }
 
         if (cmd.equalsIgnoreCase("age")) {
@@ -111,24 +119,27 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
                 p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
                 return true;
             }
+            int age = 0;
+            try {
+                age = Integer.parseInt(arg);
+            } catch (NumberFormatException ignored) {
 
-            String ageS = args[1];
-            int age = Integer.parseInt(ageS);
+            }
             this.setAge(p, age);
         }
 
         return true;
     }
 
-    private boolean setPointOne(Player p) {
-        return saveTempLoc(p, this.configManager.PointOneKey, "1");
+    private void setPointOne(Player p) {
+        saveTempLoc(p, this.configManager.PointOneKey, "1");
     }
 
-    private boolean setPointTwo(Player p) {
-        return saveTempLoc(p, this.configManager.PointTwoKey, "2");
+    private void setPointTwo(Player p) {
+        saveTempLoc(p, this.configManager.PointTwoKey, "2");
     }
 
-    private boolean saveTempLoc(Player p, String key, String pointName) {
+    private void saveTempLoc(Player p, String key, String pointName) {
         Location loc = p.getLocation();
         UUID id = p.getUniqueId();
 
@@ -142,15 +153,28 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         this.configManager.saveConfig();
 
         p.sendMessage(ChatColor.GREEN + "Point " + ChatColor.YELLOW + pointName + ChatColor.GREEN + " saved");
+    }
+
+    private boolean pointsAreSet(Player p) {
+        KeyHelper tempKeys = new KeyHelper(p.getUniqueId());
+        String tempKeyOne = tempKeys.get(TempKey, this.configManager.PointOneKey);
+        String tempKeyTwo = tempKeys.get(TempKey, this.configManager.PointTwoKey);
+
+        Location one = this.configManager.getLocation(tempKeyOne);
+        if (one == null) {
+            return false;
+        }
+        Location two = this.configManager.getLocation(tempKeyTwo);
+        if (two == null) {
+            return false;
+        }
         return true;
     }
 
     private boolean createFarm(Player p, String name) {
         UUID playerId = p.getUniqueId();
-        KeyHelper keys = new KeyHelper(name, this.configManager.FarmPrefix);
         KeyHelper tempKeys = new KeyHelper(playerId);
 
-        String tempKey = tempKeys.get(TempKey);
         String tempKeyOne = tempKeys.get(TempKey, this.configManager.PointOneKey);
         String tempKeyTwo = tempKeys.get(TempKey, this.configManager.PointTwoKey);
 
@@ -164,6 +188,8 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             p.sendMessage(ChatColor.RED + "Point 2 is not set");
             return true;
         }
+        KeyHelper keys = new KeyHelper(name, this.configManager.FarmPrefix);
+        String tempKey = tempKeys.get(TempKey);
 
         String keyOne = keys.get(this.configManager.PointOneKey);
         String keyTwo = keys.get(this.configManager.PointTwoKey);
@@ -216,7 +242,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
         Ageable a = (Ageable) bd;
 
-        p.sendMessage("Age: " + a.getAge());
+        p.sendMessage(ChatColor.GREEN + "Current age: " + ChatColor.YELLOW + a.getAge());
     }
 
     private Block getTop(Block b) {
@@ -245,10 +271,9 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         a.setAge(age);
 
         b.setBlockData(a);
-        p.sendMessage("Set age: " + age);
+        p.sendMessage(ChatColor.GREEN + "Age set to: " + ChatColor.YELLOW + age);
     }
 
-    @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> list = new ArrayList<>();
@@ -260,7 +285,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             return list;
         }
 
-        if (args.length < 1 || args[0].isEmpty()) {
+        if (args.length < 1 || args[0].isEmpty() || args[0].length() < 3) {
             list.add("set");
             list.add("age");
             list.add("create");
