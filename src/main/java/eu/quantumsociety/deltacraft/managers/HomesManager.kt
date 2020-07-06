@@ -4,6 +4,8 @@ import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.classes.PlayerHome
 import eu.quantumsociety.deltacraft.utils.KeyHelper
 import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,6 +34,32 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
         return section.getLocation("$homeName.location")
     }
 
+    fun homeExists(p: Player, homeName: String): Boolean {
+        val kh = KeyHelper(p.uniqueId)
+
+        return config.contains(kh[homeName])
+    }
+
+    fun isObstructed(location: Location): Pair<Boolean, String> {
+        val blockUnder = location.subtract(0.0, 1.0, 0.0).block
+        if (blockUnder.isEmpty) {
+            return Pair(true, "There is a block missing under the home position")
+        }
+
+        if (blockUnder.type == Material.LAVA || blockUnder.type == Material.LAVA_BUCKET) {
+            return Pair(true, "There is a lava under the home position")
+        }
+
+        val upperBlock = location.add(0.0,1.0,0.0).block
+        val block = location.block
+
+        if (upperBlock.isEmpty && block.isEmpty) {
+            return Pair(false, "")
+        }
+
+        return Pair(true, "Home location is obstructed")
+    }
+
     fun setHome(p: Player, homeName: String): Boolean {
         val l = p.location
         val pl = PlayerHome(p.uniqueId, homeName, l)
@@ -41,14 +69,15 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
         return true
     }
 
-    fun delHome(p: Player, homeName: String): Boolean {
+    fun delHome(p: Player, homeName: String): Pair<Boolean, Location?> {
         val kh = KeyHelper(p.uniqueId)
 
-        if (!config.contains(kh[homeName]))
-            return false
+        if (!homeExists(p, homeName))
+            return Pair(false, null)
+        val location = getHome(p, homeName)
         config[kh[homeName]] = null
         saveConfig()
-        return true
+        return Pair(true, location)
 
     }
 }
