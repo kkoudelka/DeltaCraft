@@ -1,8 +1,12 @@
 package eu.quantumsociety.deltacraft.commands.home
 
 import eu.quantumsociety.deltacraft.managers.HomesManager
+import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Effect
 import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -21,13 +25,33 @@ class DelHomeCommand(private val homeConfigManager: HomesManager) : CommandExecu
 
         val homeName = if (params.isEmpty()) "default" else params[0].toLowerCase()
 
+
+
         val success = homeConfigManager.delHome(player, homeName)
 
-        player.sendMessage(if (success.first) "Home deleted" else "No such home");
+        if (!success.first) {
+            val output = ComponentBuilder()
+                    .append("Home ").color(ChatColor.YELLOW)
+                    .append(homeName).color(ChatColor.WHITE)
+                    .append(" not found").color(ChatColor.YELLOW)
+            player.spigot().sendMessage(*output.create())
+
+            return true
+        }
+
+        val output = ComponentBuilder()
+                .append("Home ").color(ChatColor.YELLOW)
+                .append(homeName).color(ChatColor.WHITE)
+                .append(" has been deleted!").color(ChatColor.YELLOW)
+        player.spigot().sendMessage(*output.create())
+
+
 
         val location = success.second
+        val world = location?.world!!
 
-        location?.world?.spawnParticle(Particle.VILLAGER_ANGRY, location.add(0.0, 0.5, 0.0), 1)
+        world.spawnParticle(Particle.VILLAGER_ANGRY, location.add(0.0, 0.5, 0.0), 1)
+        world.playSound(location, Sound.BLOCK_CHAIN_BREAK, SoundCategory.MASTER, 2f, 1f)
 
         return true
     }

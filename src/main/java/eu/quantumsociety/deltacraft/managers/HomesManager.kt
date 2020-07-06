@@ -9,6 +9,7 @@ import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.floor
 
 class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
     fun getPlayerHomes(p: Player): List<PlayerHome> {
@@ -62,7 +63,10 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
 
     fun setHome(p: Player, homeName: String): Boolean {
         val l = p.location
-        val pl = PlayerHome(p.uniqueId, homeName, l)
+        l.x = floor(l.x)
+        l.z = floor(l.z)
+        val centred = l.add(0.5,0.0,0.5)
+        val pl = PlayerHome(p.uniqueId, homeName, centred)
         val kh = KeyHelper(p.uniqueId)
         config[kh[homeName, "location"]] = pl.location
         saveConfig()
@@ -74,7 +78,7 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
 
         if (!homeExists(p, homeName))
             return Pair(false, null)
-        val location = getHome(p, homeName)
+        val location = getHome(p, homeName)?.clone()
         config[kh[homeName]] = null
         saveConfig()
         return Pair(true, location)

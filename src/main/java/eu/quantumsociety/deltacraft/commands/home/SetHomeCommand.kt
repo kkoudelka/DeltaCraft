@@ -1,6 +1,8 @@
 package eu.quantumsociety.deltacraft.commands.home
 
 import eu.quantumsociety.deltacraft.managers.HomesManager
+import eu.quantumsociety.deltacraft.utils.TextHelper
+import eu.quantumsociety.deltacraft.utils.enums.Permissions
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
@@ -10,6 +12,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import java.awt.Component
 
 class SetHomeCommand(private val configManager: HomesManager) : CommandExecutor {
 
@@ -22,6 +25,12 @@ class SetHomeCommand(private val configManager: HomesManager) : CommandExecutor 
         }
 
         val player: Player = commandSender
+
+        if (!player.hasPermission(Permissions.HOMESET.value)) {
+
+            player.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.HOMESET.value))
+            return true
+        }
 
         var overrideSave: Boolean = false
 
@@ -42,17 +51,23 @@ class SetHomeCommand(private val configManager: HomesManager) : CommandExecutor 
         }
 
         if (configManager.homeExists(player, homeName) && !overrideSave) {
-            val text = ComponentBuilder("Home '$homeName' already exists.")
-                    .color(ChatColor.DARK_AQUA)
-                    .bold(true)
+            val text = ComponentBuilder()
+                    .append(TextHelper.getDivider())
+                    .append("Home ").color(ChatColor.YELLOW)
+                    .append(homeName).color(ChatColor.WHITE)
+                    .append(" already exists.").color(ChatColor.YELLOW)
                     .append("\n")
                     .append("\n")
-                    .append("[ ").color(ChatColor.DARK_AQUA).bold(false)
-                    .append("OVERWRITE").color(ChatColor.GREEN)
-                    .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sethome $homeName$overrideString"))
-                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Proceed to teleport to '$homeName' anyway").create()))
-                    .append(" ]").reset().color(ChatColor.DARK_AQUA).bold(false)
-                    .color(ChatColor.DARK_AQUA)
+                    .append("\n")
+                    .append(TextHelper.createActionButton(
+                            ComponentBuilder("OVERWRITE")
+                                    .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sethome $homeName$overrideString"))
+                                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Proceed to teleport to '$homeName' anyway").create()))
+                                    .create(), ChatColor.DARK_GREEN
+                    ))
+                    .append("")
+                    .reset()
+                    .append(TextHelper.getDivider())
 
 
             player.spigot().sendMessage(*text.create())
@@ -62,9 +77,12 @@ class SetHomeCommand(private val configManager: HomesManager) : CommandExecutor 
         //TODO: Check whether home with this name is already being used
         configManager.setHome(player, homeName)
 
-        val output = "Home $homeName has been saved successfully!"
-        player.sendMessage(output)
-        player.location.world?.spawnParticle(Particle.HEART, player.location.add((player.location.direction.multiply(2))).add(0.0,1.0,0.0), 1)
+        val output = ComponentBuilder()
+                .append("Home ").color(ChatColor.YELLOW)
+                .append(homeName).color(ChatColor.WHITE)
+                .append(" has been saved successfully!").color(ChatColor.YELLOW)
+        player.spigot().sendMessage(*output.create())
+        player.location.world?.spawnParticle(Particle.HEART, player.location.add((player.location.direction.multiply(2))).add(0.0, 1.0, 0.0), 1)
         return true
     }
 
