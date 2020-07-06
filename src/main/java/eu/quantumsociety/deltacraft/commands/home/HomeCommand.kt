@@ -36,6 +36,12 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
         }
         var homeName = if (args.isEmpty()) "default" else args[0].toLowerCase()
 
+        if (homeName == overrideString) {
+            sender.sendMessage("Home name is invalid");
+
+            return true
+        }
+
         if (homeName.endsWith(overrideString)) {
             homeName = homeName.replace(overrideString, "", true)
             overrideTp = true
