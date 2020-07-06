@@ -28,6 +28,10 @@ public enum Permissions {
         return this.path;
     }
 
+    public String getValue() {
+        return this.path;
+    }
+
     /**
      * Returns the name of this enum constant, as contained in the
      * declaration.  This method may be overridden, though it typically
