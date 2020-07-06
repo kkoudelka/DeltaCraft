@@ -1,17 +1,16 @@
 package eu.quantumsociety.deltacraft.listeners;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
-import eu.quantumsociety.deltacraft.classes.CacheAfk;
 import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
-import org.bukkit.entity.Entity;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.UUID;
 
-public class AfkDamageListener implements Listener {
+public class AfkMoveListener implements Listener {
 
     private final DeltaCraft plugin;
 
@@ -19,28 +18,24 @@ public class AfkDamageListener implements Listener {
         return this.plugin.getManager();
     }
 
-    public AfkDamageListener(DeltaCraft plugin) {
+    public AfkMoveListener(DeltaCraft plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onAfkDamage(EntityDamageEvent e) {
+    public void onAfkMove(PlayerMoveEvent e) {
         if (e == null) {
             return;
         }
-        Entity ent = e.getEntity();
-        if (!(ent instanceof Player)) {
-            return;
-        }
-
-        Player p = (Player) ent;
+        Player p = e.getPlayer();
         UUID id = p.getUniqueId();
 
         if (!this.getMgr().isPlayerAfk(id)) {
             return;
         }
 
-        // this makes player invincible
+        p.sendMessage("You're AFK, use " + ChatColor.YELLOW + " /kfc (or /afk)" + ChatColor.YELLOW + " to unstuck");
         e.setCancelled(true);
     }
+
 }
