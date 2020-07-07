@@ -5,7 +5,7 @@ import eu.quantumsociety.deltacraft.classes.CacheRegion;
 import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
 import eu.quantumsociety.deltacraft.managers.KelpManager;
 import eu.quantumsociety.deltacraft.utils.KeyHelper;
-import eu.quantumsociety.deltacraft.utils.MathHelper;
+import eu.quantumsociety.deltacraft.utils.TextHelper;
 import eu.quantumsociety.deltacraft.utils.enums.Permissions;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
 import org.bukkit.ChatColor;
@@ -24,8 +24,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class KelpCommand implements CommandExecutor, TabCompleter {
     private final KelpManager configManager;
@@ -54,8 +52,8 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
         Player p = (Player) sender;
 
-        if (!p.hasPermission(Permissions.KELPFARMUSE.getName())) {
-            p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+        if (!p.hasPermission(Permissions.KELPFARMUSE.getPath())) {
+            p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.KELPFARMUSE));
             return true;
         }
 
@@ -110,16 +108,17 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
 
         if (cmd.equalsIgnoreCase("create")) {
-            if (!p.hasPermission(Permissions.KELPFARMCREATE.getName())) {
-                p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+            if (!p.hasPermission(Permissions.KELPFARMCREATE.getPath())) {
+                p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.KELPFARMCREATE));
                 return true;
             }
-            return this.createFarm(p, arg);
+            this.createFarm(p, arg);
+            return true;
         }
 
         if (cmd.equalsIgnoreCase("delete") || cmd.equalsIgnoreCase("remove")) {
-            if (!p.hasPermission(Permissions.KELPFARMREMOVE.getName())) {
-                p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+            if (!p.hasPermission(Permissions.KELPFARMREMOVE.getPath())) {
+                p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.KELPFARMREMOVE));
                 return true;
             }
 
@@ -127,8 +126,8 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
 
         if (cmd.equalsIgnoreCase("age")) {
-            if (!p.hasPermission(Permissions.KELPFARMSETAGE.getName())) {
-                p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+            if (!p.hasPermission(Permissions.KELPFARMSETAGE.getPath())) {
+                p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.KELPFARMSETAGE));
                 return true;
             }
             int age = 0;
@@ -152,7 +151,18 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
     }
 
     private void saveTempLoc(Player p, String key, String pointName) {
+        if (this.isSpectating(p)) {
+            p.spigot().sendMessage(TextHelper.infoText("You cannot set home while spectating", net.md_5.bungee.api.ChatColor.YELLOW));
+            return;
+        }
+
         Location loc = p.getLocation();
+
+        if (this.getMgr().isInKelpFarm(loc)) {
+            p.spigot().sendMessage(TextHelper.infoText("This location is already in farm", net.md_5.bungee.api.ChatColor.YELLOW));
+            return;
+        }
+
         UUID id = p.getUniqueId();
 
         loc.setYaw(0);
@@ -177,15 +187,33 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             return false;
         }
         Location two = this.configManager.getLocation(tempKeyTwo);
+        //noinspection RedundantIfStatement
         if (two == null) {
             return false;
         }
         return true;
     }
 
-    private boolean createFarm(Player p, String name) {
+    private void createFarm(Player p, String name) {
         UUID playerId = p.getUniqueId();
         KeyHelper tempKeys = new KeyHelper(playerId);
+
+        if (this.isSpectating(p)) {
+            p.spigot().sendMessage(TextHelper.infoText("You cannot set home while spectating", net.md_5.bungee.api.ChatColor.YELLOW));
+            return;
+        }
+
+        int maxFarms = this.plugin.getConfig().getInt(Settings.KELPMAXFARMS.getPath());
+        int existing = this.getMgr().getKelpFarmCount(playerId);
+        if (existing >= maxFarms) {
+            p.spigot().sendMessage(TextHelper.infoText("You have reached quota of +" + maxFarms + " farms", net.md_5.bungee.api.ChatColor.YELLOW));
+            return;
+        }
+
+        if (this.configManager.farmExists(name)) {
+            p.spigot().sendMessage(TextHelper.infoText("Farm with this name already exists", net.md_5.bungee.api.ChatColor.YELLOW));
+            return;
+        }
 
         String tempKeyOne = tempKeys.get(TempKey, this.configManager.PointOneKey);
         String tempKeyTwo = tempKeys.get(TempKey, this.configManager.PointTwoKey);
@@ -193,26 +221,26 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         Location one = this.configManager.getLocation(tempKeyOne);
         if (one == null) {
             p.sendMessage(ChatColor.RED + "Point 1 is not set");
-            return true;
+            return;
         }
         Location two = this.configManager.getLocation(tempKeyTwo);
         if (two == null) {
             p.sendMessage(ChatColor.RED + "Point 2 is not set");
-            return true;
+            return;
         }
 
         double maxDistance = this.plugin.getConfig().getDouble(Settings.KELPMAXDISTANCE.getPath());
         double distance;
         try {
-            distance = MathHelper.calcDistance(one, two);
-        } catch (Exception ex) {
+            distance = one.distance(two);
+        } catch (IllegalArgumentException ex) {
             p.sendMessage(ChatColor.RED + "Points cannot be in a different worlds!");
-            return true;
+            return;
         }
 
         if (distance > maxDistance) {
             p.sendMessage(ChatColor.RED + "Maximum distance between blocks is " + maxDistance + ". Your distance is " + distance);
-            return true;
+            return;
         }
 
         KeyHelper keys = new KeyHelper(name, this.configManager.FarmPrefix);
@@ -231,10 +259,9 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
 
         this.configManager.saveConfig();
 
-        this.getMgr().addKelpRegion(one, two, name, playerId);
+        this.getMgr().addKelpFarm(one, two, name, playerId);
 
         p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully created");
-        return true;
     }
 
     private boolean deleteFarm(Player p, String name) {
@@ -254,7 +281,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
 
         this.configManager.saveConfig();
 
-        this.getMgr().removeKelpRegion(name);
+        this.getMgr().removeKelpFarm(name);
 
         p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully deleted");
 
@@ -314,7 +341,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
     private void isInFarm(Player p) {
         Location l = p.getLocation();
 
-        CacheRegion reg = this.getMgr().getKelpRegion(l);
+        CacheRegion reg = this.getMgr().getKelpFarm(l);
 
         if (reg != null) {
             p.sendMessage("You " + ChatColor.GREEN + "are " + ChatColor.WHITE + "in a kelp farm "
@@ -323,6 +350,14 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             return;
         }
         p.sendMessage("You " + ChatColor.RED + "are not " + ChatColor.WHITE + "in a kelp farm");
+    }
+
+    private boolean isSpectating(Player p) {
+        return this.isSpectating(p.getUniqueId());
+    }
+
+    private boolean isSpectating(UUID id) {
+        return this.getMgr().isPlayerSpectating(id);
     }
 
     @Override
@@ -356,13 +391,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
                 Player p = (Player) sender;
                 UUID id = p.getUniqueId();
 
-                Collection<CacheRegion> regs = this.getMgr().getRegions();
-
-                Stream<String> r = regs.stream()
-                        .filter(i -> i.ownerId.equals(id))
-                        .map(x -> x.name);
-
-                list = r.collect(Collectors.toList());
+                list = this.getMgr().getKelpFarmNames(id);
                 break;
         }
 

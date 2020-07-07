@@ -25,9 +25,8 @@ class SpectateCommand(private val configManager: SpectateManager, private val pl
             return false
         }
         val p: Player = sender
-        if (!p.hasPermission(Permissions.SPECTATEUSE.getName())) {
-            p.spigot().sendMessage(*insufficientPermissions("You don't have permission to use spectator mode!",
-                    Permissions.SPECTATEUSE.getName()))
+        if (!p.hasPermission(Permissions.SPECTATEUSE.path)) {
+            p.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.SPECTATEUSE));
             return true
         }
         return executeSwitch(p)

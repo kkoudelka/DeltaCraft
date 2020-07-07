@@ -1,5 +1,6 @@
 package eu.quantumsociety.deltacraft.utils
 
+import eu.quantumsociety.deltacraft.utils.enums.Permissions
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.ComponentBuilder
@@ -16,6 +17,7 @@ class TextHelper {
                     .append("\n")
                     .create();
         }
+
         @JvmStatic
         fun createActionButton(button: Array<BaseComponent>, color: ChatColor = ChatColor.DARK_AQUA): Array<BaseComponent> {
             return ComponentBuilder("")
@@ -24,6 +26,17 @@ class TextHelper {
                     .append(" ]").color(ChatColor.WHITE).bold(true)
                     .create()
         }
+
+        @JvmStatic
+        fun insufficientPermissions(permission: Permissions): Array<BaseComponent> {
+            return this.insufficientPermissions("Insufficient permissions!", permission.path)
+        }
+
+        @JvmStatic
+        fun insufficientPermissions(permission: String = "¯\\_(ツ)_/¯"): Array<BaseComponent> {
+            return this.insufficientPermissions("Insufficient permissions!", permission)
+        }
+
         @JvmStatic
         fun insufficientPermissions(customMsg: String = "Insufficient permissions!", permission: String = "¯\\_(ツ)_/¯"): Array<BaseComponent> {
             return ComponentBuilder("")
@@ -31,18 +44,21 @@ class TextHelper {
                     .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Missing permission: '$permission'").create()))
                     .create()
         }
+
         @JvmStatic
         fun infoText(text: String, color: ChatColor? = ChatColor.YELLOW): Array<BaseComponent> {
             return ComponentBuilder(text)
                     .color(color)
                     .create()
         }
+
         @JvmStatic
         fun attentionText(text: String): Array<BaseComponent> {
             return ComponentBuilder().append(infoText(text))
                     .bold(true)
                     .create()
         }
+
         @JvmStatic
         fun varText(text: String): Array<BaseComponent> {
             return ComponentBuilder(text)

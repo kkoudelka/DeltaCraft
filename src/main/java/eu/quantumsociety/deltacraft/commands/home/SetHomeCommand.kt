@@ -27,9 +27,9 @@ class SetHomeCommand(private val configManager: HomesManager, val deltaCraft: De
 
         val player: Player = commandSender
 
-        if (!player.hasPermission(Permissions.HOMESET.value)) {
+        if (!player.hasPermission(Permissions.HOMESET.path)) {
 
-            player.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.HOMESET.value))
+            player.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.HOMESET))
             return true
         }
 

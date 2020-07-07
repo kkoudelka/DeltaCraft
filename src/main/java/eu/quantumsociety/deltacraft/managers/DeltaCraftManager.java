@@ -9,6 +9,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DeltaCraftManager {
     private final DeltaCraft plugin;
@@ -52,25 +54,25 @@ public class DeltaCraftManager {
         this.spectateCache.remove(find);
     }
 
-    public void addKelpRegion(Location one, Location two,
-                              String name, UUID ownerId) {
+    public void addKelpFarm(Location one, Location two,
+                            String name, UUID ownerId) {
         CacheRegion region = new CacheRegion(one, two, name, ownerId);
 
-        this.addKelpRegion(name, region);
+        this.addKelpFarm(name, region);
     }
 
-    public void addKelpRegion(String name, CacheRegion region) {
+    public void addKelpFarm(String name, CacheRegion region) {
         this.plugin.debugMsg("Adding region: " + name);
 
         this.kelpCache.put(name, region);
-        this.getKelpRegion(name);
+        this.getKelpFarm(name);
     }
 
-    public void getKelpRegion(String find) {
+    public void getKelpFarm(String find) {
         this.kelpCache.get(find);
     }
 
-    public CacheRegion getKelpRegion(Location l) {
+    public CacheRegion getKelpFarm(Location l) {
         for (CacheRegion region : kelpCache.values()) {
             if (region.contains(l)) {
                 return region;
@@ -79,7 +81,11 @@ public class DeltaCraftManager {
         return null;
     }
 
-    public void removeKelpRegion(String name) {
+    public boolean isInKelpFarm(Location l) {
+        return this.getKelpFarm(l) != null;
+    }
+
+    public void removeKelpFarm(String name) {
         this.plugin.debugMsg("Removing region: " + name);
         this.kelpCache.remove(name);
     }
@@ -88,7 +94,7 @@ public class DeltaCraftManager {
         this.spectateCache = players;
     }
 
-    public void loadRegions(HashMap<String, CacheRegion> regions) {
+    public void loadKelpFarms(HashMap<String, CacheRegion> regions) {
         this.kelpCache = regions;
     }
 
@@ -97,8 +103,44 @@ public class DeltaCraftManager {
         return this.kelpCache.size();
     }
 
-    public Collection<CacheRegion> getRegions() {
+    public Collection<CacheRegion> getKelpFarms() {
         return this.kelpCache.values();
+    }
+
+    public List<CacheRegion> getKelpFarms(Player p) {
+        return this.getKelpFarms(p.getUniqueId());
+    }
+
+    public List<CacheRegion> getKelpFarms(UUID ownerId) {
+        Collection<CacheRegion> all = this.getKelpFarms();
+
+        Stream<CacheRegion> r = all.stream()
+                .filter(x -> x.ownerId.equals(ownerId));
+
+        return r.collect(Collectors.toList());
+    }
+
+    public List<String> getKelpFarmNames(UUID ownerId) {
+        Collection<CacheRegion> farms = this.getKelpFarms(ownerId);
+
+        Stream<String> res = farms.stream()
+                .map(x -> x.name);
+
+        return res.collect(Collectors.toList());
+    }
+
+    public int getKelpFarmCount(Player p) {
+        return this.getKelpFarmCount(p.getUniqueId());
+    }
+
+    public int getKelpFarmCount(UUID ownerId) {
+        Collection<CacheRegion> all = this.getKelpFarms();
+
+        long count = all.stream()
+                .filter(x -> x.ownerId.equals(ownerId))
+                .count();
+
+        return (int) count;
     }
 
     public CacheAfk addAfkPlayer(Player player) {

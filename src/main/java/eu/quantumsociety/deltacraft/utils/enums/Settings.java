@@ -4,6 +4,7 @@ public enum Settings {
     DEBUG("system.debug"),
     SPECTATEMAXDISTANCE("settings.spectate.maxdistance"),
     HOMEMAXHOMES("settings.home.maxhomes"),
+    KELPMAXFARMS("settings.kelp.maxfarms"),
     KELPMAXDISTANCE("settings.kelp.maxdistance");
 
     private String path;

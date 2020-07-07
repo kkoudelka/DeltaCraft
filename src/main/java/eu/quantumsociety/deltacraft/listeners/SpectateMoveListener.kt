@@ -20,7 +20,7 @@ class SpectateMoveListener(private val plugin: DeltaCraft) : Listener {
         if (!manager.isPlayerSpectating(id)) {
             return
         }
-        if (p.hasPermission(Permissions.SPECTATEUNLIMITED.getName())) {
+        if (p.hasPermission(Permissions.SPECTATEUNLIMITED.path)) {
             return
         }
         val maxDistance = plugin.config.getDouble(Settings.SPECTATEMAXDISTANCE.path)

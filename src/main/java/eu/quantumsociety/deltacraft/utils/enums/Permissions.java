@@ -20,15 +20,10 @@ public enum Permissions {
         this.path = "delta." + path;
     }
 
-
     /**
      * @return the permissions path/name
      */
-    public String getName() {
-        return this.path;
-    }
-
-    public String getValue() {
+    public String getPath() {
         return this.path;
     }
 
@@ -42,6 +37,6 @@ public enum Permissions {
      */
     @Override
     public String toString() {
-        return this.getName();
+        return this.getPath();
     }
 }
