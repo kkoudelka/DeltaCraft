@@ -5,7 +5,7 @@ import eu.quantumsociety.deltacraft.classes.CacheRegion;
 import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
 import eu.quantumsociety.deltacraft.managers.KelpManager;
 import eu.quantumsociety.deltacraft.utils.KeyHelper;
-import eu.quantumsociety.deltacraft.utils.MathHelper;
+import eu.quantumsociety.deltacraft.utils.TextHelper;
 import eu.quantumsociety.deltacraft.utils.enums.Permissions;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
 import org.bukkit.ChatColor;
@@ -114,7 +114,8 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
                 p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
                 return true;
             }
-            return this.createFarm(p, arg);
+            this.createFarm(p, arg);
+            return true;
         }
 
         if (cmd.equalsIgnoreCase("delete") || cmd.equalsIgnoreCase("remove")) {
@@ -152,6 +153,11 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
     }
 
     private void saveTempLoc(Player p, String key, String pointName) {
+        if (this.isSpectating(p)) {
+            p.spigot().sendMessage(TextHelper.infoText("You cannot set home while spectating", net.md_5.bungee.api.ChatColor.YELLOW));
+            return;
+        }
+
         Location loc = p.getLocation();
         UUID id = p.getUniqueId();
 
@@ -183,9 +189,14 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
-    private boolean createFarm(Player p, String name) {
+    private void createFarm(Player p, String name) {
         UUID playerId = p.getUniqueId();
         KeyHelper tempKeys = new KeyHelper(playerId);
+
+        if (this.isSpectating(p)) {
+            p.spigot().sendMessage(TextHelper.infoText("You cannot set home while spectating", net.md_5.bungee.api.ChatColor.YELLOW));
+            return;
+        }
 
         String tempKeyOne = tempKeys.get(TempKey, this.configManager.PointOneKey);
         String tempKeyTwo = tempKeys.get(TempKey, this.configManager.PointTwoKey);
@@ -193,26 +204,26 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         Location one = this.configManager.getLocation(tempKeyOne);
         if (one == null) {
             p.sendMessage(ChatColor.RED + "Point 1 is not set");
-            return true;
+            return;
         }
         Location two = this.configManager.getLocation(tempKeyTwo);
         if (two == null) {
             p.sendMessage(ChatColor.RED + "Point 2 is not set");
-            return true;
+            return;
         }
 
         double maxDistance = this.plugin.getConfig().getDouble(Settings.KELPMAXDISTANCE.getPath());
         double distance;
         try {
-            distance = MathHelper.calcDistance(one, two);
-        } catch (Exception ex) {
+            distance = one.distance(two);
+        } catch (IllegalArgumentException ex) {
             p.sendMessage(ChatColor.RED + "Points cannot be in a different worlds!");
-            return true;
+            return;
         }
 
         if (distance > maxDistance) {
             p.sendMessage(ChatColor.RED + "Maximum distance between blocks is " + maxDistance + ". Your distance is " + distance);
-            return true;
+            return;
         }
 
         KeyHelper keys = new KeyHelper(name, this.configManager.FarmPrefix);
@@ -234,7 +245,6 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         this.getMgr().addKelpRegion(one, two, name, playerId);
 
         p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully created");
-        return true;
     }
 
     private boolean deleteFarm(Player p, String name) {
@@ -323,6 +333,14 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             return;
         }
         p.sendMessage("You " + ChatColor.RED + "are not " + ChatColor.WHITE + "in a kelp farm");
+    }
+
+    private boolean isSpectating(Player p) {
+        return this.isSpectating(p.getUniqueId());
+    }
+
+    private boolean isSpectating(UUID id) {
+        return this.getMgr().isPlayerSpectating(id);
     }
 
     @Override
