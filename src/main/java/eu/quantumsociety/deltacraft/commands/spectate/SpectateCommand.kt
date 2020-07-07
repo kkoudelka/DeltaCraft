@@ -1,12 +1,10 @@
 package eu.quantumsociety.deltacraft.commands.spectate
 
 import eu.quantumsociety.deltacraft.DeltaCraft
-import eu.quantumsociety.deltacraft.managers.DeltaCraftManager
 import eu.quantumsociety.deltacraft.managers.SpectateManager
 import eu.quantumsociety.deltacraft.managers.cache.SpectateCacheManager
 import eu.quantumsociety.deltacraft.utils.KeyHelper
 import eu.quantumsociety.deltacraft.utils.TextHelper
-import eu.quantumsociety.deltacraft.utils.TextHelper.Companion.insufficientPermissions
 import eu.quantumsociety.deltacraft.utils.enums.Permissions
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -64,7 +62,7 @@ class SpectateCommand(private val configManager: SpectateManager, private val pl
         val loc = p.location
         val gm = p.gameMode
         configManager.save(keys, loc, gm)
-        mgr.addSpectatePlayer(p, loc, gm)
+        mgr.addItem(p, loc, gm)
         p.gameMode = GameMode.SPECTATOR
         p.spigot().sendMessage(*TextHelper.infoText("You are now Spectating!"))
         p.setPlayerListName("${p.name} (Spectating) ")

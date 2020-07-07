@@ -14,7 +14,7 @@ public class SpectateCacheManager extends CacheManager<UUID, CachePlayer> {
         super(plugin, true);
     }
 
-    public void addSpectatePlayer(Player player, Location origin, GameMode gm) {
+    public void addItem(Player player, Location origin, GameMode gm) {
         this.addItem(
                 player.getUniqueId(),
                 new CachePlayer(

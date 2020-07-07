@@ -3,6 +3,7 @@ package eu.quantumsociety.deltacraft.listeners;
 import eu.quantumsociety.deltacraft.DeltaCraft;
 import eu.quantumsociety.deltacraft.classes.CacheAfk;
 import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
+import eu.quantumsociety.deltacraft.managers.cache.AfkCacheManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,8 +16,8 @@ public class AfkDamageListener implements Listener {
 
     private final DeltaCraft plugin;
 
-    private DeltaCraftManager getMgr() {
-        return this.plugin.getManager();
+    private AfkCacheManager getMgr() {
+        return this.plugin.getManager().getAfkCacheManager();
     }
 
     public AfkDamageListener(DeltaCraft plugin) {
