@@ -205,6 +205,11 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
+        if (this.configManager.farmExists(name)) {
+            p.sendMessage(ChatColor.YELLOW + "Farm with this name already exists");
+            return;
+        }
+
         String tempKeyOne = tempKeys.get(TempKey, this.configManager.PointOneKey);
         String tempKeyTwo = tempKeys.get(TempKey, this.configManager.PointTwoKey);
 

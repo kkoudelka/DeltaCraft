@@ -40,6 +40,10 @@ public class KelpManager extends ConfigManager {
         this.getMgr().loadKelpFarms(regions);
     }
 
+    public boolean farmExists(String name) {
+        return this.getConfig().contains(FarmPrefix + "." + name);
+    }
+
     public HashMap<String, CacheRegion> getRegions() {
         FileConfiguration config = this.getConfig();
         ConfigurationSection section = config.getConfigurationSection(this.FarmPrefix);
