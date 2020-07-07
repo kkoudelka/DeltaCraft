@@ -152,14 +152,14 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
 
     private void saveTempLoc(Player p, String key, String pointName) {
         if (this.isSpectating(p)) {
-            p.spigot().sendMessage(TextHelper.infoText("You cannot set home while spectating", net.md_5.bungee.api.ChatColor.YELLOW));
+            p.spigot().sendMessage(TextHelper.infoText("You cannot set home while spectating"));
             return;
         }
 
         Location loc = p.getLocation();
 
         if (this.getMgr().isInKelpFarm(loc)) {
-            p.spigot().sendMessage(TextHelper.infoText("This location is already in farm", net.md_5.bungee.api.ChatColor.YELLOW));
+            p.spigot().sendMessage(TextHelper.infoText("This location is already in farm"));
             return;
         }
 
@@ -199,19 +199,19 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         KeyHelper tempKeys = new KeyHelper(playerId);
 
         if (this.isSpectating(p)) {
-            p.spigot().sendMessage(TextHelper.infoText("You cannot set home while spectating", net.md_5.bungee.api.ChatColor.YELLOW));
+            p.spigot().sendMessage(TextHelper.infoText("You cannot set home while spectating"));
             return;
         }
 
         int maxFarms = this.plugin.getConfig().getInt(Settings.KELPMAXFARMS.getPath());
         int existing = this.getMgr().getKelpFarmCount(playerId);
         if (existing >= maxFarms) {
-            p.spigot().sendMessage(TextHelper.infoText("You have reached quota of +" + maxFarms + " farms", net.md_5.bungee.api.ChatColor.YELLOW));
+            p.spigot().sendMessage(TextHelper.infoText("You have reached quota of +" + maxFarms + " farms"));
             return;
         }
 
         if (this.configManager.farmExists(name)) {
-            p.spigot().sendMessage(TextHelper.infoText("Farm with this name already exists", net.md_5.bungee.api.ChatColor.YELLOW));
+            p.spigot().sendMessage(TextHelper.infoText("Farm with this name already exists"));
             return;
         }
 

@@ -33,16 +33,16 @@ class TextHelper {
         }
 
         @JvmStatic
-        fun insufficientPermissions(permission: String = "¯\\_(ツ)_/¯"): Array<BaseComponent> {
-            return this.insufficientPermissions("Insufficient permissions!", permission)
-        }
-
-        @JvmStatic
         fun insufficientPermissions(customMsg: String = "Insufficient permissions!", permission: String = "¯\\_(ツ)_/¯"): Array<BaseComponent> {
             return ComponentBuilder("")
                     .append(customMsg).color(ChatColor.DARK_RED)
                     .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Missing permission: '$permission'").create()))
                     .create()
+        }
+
+        @JvmStatic
+        fun infoText(text: String): Array<BaseComponent> {
+            return this.infoText(text, ChatColor.YELLOW)
         }
 
         @JvmStatic
