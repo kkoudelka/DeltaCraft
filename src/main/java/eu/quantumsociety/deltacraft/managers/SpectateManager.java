@@ -2,6 +2,8 @@ package eu.quantumsociety.deltacraft.managers;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
 import eu.quantumsociety.deltacraft.classes.CachePlayer;
+import eu.quantumsociety.deltacraft.managers.cache.SpectateCacheManager;
+import eu.quantumsociety.deltacraft.managers.templates.CacheConfigManager;
 import eu.quantumsociety.deltacraft.utils.KeyHelper;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -12,31 +14,19 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
-public class SpectateManager extends ConfigManager {
-    private DeltaCraftManager getMgr() {
-        return this.plugin.getManager();
-    }
-
+public class SpectateManager extends CacheConfigManager<SpectateCacheManager> {
     public final String PlayersPrefix = "players";
     public final String LocationKey = "location";
     public final String GamemodeKey = "mode";
 
-    public SpectateManager(DeltaCraft plugin) {
-        super(plugin, "spectate.yml");
-
-        this.loadSpectators();
+    public SpectateManager(DeltaCraft plugin, SpectateCacheManager manager) {
+        super(plugin, "spectate.yml", manager);
     }
 
     @Override
-    public void reloadConfig() {
-        super.reloadConfig();
-
-        this.loadSpectators();
-    }
-
-    public void loadSpectators() {
+    public void loadCache() {
         HashMap<UUID, CachePlayer> players = this.getSpectators();
-        this.getMgr().loadSpectators(players);
+        this.getManager().loadCache(players);
     }
 
     public HashMap<UUID, CachePlayer> getSpectators() {

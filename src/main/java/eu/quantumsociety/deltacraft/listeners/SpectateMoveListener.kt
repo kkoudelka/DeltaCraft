@@ -1,6 +1,7 @@
 package eu.quantumsociety.deltacraft.listeners
 
 import eu.quantumsociety.deltacraft.DeltaCraft
+import eu.quantumsociety.deltacraft.managers.cache.SpectateCacheManager
 import eu.quantumsociety.deltacraft.utils.enums.Permissions
 import eu.quantumsociety.deltacraft.utils.enums.Settings
 import org.bukkit.ChatColor
@@ -9,6 +10,9 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerMoveEvent
 
 class SpectateMoveListener(private val plugin: DeltaCraft) : Listener {
+    private val mgr: SpectateCacheManager
+        get() = this.plugin.manager.spectateCacheManager
+
     @EventHandler(ignoreCancelled = true)
     fun OnMoveEvent(e: PlayerMoveEvent?) {
         if (e == null) {
@@ -16,17 +20,16 @@ class SpectateMoveListener(private val plugin: DeltaCraft) : Listener {
         }
         val p = e.player
         val id = p.uniqueId
-        val manager = plugin.manager
-        if (!manager.isPlayerSpectating(id)) {
+        if (!mgr.isPlayerSpectating(id)) {
             return
         }
         if (p.hasPermission(Permissions.SPECTATEUNLIMITED.path)) {
             return
         }
         val maxDistance = plugin.config.getDouble(Settings.SPECTATEMAXDISTANCE.path)
-        val cache = manager.getSpectatePlayer(id)
+        val cache = mgr.get(id) ?: return
+
         val origin = cache.originalLocation
-        val curr = p.location
 /*        var distance = 0.0
         distance = try {
             MathHelper.calcDistance(origin, curr)

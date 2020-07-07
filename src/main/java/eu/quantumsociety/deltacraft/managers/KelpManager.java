@@ -2,6 +2,8 @@ package eu.quantumsociety.deltacraft.managers;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
 import eu.quantumsociety.deltacraft.classes.CacheRegion;
+import eu.quantumsociety.deltacraft.managers.cache.KelpCacheManager;
+import eu.quantumsociety.deltacraft.managers.templates.CacheConfigManager;
 import eu.quantumsociety.deltacraft.utils.KeyHelper;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,40 +13,27 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
-public class KelpManager extends ConfigManager {
-    private DeltaCraftManager getMgr() {
-        return this.plugin.getManager();
-    }
-
+public class KelpManager extends CacheConfigManager<KelpCacheManager> {
     public final String FarmPrefix = "farms";
     public final String PointOneKey = "pointOne";
     public final String PointTwoKey = "pointTwo";
     public final String OwnerKey = "owner";
 
-    public KelpManager(DeltaCraft plugin) {
-        super(plugin, "kelp.yml");
-
-        this.loadRegions();
+    public KelpManager(DeltaCraft plugin, KelpCacheManager mgr) {
+        super(plugin, "kelp.yml", mgr);
     }
-
 
     @Override
-    public void reloadConfig() {
-        super.reloadConfig();
-
-        this.loadRegions();
-    }
-
-    public void loadRegions() {
-        HashMap<String, CacheRegion> regions = this.getRegions();
-        this.getMgr().loadKelpFarms(regions);
+    public void loadCache() {
+        HashMap<String, CacheRegion> regions = this.getFarms();
+        this.getManager().loadCache(regions);
     }
 
     public boolean farmExists(String name) {
         return this.getConfig().contains(FarmPrefix + "." + name);
     }
 
-    public HashMap<String, CacheRegion> getRegions() {
+    public HashMap<String, CacheRegion> getFarms() {
         FileConfiguration config = this.getConfig();
         ConfigurationSection section = config.getConfigurationSection(this.FarmPrefix);
         if (section == null) {
@@ -71,7 +60,7 @@ public class KelpManager extends ConfigManager {
             CacheRegion region = new CacheRegion(one, two, key, uid);
             regions.put(key, region);
         }
-        this.plugin.debugMsg("Loaded " + regions.size() + " regions");
+        this.plugin.debugMsg("Loaded " + regions.size() + " farms");
         return regions;
     }
 }

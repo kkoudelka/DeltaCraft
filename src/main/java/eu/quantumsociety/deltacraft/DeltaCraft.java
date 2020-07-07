@@ -14,10 +14,11 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DeltaCraft extends JavaPlugin {
+    private DeltaCraftManager manager;
+
     private HomesManager homeConfigManager;
     private SpectateManager spectateConfigManager;
     private KelpManager kelpConfigManager;
-    private DeltaCraftManager manager;
 
     private boolean isDebug;
 
@@ -33,8 +34,8 @@ public class DeltaCraft extends JavaPlugin {
         // Create managers
         this.manager = new DeltaCraftManager(this);
         this.homeConfigManager = new HomesManager(this);
-        this.spectateConfigManager = new SpectateManager(this);
-        this.kelpConfigManager = new KelpManager(this);
+        this.spectateConfigManager = new SpectateManager(this, this.manager.getSpectateCacheManager());
+        this.kelpConfigManager = new KelpManager(this, this.manager.getKelpCacheManager());
 
         // Home commands
         this.getCommand("sethome").setExecutor(new SetHomeCommand(homeConfigManager, this));
@@ -57,7 +58,7 @@ public class DeltaCraft extends JavaPlugin {
         plm.registerEvents(new KelpGrowListener(this), this);
         debugMsg("Kelp listener loaded");
 
-        debugMsg("Loaded " + manager.getKelpCacheSize() + " kelp regions");
+        debugMsg("Loaded " + manager.getKelpCacheManager().getCount() + " kelp regions");
 
 //        super.onEnable();
     }

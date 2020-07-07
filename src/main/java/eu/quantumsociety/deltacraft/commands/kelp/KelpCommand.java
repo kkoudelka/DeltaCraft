@@ -2,8 +2,8 @@ package eu.quantumsociety.deltacraft.commands.kelp;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
 import eu.quantumsociety.deltacraft.classes.CacheRegion;
-import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
 import eu.quantumsociety.deltacraft.managers.KelpManager;
+import eu.quantumsociety.deltacraft.managers.cache.KelpCacheManager;
 import eu.quantumsociety.deltacraft.utils.KeyHelper;
 import eu.quantumsociety.deltacraft.utils.TextHelper;
 import eu.quantumsociety.deltacraft.utils.enums.Permissions;
@@ -31,8 +31,8 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
 
     private final String TempKey = "temp";
 
-    private DeltaCraftManager getMgr() {
-        return this.plugin.getManager();
+    private KelpCacheManager getMgr() {
+        return this.configManager.getManager();
     }
 
     public KelpCommand(KelpManager dataMgr, DeltaCraft plugin) {
@@ -259,7 +259,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
 
         this.configManager.saveConfig();
 
-        this.getMgr().addKelpFarm(one, two, name, playerId);
+        this.getMgr().addItem(one, two, name, playerId);
 
         p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully created");
     }
@@ -281,7 +281,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
 
         this.configManager.saveConfig();
 
-        this.getMgr().removeKelpFarm(name);
+        this.getMgr().removeItem(name);
 
         p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully deleted");
 
@@ -357,7 +357,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean isSpectating(UUID id) {
-        return this.getMgr().isPlayerSpectating(id);
+        return this.plugin.getManager().getSpectateCacheManager().isPlayerSpectating(id);
     }
 
     @Override

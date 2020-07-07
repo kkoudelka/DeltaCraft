@@ -2,6 +2,7 @@ package eu.quantumsociety.deltacraft.managers
 
 import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.classes.PlayerHome
+import eu.quantumsociety.deltacraft.managers.templates.ConfigManager
 import eu.quantumsociety.deltacraft.utils.KeyHelper
 import eu.quantumsociety.deltacraft.utils.TextHelper
 import net.md_5.bungee.api.chat.BaseComponent
@@ -9,10 +10,8 @@ import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
 import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.floor
 
