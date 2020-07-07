@@ -12,7 +12,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class KelpCacheManager extends CacheManager<CacheRegion, String> {
+public class KelpCacheManager extends CacheManager<String, CacheRegion> {
     public KelpCacheManager(DeltaCraft plugin) {
         super(plugin, true);
     }

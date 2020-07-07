@@ -2,7 +2,6 @@ package eu.quantumsociety.deltacraft.commands.kelp;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
 import eu.quantumsociety.deltacraft.classes.CacheRegion;
-import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
 import eu.quantumsociety.deltacraft.managers.KelpManager;
 import eu.quantumsociety.deltacraft.managers.cache.KelpCacheManager;
 import eu.quantumsociety.deltacraft.utils.KeyHelper;
@@ -358,7 +357,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean isSpectating(UUID id) {
-        return this.getMgr().isPlayerSpectating(id);
+        return this.plugin.getManager().getSpectateCacheManager().isPlayerSpectating(id);
     }
 
     @Override

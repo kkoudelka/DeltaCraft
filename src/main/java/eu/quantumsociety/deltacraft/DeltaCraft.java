@@ -34,7 +34,7 @@ public class DeltaCraft extends JavaPlugin {
         // Create managers
         this.manager = new DeltaCraftManager(this);
         this.homeConfigManager = new HomesManager(this);
-        this.spectateConfigManager = new SpectateManager(this);
+        this.spectateConfigManager = new SpectateManager(this, this.manager.getSpectateCacheManager());
         this.kelpConfigManager = new KelpManager(this, this.manager.getKelpCacheManager());
 
         // Home commands

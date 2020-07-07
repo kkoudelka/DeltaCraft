@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 
-public abstract class CacheManager<T extends Object, TKey> {
+public abstract class CacheManager<TKey, T extends Object> {
     private boolean isLoaded;
     private final boolean needsLoad;
 
@@ -15,7 +15,7 @@ public abstract class CacheManager<T extends Object, TKey> {
 
     private HashMap<TKey, T> cache;
 
-    protected CacheManager(DeltaCraft plugin, boolean needsLoad) {
+    public CacheManager(DeltaCraft plugin, boolean needsLoad) {
         this.plugin = plugin;
         this.cache = new HashMap<>();
         this.needsLoad = needsLoad;

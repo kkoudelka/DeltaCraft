@@ -33,7 +33,7 @@ class SetHomeCommand(private val configManager: HomesManager, val deltaCraft: De
             return true
         }
 
-        if (this.deltaCraft.manager.isPlayerSpectating(player.uniqueId)) {
+        if (this.deltaCraft.manager.spectateCacheManager.isPlayerSpectating(player.uniqueId)) {
             player.spigot().sendMessage(*TextHelper.infoText("You cannot set home while spectating"))
             return true
         }

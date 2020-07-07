@@ -3,6 +3,7 @@ package eu.quantumsociety.deltacraft.commands.spectate
 import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.managers.DeltaCraftManager
 import eu.quantumsociety.deltacraft.managers.SpectateManager
+import eu.quantumsociety.deltacraft.managers.cache.SpectateCacheManager
 import eu.quantumsociety.deltacraft.utils.KeyHelper
 import eu.quantumsociety.deltacraft.utils.TextHelper
 import eu.quantumsociety.deltacraft.utils.TextHelper.Companion.insufficientPermissions
@@ -16,8 +17,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 class SpectateCommand(private val configManager: SpectateManager, private val plugin: DeltaCraft) : CommandExecutor {
-    private val mgr: DeltaCraftManager
-        get() = plugin.manager
+    private val mgr: SpectateCacheManager
+        get() = this.configManager.manager
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         if (sender !is Player) {
@@ -52,7 +53,7 @@ class SpectateCommand(private val configManager: SpectateManager, private val pl
         p.teleport(l)
         p.gameMode = gm
         val id = p.uniqueId
-        mgr.removeSpectatePlayer(id)
+        mgr.removeItem(id)
         configManager.delete(id)
         p.sendMessage(ChatColor.YELLOW.toString() + "You are no longer Spectating!")
         return true
