@@ -24,53 +24,53 @@ public class DeltaCraftManager {
         this.afkCache = new HashMap<>();
     }
 
-    public void addCachePlayer(Player player, Location origin, GameMode gm) {
-        this.addCachePlayer(new CachePlayer(player,
+    public void addSpectatePlayer(Player player, Location origin, GameMode gm) {
+        this.addSpectatePlayer(new CachePlayer(player,
                 origin,
                 gm
         ));
     }
 
-    public void addCachePlayer(CachePlayer toAdd) {
+    public void addSpectatePlayer(CachePlayer toAdd) {
         UUID id = toAdd.getId();
         this.plugin.debugMsg("Adding player: " + id);
 
         this.spectateCache.put(id, toAdd);
-        this.getCachePlayer(id);
+        this.getSpectatePlayer(id);
     }
 
-    public CachePlayer getCachePlayer(UUID find) {
+    public CachePlayer getSpectatePlayer(UUID find) {
         return this.spectateCache.get(find);
     }
 
-    public boolean isPlayerInCache(UUID uuid) {
+    public boolean isPlayerSpectating(UUID uuid) {
         return this.spectateCache.containsKey(uuid);
     }
 
-    public void removeCachePlayer(UUID find) {
+    public void removeSpectatePlayer(UUID find) {
         this.plugin.debugMsg("Removing player: " + find);
         this.spectateCache.remove(find);
     }
 
-    public void addCacheRegion(Location one, Location two,
-                               String name, UUID ownerId) {
+    public void addKelpRegion(Location one, Location two,
+                              String name, UUID ownerId) {
         CacheRegion region = new CacheRegion(one, two, name, ownerId);
 
-        this.addCacheRegion(name, region);
+        this.addKelpRegion(name, region);
     }
 
-    public void addCacheRegion(String name, CacheRegion region) {
+    public void addKelpRegion(String name, CacheRegion region) {
         this.plugin.debugMsg("Adding region: " + name);
 
         this.kelpCache.put(name, region);
-        this.getCacheRegion(name);
+        this.getKelpRegion(name);
     }
 
-    public void getCacheRegion(String find) {
+    public void getKelpRegion(String find) {
         this.kelpCache.get(find);
     }
 
-    public CacheRegion getCacheRegion(Location l) {
+    public CacheRegion getKelpRegion(Location l) {
         for (CacheRegion region : kelpCache.values()) {
             if (region.contains(l)) {
                 return region;
@@ -79,7 +79,7 @@ public class DeltaCraftManager {
         return null;
     }
 
-    public void removeCacheRegion(String name) {
+    public void removeKelpRegion(String name) {
         this.plugin.debugMsg("Removing region: " + name);
         this.kelpCache.remove(name);
     }
@@ -100,7 +100,6 @@ public class DeltaCraftManager {
     public Collection<CacheRegion> getRegions() {
         return this.kelpCache.values();
     }
-
 
     public CacheAfk addAfkPlayer(Player player) {
         return this.addAfkPlayer(new CacheAfk(player));

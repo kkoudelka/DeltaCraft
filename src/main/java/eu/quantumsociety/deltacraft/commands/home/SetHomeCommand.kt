@@ -14,7 +14,6 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import java.awt.Component
 
 class SetHomeCommand(private val configManager: HomesManager, val deltaCraft: DeltaCraft) : CommandExecutor {
 
@@ -31,6 +30,11 @@ class SetHomeCommand(private val configManager: HomesManager, val deltaCraft: De
         if (!player.hasPermission(Permissions.HOMESET.value)) {
 
             player.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.HOMESET.value))
+            return true
+        }
+
+        if (this.deltaCraft.manager.isPlayerSpectating(player.uniqueId)) {
+            player.spigot().sendMessage(*TextHelper.infoText("You cannot set home while spectating"))
             return true
         }
 

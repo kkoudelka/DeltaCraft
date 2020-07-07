@@ -41,7 +41,7 @@ public class KelpGrowListener implements Listener {
 
         Location loc = b.getLocation();
 
-        CacheRegion reg = this.getMgr().getCacheRegion(loc);
+        CacheRegion reg = this.getMgr().getKelpRegion(loc);
         if (reg == null) {
             return;
         }
