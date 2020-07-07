@@ -3,7 +3,6 @@ package eu.quantumsociety.deltacraft.commands.spectate
 import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.managers.DeltaCraftManager
 import eu.quantumsociety.deltacraft.managers.SpectateManager
-import eu.quantumsociety.deltacraft.utils.FakePlayerHelper.Companion.spawnFakePlayer
 import eu.quantumsociety.deltacraft.utils.KeyHelper
 import eu.quantumsociety.deltacraft.utils.TextHelper
 import eu.quantumsociety.deltacraft.utils.TextHelper.Companion.insufficientPermissions
@@ -54,7 +53,7 @@ class SpectateCommand(private val configManager: SpectateManager, private val pl
         p.teleport(l)
         p.gameMode = gm
         val id = p.uniqueId
-        mgr.removeCachePlayer(id)
+        mgr.removeSpectatePlayer(id)
         configManager.delete(id)
         p.sendMessage(ChatColor.YELLOW.toString() + "You are no longer Spectating!")
         return true
@@ -65,7 +64,7 @@ class SpectateCommand(private val configManager: SpectateManager, private val pl
         val loc = p.location
         val gm = p.gameMode
         configManager.save(keys, loc, gm)
-        mgr.addCachePlayer(p, loc, gm)
+        mgr.addSpectatePlayer(p, loc, gm)
         p.gameMode = GameMode.SPECTATOR
         p.spigot().sendMessage(*TextHelper.infoText("You are now Spectating!"))
         p.setPlayerListName("${p.name} (Spectating) ")

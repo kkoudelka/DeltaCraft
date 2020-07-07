@@ -28,7 +28,7 @@ public class MoveListener implements Listener {
 
         DeltaCraftManager manager = this.plugin.getManager();
 
-        CacheRegion reg = manager.getCacheRegion(l);
+        CacheRegion reg = manager.getKelpRegion(l);
 
         if (reg == null) {
             return;

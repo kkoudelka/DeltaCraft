@@ -231,7 +231,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
 
         this.configManager.saveConfig();
 
-        this.getMgr().addCacheRegion(one, two, name, playerId);
+        this.getMgr().addKelpRegion(one, two, name, playerId);
 
         p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully created");
         return true;
@@ -254,7 +254,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
 
         this.configManager.saveConfig();
 
-        this.getMgr().removeCacheRegion(name);
+        this.getMgr().removeKelpRegion(name);
 
         p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully deleted");
 
@@ -314,7 +314,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
     private void isInFarm(Player p) {
         Location l = p.getLocation();
 
-        CacheRegion reg = this.getMgr().getCacheRegion(l);
+        CacheRegion reg = this.getMgr().getKelpRegion(l);
 
         if (reg != null) {
             p.sendMessage("You " + ChatColor.GREEN + "are " + ChatColor.WHITE + "in a kelp farm "
