@@ -1,8 +1,7 @@
 package eu.quantumsociety.deltacraft.listeners;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
-import eu.quantumsociety.deltacraft.classes.CacheRegion;
-import eu.quantumsociety.deltacraft.managers.DeltaCraftManager;
+import eu.quantumsociety.deltacraft.managers.cache.KelpCacheManager;
 import eu.quantumsociety.deltacraft.runnables.KelpRunnable;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,8 +16,8 @@ public class KelpGrowListener implements Listener {
 
     private final DeltaCraft plugin;
 
-    private DeltaCraftManager getMgr() {
-        return this.plugin.getManager();
+    private KelpCacheManager getMgr() {
+        return this.plugin.getManager().getKelpCacheManager();
     }
 
     public KelpGrowListener(DeltaCraft plugin) {

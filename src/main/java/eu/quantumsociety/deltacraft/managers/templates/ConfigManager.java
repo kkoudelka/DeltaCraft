@@ -1,4 +1,4 @@
-package eu.quantumsociety.deltacraft.managers;
+package eu.quantumsociety.deltacraft.managers.templates;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
 import org.bukkit.Location;
@@ -13,7 +13,7 @@ import java.util.logging.Level;
 
 import static org.bukkit.Bukkit.getLogger;
 
-public class ConfigManager {
+public abstract class ConfigManager {
     protected final DeltaCraft plugin;
     private final String fileName;
     private FileConfiguration dataConfig = null;

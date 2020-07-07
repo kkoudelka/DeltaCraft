@@ -2,6 +2,7 @@ package eu.quantumsociety.deltacraft.managers;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
 import eu.quantumsociety.deltacraft.classes.CachePlayer;
+import eu.quantumsociety.deltacraft.managers.templates.ConfigManager;
 import eu.quantumsociety.deltacraft.utils.KeyHelper;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
