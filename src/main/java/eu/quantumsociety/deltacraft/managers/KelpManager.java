@@ -37,7 +37,7 @@ public class KelpManager extends ConfigManager {
 
     public void loadRegions() {
         HashMap<String, CacheRegion> regions = this.getRegions();
-        this.getMgr().loadRegions(regions);
+        this.getMgr().loadKelpFarms(regions);
     }
 
     public HashMap<String, CacheRegion> getRegions() {

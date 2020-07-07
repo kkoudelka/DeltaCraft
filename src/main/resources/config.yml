@@ -4,6 +4,7 @@ settings:
   spectate:
     maxdistance: 100
   kelp:
+    maxfarms: 5
     maxdistance: 50
   home:
     maxhomes: 10

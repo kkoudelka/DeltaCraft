@@ -198,6 +198,13 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
+        int maxFarms = this.plugin.getConfig().getInt(Settings.KELPMAXFARMS.getPath());
+        int existing = this.getMgr().getKelpFarmCount(playerId);
+        if (existing >= maxFarms) {
+            p.spigot().sendMessage(TextHelper.infoText("You have reached quota of +" + maxFarms + " farms", net.md_5.bungee.api.ChatColor.YELLOW));
+            return;
+        }
+
         String tempKeyOne = tempKeys.get(TempKey, this.configManager.PointOneKey);
         String tempKeyTwo = tempKeys.get(TempKey, this.configManager.PointTwoKey);
 
@@ -374,13 +381,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
                 Player p = (Player) sender;
                 UUID id = p.getUniqueId();
 
-                Collection<CacheRegion> regs = this.getMgr().getRegions();
-
-                Stream<String> r = regs.stream()
-                        .filter(i -> i.ownerId.equals(id))
-                        .map(x -> x.name);
-
-                list = r.collect(Collectors.toList());
+                list = this.getMgr().getKelpFarmNames(id);
                 break;
         }
 
