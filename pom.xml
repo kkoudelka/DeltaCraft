@@ -110,7 +110,8 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>1.16.1-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/lib/spigot.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
