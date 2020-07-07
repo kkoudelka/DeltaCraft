@@ -29,7 +29,7 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
 
         if (!player.hasPermission(Permissions.HOMEUSE.value)) {
 
-            player.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.HOMEUSE.value))
+            player.spigot().sendMessage(*TextHelper.insufficientPermissions("", Permissions.HOMEUSE.value))
             return true
         }
 
