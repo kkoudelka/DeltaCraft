@@ -111,7 +111,7 @@
             <artifactId>spigot</artifactId>
             <version>1.16.1-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/src/lib/spigot.jar</systemPath>
+            <systemPath>${pom.basedir}/src/lib/spigot.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
