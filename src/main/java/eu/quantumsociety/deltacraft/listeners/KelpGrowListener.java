@@ -41,23 +41,21 @@ public class KelpGrowListener implements Listener {
 
         Location loc = b.getLocation();
 
-        CacheRegion reg = this.getMgr().getKelpRegion(loc);
-        if (reg == null) {
+        if (this.getMgr().isInKelpFarm(loc)) {
             return;
         }
 
         BlockData bd = e.getNewState().getBlockData();
         if (!(bd instanceof Ageable)) {
-            this.plugin.debugMsg("Is not ageable");
+            this.plugin.debugMsg(bd.toString() + " is not ageable");
             return;
         }
         Ageable a = (Ageable) bd;
 
         if (a.getAge() == 25) {
-            this.plugin.debugMsg("Repairing kelp in region " + reg.name);
+            this.plugin.debugMsg("Repairing kelp in location " + loc.toString());
             // Run with delay 1 tick
             new KelpRunnable(this.plugin, b).runTaskLater(this.plugin, 1);
-
         }
 
 

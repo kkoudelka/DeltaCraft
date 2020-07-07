@@ -24,8 +24,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class KelpCommand implements CommandExecutor, TabCompleter {
     private final KelpManager configManager;
@@ -54,8 +52,8 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
         Player p = (Player) sender;
 
-        if (!p.hasPermission(Permissions.KELPFARMUSE.getName())) {
-            p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+        if (!p.hasPermission(Permissions.KELPFARMUSE.getPath())) {
+            p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.KELPFARMUSE));
             return true;
         }
 
@@ -110,8 +108,8 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
 
         if (cmd.equalsIgnoreCase("create")) {
-            if (!p.hasPermission(Permissions.KELPFARMCREATE.getName())) {
-                p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+            if (!p.hasPermission(Permissions.KELPFARMCREATE.getPath())) {
+                p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.KELPFARMCREATE));
                 return true;
             }
             this.createFarm(p, arg);
@@ -119,8 +117,8 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
 
         if (cmd.equalsIgnoreCase("delete") || cmd.equalsIgnoreCase("remove")) {
-            if (!p.hasPermission(Permissions.KELPFARMREMOVE.getName())) {
-                p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+            if (!p.hasPermission(Permissions.KELPFARMREMOVE.getPath())) {
+                p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.KELPFARMREMOVE));
                 return true;
             }
 
@@ -128,8 +126,8 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
 
         if (cmd.equalsIgnoreCase("age")) {
-            if (!p.hasPermission(Permissions.KELPFARMSETAGE.getName())) {
-                p.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
+            if (!p.hasPermission(Permissions.KELPFARMSETAGE.getPath())) {
+                p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.KELPFARMSETAGE));
                 return true;
             }
             int age = 0;
@@ -159,6 +157,12 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
 
         Location loc = p.getLocation();
+
+        if (this.getMgr().isInKelpFarm(loc)) {
+            p.spigot().sendMessage(TextHelper.infoText("This location is already in farm", net.md_5.bungee.api.ChatColor.YELLOW));
+            return;
+        }
+
         UUID id = p.getUniqueId();
 
         loc.setYaw(0);
@@ -183,6 +187,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             return false;
         }
         Location two = this.configManager.getLocation(tempKeyTwo);
+        //noinspection RedundantIfStatement
         if (two == null) {
             return false;
         }
@@ -206,7 +211,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
         }
 
         if (this.configManager.farmExists(name)) {
-            p.sendMessage(ChatColor.YELLOW + "Farm with this name already exists");
+            p.spigot().sendMessage(TextHelper.infoText("Farm with this name already exists", net.md_5.bungee.api.ChatColor.YELLOW));
             return;
         }
 
@@ -254,7 +259,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
 
         this.configManager.saveConfig();
 
-        this.getMgr().addKelpRegion(one, two, name, playerId);
+        this.getMgr().addKelpFarm(one, two, name, playerId);
 
         p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully created");
     }
@@ -276,7 +281,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
 
         this.configManager.saveConfig();
 
-        this.getMgr().removeKelpRegion(name);
+        this.getMgr().removeKelpFarm(name);
 
         p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully deleted");
 
@@ -336,7 +341,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
     private void isInFarm(Player p) {
         Location l = p.getLocation();
 
-        CacheRegion reg = this.getMgr().getKelpRegion(l);
+        CacheRegion reg = this.getMgr().getKelpFarm(l);
 
         if (reg != null) {
             p.sendMessage("You " + ChatColor.GREEN + "are " + ChatColor.WHITE + "in a kelp farm "

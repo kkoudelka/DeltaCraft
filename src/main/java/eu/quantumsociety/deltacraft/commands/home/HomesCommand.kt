@@ -11,7 +11,6 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import java.awt.Component
 
 class HomesCommand(private val configManager: HomesManager) : CommandExecutor {
     override fun onCommand(commandSender: CommandSender, command: Command, s: String, strings: Array<String>): Boolean {
@@ -21,9 +20,9 @@ class HomesCommand(private val configManager: HomesManager) : CommandExecutor {
         }
         val player: Player = commandSender
 
-        if (!player.hasPermission(Permissions.HOMELISTSELF.value)) {
+        if (!player.hasPermission(Permissions.HOMELISTSELF.path)) {
 
-            player.spigot().sendMessage(*TextHelper.insufficientPermissions(permission = Permissions.HOMELISTSELF.value))
+            player.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.HOMELISTSELF))
             return true
         }
 
