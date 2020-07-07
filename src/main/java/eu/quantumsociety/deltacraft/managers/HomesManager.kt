@@ -3,12 +3,18 @@ package eu.quantumsociety.deltacraft.managers
 import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.classes.PlayerHome
 import eu.quantumsociety.deltacraft.utils.KeyHelper
+import eu.quantumsociety.deltacraft.utils.TextHelper
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.ComponentBuilder
+import net.md_5.bungee.api.chat.HoverEvent
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.floor
 
 class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
     fun getPlayerHomes(p: Player): List<PlayerHome> {
@@ -23,6 +29,15 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
             list.add(home)
         }
         return list
+    }
+
+    fun getPlayerHomesCount(p: Player): Int {
+        val kh = KeyHelper(p.uniqueId)
+        if (!config.contains(kh.playerKey))
+            return 0
+        val section = config.getConfigurationSection(kh.playerKey)!!
+
+        return section.getKeys(false).size
     }
 
     fun getHome(p: Player, homeName: String): Location? {
@@ -40,29 +55,35 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
         return config.contains(kh[homeName])
     }
 
-    fun isObstructed(location: Location): Pair<Boolean, String> {
-        val blockUnder = location.subtract(0.0, 1.0, 0.0).block
+    fun isObstructed(location: Location): Pair<Boolean, Array<BaseComponent>?> {
+        val blockUnder = location.block.getRelative(BlockFace.DOWN)
         if (blockUnder.isEmpty) {
-            return Pair(true, "There is a block missing under the home position")
+            return Pair(true, TextHelper.attentionText("A block is missing under the home location!"))
         }
 
         if (blockUnder.type == Material.LAVA || blockUnder.type == Material.LAVA_BUCKET) {
-            return Pair(true, "There is a lava under the home position")
+            return Pair(true, TextHelper.attentionText("There is a lava under the home position"))
         }
 
-        val upperBlock = location.add(0.0,1.0,0.0).block
         val block = location.block
+        val up = block.getRelative(BlockFace.UP)
 
-        if (upperBlock.isEmpty && block.isEmpty) {
-            return Pair(false, "")
+        if (up.isEmpty && block.isEmpty) {
+            return Pair(false, null)
         }
 
-        return Pair(true, "Home location is obstructed")
+        return Pair(true, ComponentBuilder()
+                .append(TextHelper.attentionText("Home location is obstructed"))
+                .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Obstructed by: '${block.type} and ${up.type}'").create()))
+                .create())
     }
 
     fun setHome(p: Player, homeName: String): Boolean {
         val l = p.location
-        val pl = PlayerHome(p.uniqueId, homeName, l)
+        l.x = floor(l.x)
+        l.z = floor(l.z)
+        val centred = l.add(0.5,0.0,0.5)
+        val pl = PlayerHome(p.uniqueId, homeName, centred)
         val kh = KeyHelper(p.uniqueId)
         config[kh[homeName, "location"]] = pl.location
         saveConfig()
@@ -74,7 +95,7 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
 
         if (!homeExists(p, homeName))
             return Pair(false, null)
-        val location = getHome(p, homeName)
+        val location = getHome(p, homeName)?.clone()
         config[kh[homeName]] = null
         saveConfig()
         return Pair(true, location)

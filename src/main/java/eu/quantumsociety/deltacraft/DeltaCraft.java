@@ -37,7 +37,7 @@ public class DeltaCraft extends JavaPlugin {
         this.kelpConfigManager = new KelpManager(this);
 
         // Home commands
-        this.getCommand("sethome").setExecutor(new SetHomeCommand(homeConfigManager));
+        this.getCommand("sethome").setExecutor(new SetHomeCommand(homeConfigManager, this));
         debugMsg("SetHome loaded");
         this.getCommand("home").setExecutor(new HomeCommand(homeConfigManager));
         debugMsg("Home loaded");
