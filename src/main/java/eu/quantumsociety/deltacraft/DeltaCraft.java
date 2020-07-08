@@ -58,7 +58,7 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Spectate listener loaded");
         plm.registerEvents(new KelpGrowListener(this), this);
         debugMsg("Kelp listener loaded");
-        plm.registerEvents(new ComposterListener(), this);
+        plm.registerEvents(new ComposterListener(this), this);
         debugMsg("Composter listener loaded");
 
         debugMsg("Loaded " + manager.getKelpCacheManager().getCount() + " kelp regions");

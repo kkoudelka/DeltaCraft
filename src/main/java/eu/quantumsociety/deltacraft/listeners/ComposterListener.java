@@ -1,6 +1,10 @@
 package eu.quantumsociety.deltacraft.listeners;
 
-import org.bukkit.*;
+import eu.quantumsociety.deltacraft.DeltaCraft;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.data.BlockData;
@@ -23,8 +27,10 @@ import java.util.Random;
 public class ComposterListener implements Listener {
 
     private final Random random;
+    private final DeltaCraft plugin;
 
-    public ComposterListener() {
+    public ComposterListener(DeltaCraft plugin) {
+        this.plugin = plugin;
         this.random = new Random();
     }
 
@@ -79,6 +85,9 @@ public class ComposterListener implements Listener {
         if (e.getItem().getType() != Material.ROTTEN_FLESH) {
             return;
         }
+        if (source.getLocation() == null) {
+            return;
+        }
         Block hopperB = source.getLocation().getBlock();
         Directional hopper = (Directional) hopperB.getBlockData();
         Vector direction = hopper.getFacing().getDirection();
@@ -89,13 +98,14 @@ public class ComposterListener implements Listener {
         if (destination.getType() != Material.COMPOSTER) {
             return;
         }
+        boolean success = this.compostBlock(e.getItem(), destination, false);
 
-        boolean success = this.compostBlock(e.getItem(), destination);
-        e.setCancelled(!success);
-    }
+        if (success) {
+            e.setCancelled(true);
 
-    private boolean compostBlock(ItemStack i, Block composter) {
-        return this.compostBlock(i, composter, true);
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> e.getSource().removeItem(e.getItem()), 1);
+        }
+
     }
 
     private boolean compostBlock(ItemStack i, Block composter, boolean shouldRemove) {
@@ -110,10 +120,9 @@ public class ComposterListener implements Listener {
             return false;
         }
 
-
         double rnd = random.nextDouble();
         boolean isFilled = false;
-        double fleshCompostChance = 0.4;
+        double fleshCompostChance = 0.65;
         if (rnd <= fleshCompostChance) {
             // Compost
             level++;
