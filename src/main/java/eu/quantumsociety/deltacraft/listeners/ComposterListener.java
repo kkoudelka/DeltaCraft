@@ -2,14 +2,21 @@ package eu.quantumsociety.deltacraft.listeners;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.Hopper;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.util.Random;
 
@@ -56,16 +63,53 @@ public class ComposterListener implements Listener {
             return;
         }
 
-        Levelled composter = (Levelled) b.getBlockData();
-        if (composter.getLevel() != composter.getMaximumLevel()) {
-            compostBlock(p, b, composter);
-            e.setCancelled(true);
-        }
+        boolean success = compostBlock(p.getInventory().getItemInMainHand(), b, p.getGameMode() != GameMode.CREATIVE);
+        e.setCancelled(success);
     }
 
-    private void compostBlock(Player p, Block composter, Levelled state) {
+    @EventHandler(ignoreCancelled = true)
+    public void onHopperInteractEvent(InventoryMoveItemEvent e) {
+        Inventory source = e.getSource();
+        // Only hoppers
+        if (source.getType() != InventoryType.HOPPER ||
+                !(source.getHolder() instanceof Hopper)) {
+            return;
+        }
+        // Only rotten flesh
+        if (e.getItem().getType() != Material.ROTTEN_FLESH) {
+            return;
+        }
+        Block hopperB = source.getLocation().getBlock();
+        Directional hopper = (Directional) hopperB.getBlockData();
+        Vector direction = hopper.getFacing().getDirection();
+        Block destination = hopperB.getLocation().clone()
+                .add(direction).getBlock();
+
+        // Only composters
+        if (destination.getType() != Material.COMPOSTER) {
+            return;
+        }
+
+        boolean success = this.compostBlock(e.getItem(), destination);
+        e.setCancelled(!success);
+    }
+
+    private boolean compostBlock(ItemStack i, Block composter) {
+        return this.compostBlock(i, composter, true);
+    }
+
+    private boolean compostBlock(ItemStack i, Block composter, boolean shouldRemove) {
+        BlockData bd = composter.getBlockData();
+        if (!(bd instanceof Levelled)) {
+            return false;
+        }
+        Levelled state = (Levelled) bd;
         int max = state.getMaximumLevel();
         int level = state.getLevel();
+        if (level == max) {
+            return false;
+        }
+
 
         double rnd = random.nextDouble();
         boolean isFilled = false;
@@ -81,11 +125,11 @@ public class ComposterListener implements Listener {
         // Play sound
         composter.getWorld().playSound(composter.getLocation(), (isFilled) ? Sound.BLOCK_COMPOSTER_FILL : Sound.BLOCK_COMPOSTER_FILL_SUCCESS, 1, 1);
 
-        int amount = p.getInventory().getItemInMainHand().getAmount();
-        if (p.getGameMode() != GameMode.CREATIVE) {
-            p.getInventory().getItemInMainHand().setAmount(amount - 1);
+        int amount = i.getAmount();
+        if (shouldRemove) {
+            i.setAmount(amount - 1);
         }
         composter.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, composter.getLocation().clone().add(0.5, 0.6, 0.5), 10, 0.25, 0.2, 0.25);
-
+        return true;
     }
 }
