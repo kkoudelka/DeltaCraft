@@ -83,7 +83,7 @@ class SpectateMoveListener(private val plugin: DeltaCraft) : Listener {
 
         for (sp in spectatePlayers) {
             if (sp != null) {
-                this.fakePlayerManager.spawnFakePlayer(sp.player, observer, null)
+                this.fakePlayerManager.spawnFakePlayer(sp.player, observer, sp.originalLocation)
             }
         }
     }

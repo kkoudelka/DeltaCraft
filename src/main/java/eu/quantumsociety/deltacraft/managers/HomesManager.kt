@@ -16,7 +16,7 @@ import java.util.UUID
 import kotlin.collections.ArrayList
 import kotlin.math.floor
 
-class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
+class HomesManager(val plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
     fun getPlayerHomes(p: Player): List<PlayerHome> {
         val kh = KeyHelper(p.uniqueId)
         if (!config.contains(kh.playerKey))
