@@ -47,7 +47,7 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Homes loaded");
         this.getCommand("delhome").setExecutor(new DelHomeCommand(homeConfigManager));
         debugMsg("DelHome loaded");
-        this.getCommand("c").setExecutor(new SpectateCommand(spectateConfigManager, this));
+        this.getCommand("c").setExecutor(new SpectateCommand(spectateConfigManager, this, this.manager.getFakePlayerManager()));
         debugMsg("Spectate loaded");
         this.getCommand("kelp").setExecutor(new KelpCommand(kelpConfigManager, this));
         debugMsg("Kelp farms loaded");

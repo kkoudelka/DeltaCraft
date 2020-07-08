@@ -1,17 +1,22 @@
 package eu.quantumsociety.deltacraft.listeners
 
 import eu.quantumsociety.deltacraft.DeltaCraft
+import eu.quantumsociety.deltacraft.managers.cache.FakePlayerManager
 import eu.quantumsociety.deltacraft.managers.cache.SpectateCacheManager
 import eu.quantumsociety.deltacraft.utils.enums.Permissions
 import eu.quantumsociety.deltacraft.utils.enums.Settings
 import org.bukkit.ChatColor
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
+import org.bukkit.event.player.PlayerQuitEvent
 
 class SpectateMoveListener(private val plugin: DeltaCraft) : Listener {
-    private val mgr: SpectateCacheManager
+    private val spectateCacheManager: SpectateCacheManager
         get() = this.plugin.manager.spectateCacheManager
+    private val fakePlayerManager: FakePlayerManager
+        get() = this.plugin.manager.fakePlayerManager
 
     @EventHandler(ignoreCancelled = true)
     fun OnMoveEvent(e: PlayerMoveEvent?) {
@@ -20,14 +25,14 @@ class SpectateMoveListener(private val plugin: DeltaCraft) : Listener {
         }
         val p = e.player
         val id = p.uniqueId
-        if (!mgr.isPlayerSpectating(id)) {
+        if (!spectateCacheManager.isPlayerSpectating(id)) {
             return
         }
         if (p.hasPermission(Permissions.SPECTATEUNLIMITED.path)) {
             return
         }
         val maxDistance = plugin.config.getDouble(Settings.SPECTATEMAXDISTANCE.path)
-        val cache = mgr.get(id) ?: return
+        val cache = spectateCacheManager.get(id) ?: return
 
         val origin = cache.originalLocation
 /*        var distance = 0.0
@@ -58,15 +63,37 @@ class SpectateMoveListener(private val plugin: DeltaCraft) : Listener {
 
         p.teleport(newLoc)
 
-
-
-
-
-
         return
+    }
 
+    @EventHandler
+    fun onPlayerJoin(event: PlayerJoinEvent) {
+        val observer = event.player
 
-//        e.setCancelled(true);
+        if (this.spectateCacheManager.isPlayerSpectating(observer.uniqueId)) {
+
+            val pl = this.spectateCacheManager.get(observer.uniqueId)
+
+            this.fakePlayerManager.spawnFakePlayerToAll(observer, pl?.originalLocation)
+
+            return
+        }
+
+        val spectatePlayers = this.spectateCacheManager.values
+
+        for (sp in spectatePlayers) {
+            if (sp != null) {
+                this.fakePlayerManager.spawnFakePlayer(sp.player, observer, null)
+            }
+        }
+    }
+
+    @EventHandler
+    fun onPlayerQuit(event: PlayerQuitEvent) {
+        val player = event.player
+        if (this.spectateCacheManager.isPlayerSpectating(player.uniqueId)) {
+            this.fakePlayerManager.despawnFakePlayerToAll(player)
+        }
     }
 
 }
