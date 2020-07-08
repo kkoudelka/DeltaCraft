@@ -63,19 +63,21 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         return
     }
 
-    fun teleportTowardsOrigin(player: Player, location: Location, blocks: Int = 2, playerToOriginalDirection: Boolean = false) {
+    private fun teleportTowardsOrigin(player: Player, location: Location, blocks: Int = 2, playerToOriginalDirection: Boolean = false) {
         val pDirection = player.location.direction
 
         val d = location.clone().subtract(player.eyeLocation.toVector()).toVector()
         val l = player.location.setDirection(d)
         l.add(d.normalize().multiply(blocks))
-        player.teleport(l)
 
         if (playerToOriginalDirection) {
-            val newLoc = player.location.setDirection(pDirection)
-
-            player.teleport(newLoc)
+           val l2 = l.setDirection(pDirection)
+            player.teleport(l2)
+            return
         }
+
+        player.teleport(l)
+
     }
 
     @EventHandler
@@ -118,20 +120,22 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
 
         val playerLocation = player.location
 
-
         if (playerLocation.world != event.to?.world) {
             event.isCancelled = true
             player.spigot().sendMessage(*TextHelper.attentionText("You can't travel to another world while spectating!"))
             return
         }
 
-        val origin = this.spectateCacheManager.get(player.uniqueId)!!.originalLocation
+        if (player.hasPermission(Permissions.SPECTATEUNLIMITED.path)) {
+            return
+        }
 
-        val distance = origin.distance(playerLocation)
+        val distance = playerLocation.distance(event.to!!)
         val maxDistance = plugin.config.getDouble(Settings.SPECTATEMAXDISTANCE.path)
         if (distance > maxDistance) {
-            teleportTowardsOrigin(player, origin, playerToOriginalDirection = true)
+            event.isCancelled = true
+            player.spigot().sendMessage(*TextHelper.attentionText("That is too far away!"))
+            return
         }
     }
-
 }
