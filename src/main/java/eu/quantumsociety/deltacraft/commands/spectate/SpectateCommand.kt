@@ -51,11 +51,11 @@ class SpectateCommand(private val configManager: SpectateManager, private val pl
     }
 
     private fun switchBack(p: Player, l: Location, gm: GameMode): Boolean {
-        p.teleport(l)
-        p.gameMode = gm
         val id = p.uniqueId
         spectateCache.removeItem(id)
         configManager.delete(id)
+        p.teleport(l)
+        p.gameMode = gm
         p.sendMessage(ChatColor.YELLOW.toString() + "You are no longer Spectating!")
         return true
     }
