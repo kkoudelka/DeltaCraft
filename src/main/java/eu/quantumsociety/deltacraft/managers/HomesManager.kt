@@ -77,7 +77,6 @@ class HomesManager(val plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") 
         val block = location.block
         val up = block.getRelative(BlockFace.UP)
 
-
         if (up.isLiquid == block.isLiquid) {
             if (isLava(up) || isLava(block)) {
                 return Pair(true, TextHelper.attentionText("There is lava in the home position"))
