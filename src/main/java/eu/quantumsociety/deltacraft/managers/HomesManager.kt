@@ -12,6 +12,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
+import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.floor
 
@@ -78,12 +79,15 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
     }
 
     fun setHome(p: Player, homeName: String): Boolean {
-        val l = p.location
-        l.x = floor(l.x)
-        l.z = floor(l.z)
-        val centred = l.add(0.5,0.0,0.5)
-        val pl = PlayerHome(p.uniqueId, homeName, centred)
-        val kh = KeyHelper(p.uniqueId)
+        return this.setHome(p.uniqueId, homeName, p.location)
+    }
+
+    fun setHome(playerId: UUID, homeName: String, location: Location): Boolean {
+        location.x = floor(location.x)
+        location.z = floor(location.z)
+        val centred = location.add(0.5, 0.0, 0.5)
+        val pl = PlayerHome(playerId, homeName, centred)
+        val kh = KeyHelper(playerId)
         config[kh[homeName, "location"]] = pl.location
         saveConfig()
         return true
