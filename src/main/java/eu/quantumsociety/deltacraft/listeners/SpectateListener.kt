@@ -3,16 +3,20 @@ package eu.quantumsociety.deltacraft.listeners
 import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.managers.cache.FakePlayerManager
 import eu.quantumsociety.deltacraft.managers.cache.SpectateCacheManager
+import eu.quantumsociety.deltacraft.utils.TextHelper
 import eu.quantumsociety.deltacraft.utils.enums.Permissions
 import eu.quantumsociety.deltacraft.utils.enums.Settings
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.event.player.PlayerTeleportEvent
 
-class SpectateMoveListener(private val plugin: DeltaCraft) : Listener {
+
+class SpectateListener(private val plugin: DeltaCraft) : Listener {
     private val spectateCacheManager: SpectateCacheManager
         get() = this.plugin.manager.spectateCacheManager
     private val fakePlayerManager: FakePlayerManager
@@ -93,6 +97,17 @@ class SpectateMoveListener(private val plugin: DeltaCraft) : Listener {
         val player = event.player
         if (this.spectateCacheManager.isPlayerSpectating(player.uniqueId)) {
             this.fakePlayerManager.despawnFakePlayerToAll(player)
+        }
+    }
+
+    @EventHandler
+    fun onPlayerTeleport(event: PlayerTeleportEvent) {
+        val player = event.player
+
+        if (this.spectateCacheManager.isPlayerSpectating(player.uniqueId)) {
+            event.isCancelled = true
+            player.spigot().sendMessage(*TextHelper.attentionText("You can't teleport while spectating!"))
+            return
         }
     }
 

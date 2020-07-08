@@ -8,7 +8,7 @@ import eu.quantumsociety.deltacraft.commands.kelp.KelpCommand;
 import eu.quantumsociety.deltacraft.commands.spectate.SpectateCommand;
 import eu.quantumsociety.deltacraft.listeners.ComposterListener;
 import eu.quantumsociety.deltacraft.listeners.KelpGrowListener;
-import eu.quantumsociety.deltacraft.listeners.SpectateMoveListener;
+import eu.quantumsociety.deltacraft.listeners.SpectateListener;
 import eu.quantumsociety.deltacraft.managers.*;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
 import org.bukkit.plugin.PluginManager;
@@ -54,7 +54,7 @@ public class DeltaCraft extends JavaPlugin {
 
         // Events
         PluginManager plm = this.getServer().getPluginManager();
-        plm.registerEvents(new SpectateMoveListener(this), this);
+        plm.registerEvents(new SpectateListener(this), this);
         debugMsg("Spectate listener loaded");
         plm.registerEvents(new KelpGrowListener(this), this);
         debugMsg("Kelp listener loaded");

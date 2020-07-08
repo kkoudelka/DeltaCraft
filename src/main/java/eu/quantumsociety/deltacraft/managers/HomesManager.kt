@@ -10,6 +10,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -55,20 +56,39 @@ class HomesManager(val plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") 
         return config.contains(kh[homeName])
     }
 
+    fun isLava(block: Block): Boolean {
+        return block.type == Material.LAVA || block.type == Material.LAVA_BUCKET
+    }
+
+    fun isWater(block: Block): Boolean {
+        return block.type == Material.LAVA || block.type == Material.LAVA_BUCKET
+    }
+
     fun isObstructed(location: Location): Pair<Boolean, Array<BaseComponent>?> {
         val blockUnder = location.block.getRelative(BlockFace.DOWN)
         if (blockUnder.isEmpty) {
             return Pair(true, TextHelper.attentionText("A block is missing under the home location!"))
         }
 
-        if (blockUnder.type == Material.LAVA || blockUnder.type == Material.LAVA_BUCKET) {
+        if (isLava(blockUnder)) {
             return Pair(true, TextHelper.attentionText("There is a lava under the home position"))
         }
 
         val block = location.block
         val up = block.getRelative(BlockFace.UP)
 
-        if (up.isEmpty && block.isEmpty) {
+
+        if (up.isLiquid == block.isLiquid) {
+            if (isLava(up) || isLava(block)) {
+                return Pair(true, TextHelper.attentionText("There is lava in the home position"))
+            }
+
+            if (isWater(up) || isWater(block)) {
+                return Pair(true, TextHelper.attentionText("There is water in the home position"))
+            }
+        }
+
+        if (up.isPassable && block.isPassable) {
             return Pair(false, null)
         }
 
