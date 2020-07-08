@@ -1,5 +1,6 @@
 package eu.quantumsociety.deltacraft;
 
+import eu.quantumsociety.deltacraft.classes.PlayerHome;
 import eu.quantumsociety.deltacraft.commands.home.DelHomeCommand;
 import eu.quantumsociety.deltacraft.commands.home.HomeCommand;
 import eu.quantumsociety.deltacraft.commands.home.HomesCommand;
@@ -10,9 +11,17 @@ import eu.quantumsociety.deltacraft.listeners.ComposterListener;
 import eu.quantumsociety.deltacraft.listeners.KelpGrowListener;
 import eu.quantumsociety.deltacraft.listeners.SpectateMoveListener;
 import eu.quantumsociety.deltacraft.managers.*;
+import eu.quantumsociety.deltacraft.managers.templates.ConfigManager;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Set;
+import java.util.UUID;
 
 public class DeltaCraft extends JavaPlugin {
     private DeltaCraftManager manager;
@@ -38,6 +47,8 @@ public class DeltaCraft extends JavaPlugin {
         this.spectateConfigManager = new SpectateManager(this, this.manager.getSpectateCacheManager());
         this.kelpConfigManager = new KelpManager(this, this.manager.getKelpCacheManager());
 
+        ConfigManager mgr = new ConfigManager(this, "old.yml");
+        Test(mgr);
         // Home commands
         this.getCommand("sethome").setExecutor(new SetHomeCommand(homeConfigManager, this));
         debugMsg("SetHome loaded");
@@ -112,6 +123,34 @@ public class DeltaCraft extends JavaPlugin {
         if (isInDebug()) {
             getLogger().info("[Debug]: " + message);
         }
+    }
+
+    public void Test(ConfigManager mgr) {
+        FileConfiguration config = mgr.getConfig();
+
+        Set<String> playerIds = config.getKeys(false);
+        for (String playerId : playerIds) {
+            UUID uid = UUID.fromString(playerId);
+            ConfigurationSection section = config.getConfigurationSection(playerId);
+            Set<String> homeNames = section.getKeys(false);
+
+            for (String homeName : homeNames) {
+                String k = playerId + "." + homeName + ".";
+                String worldName = config.getString(k + "world");
+                double x = config.getDouble(k + "x");
+                double y = config.getDouble(k + "y");
+                double z = config.getDouble(k + "z");
+
+                World world = this.getServer().getWorld(worldName);
+                Location loc = new Location(world, x, y, z);
+
+                this.homeConfigManager.setHome(uid, homeName, loc);
+                this.homeConfigManager.saveConfig();
+                this.debugMsg("Saving home: " + homeName);
+            }
+        }
+
+        this.debugMsg("Done");
     }
 
 }

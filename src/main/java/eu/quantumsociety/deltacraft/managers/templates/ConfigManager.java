@@ -13,7 +13,7 @@ import java.util.logging.Level;
 
 import static org.bukkit.Bukkit.getLogger;
 
-public abstract class ConfigManager {
+public  class ConfigManager {
     protected final DeltaCraft plugin;
     private final String fileName;
     private FileConfiguration dataConfig = null;

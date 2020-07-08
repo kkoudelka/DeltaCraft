@@ -1,0 +1,763 @@
+cc02e655-d614-39e2-946f-34569daf750d:
+  default:
+    world: world
+    x: 5993
+    y: 63
+    z: 82
+  pisek:
+    world: world
+    x: 2020
+    y: 67
+    z: 3837
+  potentialhome:
+    world: world
+    x: -2331
+    y: 77
+    z: 484
+  nether:
+    world: world_nether
+    x: 531
+    y: 128
+    z: 56
+  pristav:
+    world: world
+    x: 910
+    y: 64
+    z: 568
+d9542cdb-6d5d-3463-ab13-5f924f1d7187:
+  default:
+    world: world
+    x: -3181
+    y: 72
+    z: 275
+  vesnice:
+    world: world
+    x: -2775
+    y: 64
+    z: 1218
+dcd2255c-a9ba-3bb6-9600-a52170fb65fa:
+  nether:
+    world: world_nether
+    x: 28
+    y: 43
+    z: 20
+  default:
+    world: world
+    x: 911
+    y: 65
+    z: 569
+  main:
+    world: world
+    x: 791
+    y: 73
+    z: 529
+  pisek:
+    world: world
+    x: 2017
+    y: 67
+    z: 3837
+  plateau:
+    world: world
+    x: -2919
+    y: 90
+    z: 6728
+  nether2:
+    world: world_nether
+    x: 93
+    y: 128
+    z: -55
+  nether3:
+    world: world_nether
+    x: -124
+    y: 50
+    z: -290
+  goldfarma:
+    world: world_nether
+    x: -219
+    y: 129
+    z: 52
+  goldfarm:
+    world: world_nether
+    x: 536
+    y: 129
+    z: 49
+d8ac3291-c953-3b45-84a9-55f5dea62d00:
+  default:
+    world: world
+    x: 907
+    y: 64
+    z: 569
+4f00a094-2634-3ba9-b085-efa4d0e68c13:
+  default:
+    world: world
+    x: 210
+    y: 83
+    z: -133
+  harbour:
+    world: world
+    x: 912
+    y: 66
+    z: 562
+  home:
+    world: world
+    x: 211
+    y: 83
+    z: -132
+  ranch:
+    world: world
+    x: 208
+    y: 74
+    z: -164
+  mill:
+    world: world
+    x: 193
+    y: 68
+    z: -154
+  supertrap:
+    world: world_nether
+    x: 536
+    y: 129
+    z: 50
+  diamonds:
+    world: world
+    x: -1148
+    y: 11
+    z: -511
+289ffbb0-ae47-37cc-aa60-29e652ac7aaf:
+  default:
+    world: world
+    x: -2378
+    y: 63
+    z: 555
+  domov:
+    world: world
+    x: -2328
+    y: 78
+    z: 483
+  cave:
+    world: world
+    x: -2365
+    y: 53
+    z: 225
+  spawner:
+    world: world
+    x: -2308
+    y: 39
+    z: 217
+  cave2:
+    world: world
+    x: -2269
+    y: 39
+    z: 200
+01cab51d-b1ec-385b-9f59-7bf473ac0847:
+  default:
+    world: world
+    x: -1938
+    y: 64
+    z: -1632
+  kaja:
+    world: world
+    x: 910
+    y: 49
+    z: 516
+  piglins:
+    world: world_nether
+    x: -77
+    y: 58
+    z: -484
+  nether:
+    world: world_nether
+    x: 229
+    y: 75
+    z: -520
+  nether2:
+    world: world_nether
+    x: 236
+    y: 83
+    z: -557
+  slime:
+    world: world
+    x: -1941
+    y: 10
+    z: -1461
+  farmaowo:
+    world: world_nether
+    x: 544
+    y: 128
+    z: 51
+955c63d3-1abd-3548-9bb1-688442c966bc:
+  default:
+    world: world
+    x: 8405
+    y: 67
+    z: -8191
+  xp:
+    world: world
+    x: -6057
+    y: 23
+    z: -558
+  dada:
+    world: world
+    x: -1937
+    y: 63
+    z: -1638
+  slajm:
+    world: world
+    x: -1940
+    y: 63
+    z: -1464
+  xpecka:
+    world: world_nether
+    x: 543
+    y: 128
+    z: 51
+bbf8a367-16f2-35b1-8b11-15fe81926d46:
+  default:
+    world: world
+    x: -6061
+    y: 63
+    z: -565
+  nether:
+    world: world_nether
+    x: 250
+    y: 13
+    z: 81
+  endport:
+    world: world
+    x: 2200
+    y: 26
+    z: -128
+  netherspawn:
+    world: world_nether
+    x: -220
+    y: 129
+    z: 52
+  nethertop:
+    world: world_nether
+    x: -228
+    y: 234
+    z: 53
+  top:
+    world: world
+    x: -6031
+    y: 77
+    z: -570
+  skeletonxp:
+    world: world
+    x: 915
+    y: 50
+    z: 523
+  utop:
+    world: world_nether
+    x: 543
+    y: 255
+    z: 56
+  a:
+    world: world_nether
+    x: 536
+    y: 129
+    z: 50
+  test:
+    world: world
+    x: 846
+    y: 14
+    z: 663
+eba07b1f-3286-3d8f-973b-d2f960d0f56d:
+  default:
+    world: world
+    x: -5991
+    y: 80
+    z: -389
+  dung:
+    world: world
+    x: -6076
+    y: 55
+    z: -574
+  nether:
+    world: world_nether
+    x: -219
+    y: 129
+    z: 52
+  end:
+    world: world
+    x: 2202
+    y: 25
+    z: -128
+  hhh:
+    world: world
+    x: 939
+    y: 64
+    z: 551
+  ice:
+    world: world
+    x: 2752
+    y: 68
+    z: -1377
+  pepe:
+    world: world
+    x: -6066
+    y: 63
+    z: -572
+  piglin:
+    world: world_nether
+    x: 540
+    y: 250
+    z: 56
+c19c7bc9-79fb-39e4-9170-bcaaa276f4ba:
+  one:
+    world: world
+    x: -2186
+    y: 65
+    z: 4815
+  h:
+    world: world
+    x: -1493
+    y: 69
+    z: 8499
+  vill:
+    world: world
+    x: -2505
+    y: 64
+    z: 5536
+  village:
+    world: world
+    x: -1302
+    y: 66
+    z: 7347
+  cave:
+    world: world
+    x: -1223
+    y: 22
+    z: 7329
+  cave1:
+    world: world
+    x: -1201
+    y: 21
+    z: 7439
+  brench:
+    world: world
+    x: -1167
+    y: 12
+    z: 7468
+  caveee:
+    world: world
+    x: -1276
+    y: 64
+    z: 9311
+  doly:
+    world: world
+    x: -1501
+    y: 42
+    z: 8485
+f7c767d7-0052-3e38-8be5-5fc222d4e8c5:
+  les:
+    world: world
+    x: 6989
+    y: 91
+    z: -8208
+  default:
+    world: world
+    x: 10123
+    y: 65
+    z: -8436
+  dědek:
+    world: world
+    x: 11620
+    y: 60
+    z: -8922
+  skr:
+    world: world_nether
+    x: 1244
+    y: 128
+    z: -1421
+  prase:
+    world: world_nether
+    x: 1244
+    y: 210
+    z: -1420
+  nether:
+    world: world_nether
+    x: 1593
+    y: 67
+    z: -1045
+  irony:
+    world: world
+    x: 10154
+    y: 33
+    z: -8450
+  top:
+    world: world
+    x: 10127
+    y: 126
+    z: -8466
+  mine:
+    world: world_nether
+    x: 1407
+    y: 26
+    z: -1164
+  bambus:
+    world: world
+    x: -2042
+    y: 69
+    z: -681
+9e2607c6-1741-309c-b7ed-3b9aad07c622:
+  default:
+    world: world
+    x: -1212
+    y: 88
+    z: 8137
+918bcb70-b01f-3a1d-8236-12c06edbf8c2:
+  default:
+    world: world
+    x: 10129
+    y: 57
+    z: -8440
+  terakota:
+    world: world
+    x: 12297
+    y: 64
+    z: -8440
+  draksut:
+    world: world
+    x: -1975
+    y: 63
+    z: -1623
+  kniha:
+    world: world
+    x: 11620
+    y: 64
+    z: -8924
+  nether:
+    world: world_nether
+    x: -294
+    y: 65
+    z: -314
+  vilage:
+    world: world
+    x: 1531473
+    y: 63
+    z: 1544324
+  prase:
+    world: world_nether
+    x: 1242
+    y: 228
+    z: -1304
+  top:
+    world: world
+    x: 10102
+    y: 126
+    z: -8470
+  pavoukl:
+    world: world
+    x: 10171
+    y: 20
+    z: -8436
+  mansion:
+    world: world
+    x: 5333
+    y: 111
+    z: -18626
+63ae8670-f39e-3fed-83f4-dca9575c889f:
+  default:
+    world: world
+    x: 10124
+    y: 65
+    z: -8435
+  nedr:
+    world: world_nether
+    x: 1234
+    y: 76
+    z: -1144
+  nedr15:
+    world: world_nether
+    x: 1227
+    y: 14
+    z: -1305
+  brench:
+    world: world
+    x: 10179
+    y: 11
+    z: -8597
+  pigman:
+    world: world_nether
+    x: 1242
+    y: 228
+    z: -1304
+  chunk:
+    world: world
+    x: 10131
+    y: 64
+    z: -8449
+  nedrbuzeranti:
+    world: world_nether
+    x: -237
+    y: 65
+    z: -316
+  tera:
+    world: world
+    x: 12299
+    y: 66
+    z: -8439
+  mending:
+    world: world
+    x: 11619
+    y: 60
+    z: -8922
+  village:
+    world: world
+    x: 9261
+    y: 71
+    z: -7524
+b3b396ad-d4c2-3844-885e-45e79052e21f:
+  default:
+    world: world
+    x: 1461
+    y: 80
+    z: -302
+  hrad:
+    world: world
+    x: -6064
+    y: 63
+    z: -570
+  fox:
+    world: world
+    x: -1498
+    y: 69
+    z: 8498
+  skeletons:
+    world: world
+    x: 1695
+    y: 15
+    z: -251
+  end:
+    world: world
+    x: 2133
+    y: 80
+    z: -127
+  nether:
+    world: world_nether
+    x: 215
+    y: 12
+    z: 28
+  ok:
+    world: world
+    x: 10153
+    y: 69
+    z: -8442
+  nether_red:
+    world: world_nether
+    x: -198
+    y: 74
+    z: 791
+  nether_farm:
+    world: world_nether
+    x: -219
+    y: 129
+    z: 52
+  zelvy:
+    world: world
+    x: 684
+    y: 65
+    z: 1049
+be240084-5956-3c38-af0f-4c6923715618:
+  default:
+    world: world
+    x: 10144
+    y: 66
+    z: -8438
+deb0d2c6-8bf1-3f7e-b853-ae66b33dc665:
+  nighty:
+    world: world
+    x: -1495
+    y: 72
+    z: 8522
+  hrad:
+    world: world
+    x: -6057
+    y: 63
+    z: -587
+  enchnting:
+    world: world
+    x: -1954
+    y: 11
+    z: -1622
+  build:
+    world: world
+    x: 1568
+    y: 102
+    z: -274
+  default:
+    world: world
+    x: 1461
+    y: 80
+    z: -302
+  peklo:
+    world: world_nether
+    x: -220
+    y: 129
+    z: 51
+  xp:
+    world: world
+    x: 911
+    y: 49
+    z: 516
+  farm:
+    world: world_nether
+    x: 541
+    y: 250
+    z: 56
+  gold:
+    world: world_nether
+    x: 529
+    y: 128
+    z: 57
+e1baf214-f3b3-3b74-ab47-6ddc6899ab86:
+  default:
+    world: world
+    x: 42996
+    y: 88
+    z: -43143
+  nether:
+    world: world
+    x: 1531203
+    y: 33
+    z: 1544415
+  portal:
+    world: world_nether
+    x: 5371
+    y: 87
+    z: -5393
+  krajina:
+    world: world
+    x: 43155
+    y: 72
+    z: -43003
+  bedrock:
+    world: world
+    x: 1531171
+    y: 11
+    z: 1544402
+  jubed:
+    world: world_nether
+    x: 191453
+    y: 128
+    z: 193029
+  doly:
+    world: world
+    x: 1531117
+    y: 37
+    z: 1544373
+  danik:
+    world: world
+    x: -1937
+    y: 63
+    z: -1638
+  mob:
+    world: world
+    x: -2032
+    y: 64
+    z: -1801
+  spawner:
+    world: world
+    x: -1980
+    y: 48
+    z: -1837
+12e3375b-0cdf-36ad-a256-b7e393696ca3:
+  default:
+    world: world
+    x: -1913
+    y: 82
+    z: -1891
+  enchant:
+    world: world
+    x: 1460
+    y: 80
+    z: -303
+  spruce:
+    world: world
+    x: 10236
+    y: 63
+    z: -8391
+  danik:
+    world: world
+    x: -1941
+    y: 63
+    z: -1644
+  end:
+    world: world
+    x: 2192
+    y: 25
+    z: -132
+b13fc315-933d-3fc2-8b7a-72a2f2493479:
+  default:
+    world: world
+    x: 10124
+    y: 65
+    z: -8436
+  draksut:
+    world: world
+    x: -1928
+    y: 63
+    z: -1671
+  dedek:
+    world: world
+    x: 11619
+    y: 60
+    z: -8922
+  chunk:
+    world: world
+    x: 10123
+    y: 126
+    z: -8461
+  nether:
+    world: world_nether
+    x: 1590
+    y: 67
+    z: -1045
+  prase:
+    world: world_nether
+    x: 1245
+    y: 210
+    z: -1420
+  up:
+    world: world
+    x: 10120
+    y: 64
+    z: -8491
+  irongolem:
+    world: world
+    x: 10156
+    y: 34
+    z: -8449
+  watertemplee:
+    world: world
+    x: 11033
+    y: 62
+    z: -7613
+119769e0-975c-36f3-9eb3-016fdc175eba:
+  dexit:
+    world: world
+    x: -1950
+    y: 63
+    z: -1635
+  default:
+    world: world
+    x: -1943
+    y: 63
+    z: -1632
+  slime:
+    world: world
+    x: -1934
+    y: 11
+    z: -1462
+  farm:
+    world: world
+    x: -1989
+    y: 64
+    z: -1536
+d3c5487c-577e-3d68-914a-d429fbe42c37:
+  default:
+    world: world
+    x: 10131
+    y: 126
+    z: -8475
