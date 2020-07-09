@@ -78,9 +78,7 @@ public class SpawnerDestroyListener implements Listener {
 
         e.setExpToDrop(0);
 
-        Location loc = b.getLocation();
-        b.getWorld().dropItemNaturally(loc, toDrop);
-        b.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 1);
+        b.getWorld().dropItemNaturally(b.getLocation(), toDrop);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -100,7 +98,7 @@ public class SpawnerDestroyListener implements Listener {
 
         ItemMeta meta = e.getItemInHand().getItemMeta();
         List<String> lore = meta.getLore();
-        if (lore.size() < 1) {
+        if (lore == null || lore.size() < 1) {
             if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
                 e.setCancelled(true);
             }
@@ -110,7 +108,5 @@ public class SpawnerDestroyListener implements Listener {
         EntityType type = EntityType.valueOf(name);
         spawner.setSpawnedType(type);
         spawner.update();
-
-        b.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, b.getLocation(), 1);
     }
 }
