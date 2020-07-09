@@ -1,5 +1,6 @@
 package eu.quantumsociety.deltacraft.commands.home
 
+import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.managers.HomesManager
 import eu.quantumsociety.deltacraft.utils.TextHelper
 import eu.quantumsociety.deltacraft.utils.enums.Permissions
@@ -20,6 +21,10 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
 
     private val overrideString: String = "::override::"
 
+    private val plugin: DeltaCraft
+        get() = this.configManager.plugin!!
+
+
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         if (sender !is Player) {
             sender.sendMessage("Only players can use this command")
@@ -30,6 +35,11 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
         if (!player.hasPermission(Permissions.HOMEUSE.path)) {
 
             player.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.HOMEUSE))
+            return true
+        }
+
+        if (this.plugin.manager.spectateCacheManager.isPlayerSpectating(player.uniqueId)) {
+            player.spigot().sendMessage(*TextHelper.attentionText("You can't use this command while spectating!"))
             return true
         }
 

@@ -40,7 +40,7 @@ public class KelpGrowListener implements Listener {
 
         Location loc = b.getLocation();
 
-        if (this.getMgr().isInKelpFarm(loc)) {
+        if (!this.getMgr().isInKelpFarm(loc)) {
             return;
         }
 
@@ -50,13 +50,10 @@ public class KelpGrowListener implements Listener {
             return;
         }
         Ageable a = (Ageable) bd;
-
         if (a.getAge() == 25) {
-            this.plugin.debugMsg("Repairing kelp in location " + loc.toString());
+//          this.plugin.debugMsg("Repairing kelp in location " + loc.toString());
             // Run with delay 1 tick
             new KelpRunnable(this.plugin, b).runTaskLater(this.plugin, 1);
         }
-
-
     }
 }

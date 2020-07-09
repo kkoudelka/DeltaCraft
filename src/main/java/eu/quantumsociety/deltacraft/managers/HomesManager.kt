@@ -10,12 +10,14 @@ import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
+import java.util.UUID
 import kotlin.collections.ArrayList
 import kotlin.math.floor
 
-class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
+class HomesManager(val plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
     fun getPlayerHomes(p: Player): List<PlayerHome> {
         val kh = KeyHelper(p.uniqueId)
         if (!config.contains(kh.playerKey))
@@ -54,20 +56,38 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
         return config.contains(kh[homeName])
     }
 
+    fun isLava(block: Block): Boolean {
+        return block.type == Material.LAVA || block.type == Material.LAVA_BUCKET
+    }
+
+    fun isWater(block: Block): Boolean {
+        return block.type == Material.LAVA || block.type == Material.LAVA_BUCKET
+    }
+
     fun isObstructed(location: Location): Pair<Boolean, Array<BaseComponent>?> {
         val blockUnder = location.block.getRelative(BlockFace.DOWN)
         if (blockUnder.isEmpty) {
             return Pair(true, TextHelper.attentionText("A block is missing under the home location!"))
         }
 
-        if (blockUnder.type == Material.LAVA || blockUnder.type == Material.LAVA_BUCKET) {
+        if (isLava(blockUnder)) {
             return Pair(true, TextHelper.attentionText("There is a lava under the home position"))
         }
 
         val block = location.block
         val up = block.getRelative(BlockFace.UP)
 
-        if (up.isEmpty && block.isEmpty) {
+        if (up.isLiquid == block.isLiquid) {
+            if (isLava(up) || isLava(block)) {
+                return Pair(true, TextHelper.attentionText("There is lava in the home position"))
+            }
+
+            if (isWater(up) || isWater(block)) {
+                return Pair(true, TextHelper.attentionText("There is water in the home position"))
+            }
+        }
+
+        if (up.isPassable && block.isPassable) {
             return Pair(false, null)
         }
 
@@ -78,12 +98,15 @@ class HomesManager(plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") {
     }
 
     fun setHome(p: Player, homeName: String): Boolean {
-        val l = p.location
-        l.x = floor(l.x)
-        l.z = floor(l.z)
-        val centred = l.add(0.5,0.0,0.5)
-        val pl = PlayerHome(p.uniqueId, homeName, centred)
-        val kh = KeyHelper(p.uniqueId)
+        return this.setHome(p.uniqueId, homeName, p.location)
+    }
+
+    fun setHome(playerId: UUID, homeName: String, location: Location): Boolean {
+        location.x = floor(location.x)
+        location.z = floor(location.z)
+        val centred = location.add(0.5, 0.0, 0.5)
+        val pl = PlayerHome(playerId, homeName, centred)
+        val kh = KeyHelper(playerId)
         config[kh[homeName, "location"]] = pl.location
         saveConfig()
         return true

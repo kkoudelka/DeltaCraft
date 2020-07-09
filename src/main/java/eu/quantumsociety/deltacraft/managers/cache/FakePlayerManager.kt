@@ -18,10 +18,12 @@ class FakePlayerManager(val plugin: DeltaCraft) : CacheManager<UUID, EntityPlaye
     fun spawnFakePlayer(spectatePlayer: Player, playerObserver: Player, entityLocation: Location?): EntityPlayer {
         val uuid = UUID.randomUUID()
 
-        val server = (Bukkit.getServer() as CraftServer).server
-        val world = (Bukkit.getWorlds()[0] as CraftWorld).handle
-        val npc = EntityPlayer(server, world, GameProfile(uuid, spectatePlayer.displayName), PlayerInteractManager(world))
         val location = entityLocation ?: spectatePlayer.location
+
+
+        val server = (Bukkit.getServer() as CraftServer).server
+        val world = (location.world as CraftWorld).handle
+        val npc = EntityPlayer(server, world, GameProfile(uuid, spectatePlayer.displayName), PlayerInteractManager(world))
         npc.setLocation(location.x, location.y, location.z, location.yaw, location.pitch)
 
         val connection = (playerObserver as CraftPlayer).handle.playerConnection
