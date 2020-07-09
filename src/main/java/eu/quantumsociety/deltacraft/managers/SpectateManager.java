@@ -9,6 +9,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -17,6 +18,8 @@ import java.util.UUID;
 public class SpectateManager extends CacheConfigManager<SpectateCacheManager> {
     public final String PlayersPrefix = "players";
     public final String LocationKey = "location";
+    public final String VelocityKey = "velocity";
+    public final String FallDistanceKey = "falldistance";
     public final String GamemodeKey = "mode";
 
     public SpectateManager(DeltaCraft plugin, SpectateCacheManager manager) {
@@ -46,10 +49,12 @@ public class SpectateManager extends CacheConfigManager<SpectateCacheManager> {
 
             Location loc = this.getLocation(kh);
             GameMode gm = this.getGamemode(kh);
+            Vector velocity = this.getVelocity(kh);
+            float fallDis = this.getFallDistance(kh);
 
             UUID id = UUID.fromString(key);
 
-            CachePlayer pl = new CachePlayer(id, loc, gm);
+            CachePlayer pl = new CachePlayer(id, loc, gm, velocity, fallDis);
             cache.put(id, pl);
         }
         return cache;
@@ -75,15 +80,33 @@ public class SpectateManager extends CacheConfigManager<SpectateCacheManager> {
         return GameMode.valueOf(gameModeVal);
     }
 
+    public Vector getVelocity(KeyHelper keys) {
+        FileConfiguration config = this.getConfig();
+
+        String modeKey = keys.get(this.VelocityKey);
+
+        return (Vector) config.get(modeKey);
+    }
+
+    public float getFallDistance(KeyHelper keys) {
+        FileConfiguration config = this.getConfig();
+
+        String modeKey = keys.get(this.FallDistanceKey);
+
+        return (float) config.getDouble(modeKey);
+    }
+
     public boolean exists(KeyHelper keys) {
         return this.getConfig().contains(keys.getPlayerKey());
     }
 
-    public void save(KeyHelper keys, Location l, GameMode gm) {
+    public void save(KeyHelper keys, Location l, GameMode gm, Vector velocity, float fallDistance) {
         FileConfiguration config = this.getConfig();
 
         config.set(keys.get(this.LocationKey), l);
         config.set(keys.get(this.GamemodeKey), gm.name());
+        config.set(keys.get(this.VelocityKey), velocity);
+        config.set(keys.get(this.FallDistanceKey), fallDistance);
 
         this.saveConfig();
     }
