@@ -8,6 +8,7 @@ import eu.quantumsociety.deltacraft.commands.kelp.KelpCommand;
 import eu.quantumsociety.deltacraft.commands.spectate.SpectateCommand;
 import eu.quantumsociety.deltacraft.listeners.ComposterListener;
 import eu.quantumsociety.deltacraft.listeners.KelpGrowListener;
+import eu.quantumsociety.deltacraft.listeners.SpawnerDestroyListener;
 import eu.quantumsociety.deltacraft.listeners.SpectateListener;
 import eu.quantumsociety.deltacraft.managers.*;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
@@ -60,6 +61,8 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Kelp listener loaded");
         plm.registerEvents(new ComposterListener(this), this);
         debugMsg("Composter listener loaded");
+        plm.registerEvents(new SpawnerDestroyListener(this), this);
+        debugMsg("Spawner destroy listener loaded");
 
         debugMsg("Loaded " + manager.getKelpCacheManager().getCount() + " kelp regions");
 
