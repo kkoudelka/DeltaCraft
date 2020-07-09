@@ -25,7 +25,7 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         get() = this.plugin.manager.fakePlayerManager
 
     @EventHandler(ignoreCancelled = true)
-    fun OnMoveEvent(e: PlayerMoveEvent?) {
+    fun onMoveEvent(e: PlayerMoveEvent?) {
         if (e == null) {
             return
         }
@@ -41,23 +41,12 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         val cache = spectateCacheManager.get(id) ?: return
 
         val origin = cache.originalLocation
-/*        var distance = 0.0
-        distance = try {
-            MathHelper.calcDistance(origin, curr)
-        } catch (ex: Exception) {
-            plugin.logger.warning(ex.toString())
-            p.sendMessage(ChatColor.RED.toString() + "ERROR in calculating distance: " + ex.toString())
-            return
-        }*/
 
         val distance = origin.distance(p.location)
-
-
         if (distance < maxDistance) {
             return
         }
         p.sendMessage(ChatColor.RED.toString() + "You've reached maximum distance (" + maxDistance + ")")
-        // p.teleport(origin)
 
         teleportTowardsOrigin(p, origin, playerToOriginalDirection = true)
         return
@@ -70,6 +59,9 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         val l = player.location.setDirection(d)
         l.add(d.normalize().multiply(blocks))
 
+        // Set metadata (correction teleport)
+        player.setMetadata(this.spectateCacheManager.correctionKey, this.spectateCacheManager.getFakeMetadata())
+
         if (playerToOriginalDirection) {
            val l2 = l.setDirection(pDirection)
             player.teleport(l2)
@@ -77,7 +69,6 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         }
 
         player.teleport(l)
-
     }
 
     @EventHandler
@@ -117,6 +108,9 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         if (!this.spectateCacheManager.isPlayerSpectating(player.uniqueId)) {
             return
         }
+
+        player.removeMetadata(this.spectateCacheManager.correctionKey, plugin)
+        player.removeMetadata(this.spectateCacheManager.teleportBackKey, plugin)
 
         val playerLocation = player.location
 

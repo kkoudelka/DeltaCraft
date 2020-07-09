@@ -54,6 +54,8 @@ class SpectateCommand(private val configManager: SpectateManager, private val pl
     }
 
     private fun switchBack(p: Player, l: Location, gm: GameMode, velocity: Vector, fallDistance: Float): Boolean {
+        p.setMetadata(this.spectateCache.teleportBackKey, this.spectateCache.getFakeMetadata())
+
         val id = p.uniqueId
         spectateCache.removeItem(id)
         configManager.delete(id)

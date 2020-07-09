@@ -6,10 +6,14 @@ import eu.quantumsociety.deltacraft.managers.templates.CacheManager
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.entity.Player
+import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.util.Vector
 import java.util.UUID
 
-class SpectateCacheManager(plugin: DeltaCraft) : CacheManager<UUID, CachePlayer>(plugin, true) {
+class SpectateCacheManager(private val plugin: DeltaCraft) : CacheManager<UUID, CachePlayer>(plugin, true) {
+    val correctionKey = "teleportCorrection"
+    val teleportBackKey = "teleportBack"
+
     fun addItem(player: Player, origin: Location, gm: GameMode, velocity: Vector, fallDistance: Float) {
         this.addItem(
                 player.uniqueId,
@@ -29,4 +33,9 @@ class SpectateCacheManager(plugin: DeltaCraft) : CacheManager<UUID, CachePlayer>
     fun isPlayerSpectating(uuid: UUID): Boolean {
         return this.contains(uuid)
     }
+
+    fun getFakeMetadata(): FixedMetadataValue {
+        return FixedMetadataValue(plugin, true)
+    }
+
 }
