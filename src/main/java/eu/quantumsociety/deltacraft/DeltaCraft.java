@@ -6,10 +6,7 @@ import eu.quantumsociety.deltacraft.commands.home.HomesCommand;
 import eu.quantumsociety.deltacraft.commands.home.SetHomeCommand;
 import eu.quantumsociety.deltacraft.commands.kelp.KelpCommand;
 import eu.quantumsociety.deltacraft.commands.spectate.SpectateCommand;
-import eu.quantumsociety.deltacraft.listeners.ComposterListener;
-import eu.quantumsociety.deltacraft.listeners.KelpGrowListener;
-import eu.quantumsociety.deltacraft.listeners.SpawnerDestroyListener;
-import eu.quantumsociety.deltacraft.listeners.SpectateListener;
+import eu.quantumsociety.deltacraft.listeners.*;
 import eu.quantumsociety.deltacraft.managers.*;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
 import org.bukkit.plugin.PluginManager;
@@ -63,6 +60,8 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Composter listener loaded");
         plm.registerEvents(new SpawnerDestroyListener(this), this);
         debugMsg("Spawner destroy listener loaded");
+        plm.registerEvents(new ShulkerKillListener(), this);
+        debugMsg("Shulker kill listener loaded");
 
         debugMsg("Loaded " + manager.getKelpCacheManager().getCount() + " kelp regions");
 
