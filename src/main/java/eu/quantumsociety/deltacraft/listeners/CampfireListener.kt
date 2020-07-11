@@ -21,8 +21,6 @@ class CampfireListener(private val plugin: DeltaCraft): Listener {
 
         // Teď sen používá - mělo být na samostatné branchi feature/campfire, ta se ale nevytvořila a já to pushnul
         // do devu. Všiml jsem si až když to bylo pushnuté
-        return
-
 
         val emitter = event.block
 
