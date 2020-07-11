@@ -18,6 +18,12 @@ class CampfireListener(private val plugin: DeltaCraft): Listener {
 
     @EventHandler
     fun onBlockDispenseEvent(event: BlockDispenseEvent) {
+
+        // Teď sen používá - mělo být na samostatné branchi feature/campfire, ta se ale nevytvořila a já to pushnul
+        // do devu. Všiml jsem si až když to bylo pushnuté
+        return
+
+
         val emitter = event.block
 
         if (emitter.type != Material.DISPENSER && emitter.type != Material.DROPPER) {
@@ -51,7 +57,7 @@ class CampfireListener(private val plugin: DeltaCraft): Listener {
 
         val dispenserInv = emitterD.inventory
 
-        emitterD.upda
+
 
         val itemSlot = emitterD.inventory.first(item)
         val slotStack = dispenserInv.getItem(itemSlot)!!
