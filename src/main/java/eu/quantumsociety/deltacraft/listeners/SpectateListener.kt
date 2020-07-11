@@ -101,7 +101,7 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onPlayerTeleport(event: PlayerTeleportEvent) {
         val player = event.player
 

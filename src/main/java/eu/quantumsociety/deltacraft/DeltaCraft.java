@@ -64,6 +64,8 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Spawner destroy listener loaded");
         plm.registerEvents(new ShulkerKillListener(), this);
         debugMsg("Shulker kill listener loaded");
+        plm.registerEvents(new EndTeleportListener(), this);
+        debugMsg("End restriction listener loaded");
 
 
         debugMsg("Loaded " + manager.getKelpCacheManager().getCount() + " kelp regions");
