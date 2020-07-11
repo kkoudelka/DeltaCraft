@@ -2,77 +2,74 @@ package eu.quantumsociety.deltacraft.listeners
 
 import eu.quantumsociety.deltacraft.DeltaCraft
 import org.bukkit.Material
-import org.bukkit.block.*
+import org.bukkit.block.Campfire
 import org.bukkit.block.data.Directional
-import org.bukkit.entity.Entity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDispenseEvent
-import org.bukkit.inventory.ItemStack
 
-class CampfireListener(private val plugin: DeltaCraft): Listener {
+class CampfireListener(private val plugin: DeltaCraft) : Listener {
 
-    private fun fillCampfire(campfire: Campfire, item: ItemStack) {
-
-    }
-
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onBlockDispenseEvent(event: BlockDispenseEvent) {
-
-        // Teď sen používá - mělo být na samostatné branchi feature/campfire, ta se ale nevytvořila a já to pushnul
-        // do devu. Všiml jsem si až když to bylo pushnuté
-        return
-
-
         val emitter = event.block
-
-        if (emitter.type != Material.DISPENSER && emitter.type != Material.DROPPER) {
+        if (emitter.type != Material.DISPENSER) {
             return
         }
 
         val emitterDirectional = emitter.blockData as Directional
         val direction = emitterDirectional.facing.direction
-
         val destination = emitter.location.clone()
                 .add(direction).block
 
 
-        if (destination.type != Material.CAMPFIRE
-                && destination.type != Material.SOUL_CAMPFIRE) {
-
+        if (destination.type != Material.CAMPFIRE &&
+                destination.type != Material.SOUL_CAMPFIRE) {
             return
         }
 
-
         val item = event.item.clone()
-
-        val campfire = destination.state as Campfire
-
-
-        //campfire.setItem(0, ItemStack(Material.CHICKEN, 1))
-
-        //campfire.update(false)
-
-        val emitterD = emitter.state as Dispenser
-
-        val dispenserInv = emitterD.inventory
-
-
-
-        val itemSlot = emitterD.inventory.first(item)
-        val slotStack = dispenserInv.getItem(itemSlot)!!
-
-        if(slotStack.amount > 1) {
-            slotStack.amount = slotStack.amount -1;
-            dispenserInv.setItem(itemSlot, slotStack);
-        } else {
-            dispenserInv.clear(itemSlot);
+        val type = item.type
+        if (type != Material.BEEF &&
+                type != Material.CHICKEN &&
+                type != Material.RABBIT &&
+                type != Material.PORKCHOP &&
+                type != Material.MUTTON &&
+                type != Material.COD &&
+                type != Material.SALMON &&
+                type != Material.POTATO &&
+                type != Material.KELP) {
+            return
         }
 
-        event.isCancelled = true
+        if (destination.state !is Campfire) {
+            return
+        }
 
-        val itemEntity = event.item as Entity
-        itemEntity.teleport(itemEntity.location.add(0.0,20.0,0.0))
+        val campfire = destination.state as Campfire
+        var pos = -1
+        when {
+            campfire.getItem(0) == null -> {
+                pos = 0
+            }
+            campfire.getItem(1) == null -> {
+                pos = 1
+            }
+            campfire.getItem(2) == null -> {
+                pos = 2
+            }
+            campfire.getItem(3) == null -> {
+                pos = 3
+            }
+        }
+        if (pos >= 0) {
 
+            item.amount = 1
+            campfire.setItem(pos, item)
+            plugin.server.scheduler.runTaskLater(plugin, Runnable {
+                campfire.update(false)
+                campfire.setCookTimeTotal(pos, 600)
+            }, 1)
+        }
     }
 }
