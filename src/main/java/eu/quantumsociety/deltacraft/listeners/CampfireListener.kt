@@ -47,29 +47,31 @@ class CampfireListener(private val plugin: DeltaCraft) : Listener {
         }
 
         val campfire = destination.state as Campfire
-        var pos = -1
+        var position = -1
         when {
             campfire.getItem(0) == null -> {
-                pos = 0
+                position = 0
             }
             campfire.getItem(1) == null -> {
-                pos = 1
+                position = 1
             }
             campfire.getItem(2) == null -> {
-                pos = 2
+                position = 2
             }
             campfire.getItem(3) == null -> {
-                pos = 3
+                position = 3
             }
         }
-        if (pos >= 0) {
-
+        if (position >= 0) {
             item.amount = 1
-            campfire.setItem(pos, item)
-            plugin.server.scheduler.runTaskLater(plugin, Runnable {
-                campfire.update(false)
-                campfire.setCookTimeTotal(pos, 600)
-            }, 1)
+
+            campfire.setCookTime(position, 0)
+            campfire.setCookTimeTotal(position, 600)
+            campfire.setItem(position, item)
+            campfire.update()
+
+            event.isCancelled = true
+            // TODO: Remove item
         }
     }
 }
