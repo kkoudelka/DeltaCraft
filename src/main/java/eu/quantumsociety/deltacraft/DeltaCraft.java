@@ -5,6 +5,7 @@ import eu.quantumsociety.deltacraft.commands.home.HomeCommand;
 import eu.quantumsociety.deltacraft.commands.home.HomesCommand;
 import eu.quantumsociety.deltacraft.commands.home.SetHomeCommand;
 import eu.quantumsociety.deltacraft.commands.kelp.KelpCommand;
+import eu.quantumsociety.deltacraft.commands.other.KahyCommand;
 import eu.quantumsociety.deltacraft.commands.spectate.SpectateCommand;
 import eu.quantumsociety.deltacraft.listeners.*;
 import eu.quantumsociety.deltacraft.managers.*;
@@ -50,6 +51,8 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Spectate loaded");
         this.getCommand("kelp").setExecutor(new KelpCommand(kelpConfigManager, this));
         debugMsg("Kelp farms loaded");
+        this.getCommand("kahy").setExecutor(new KahyCommand(this));
+        debugMsg("Kahy commands loaded");
 
         // Events
         PluginManager plm = this.getServer().getPluginManager();
@@ -57,8 +60,8 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Spectate listener loaded");
         plm.registerEvents(new KelpGrowListener(this), this);
         debugMsg("Kelp listener loaded");
-//        plm.registerEvents(new CampfireListener(this), this);
-//        debugMsg("Campfire listener loaded");
+        plm.registerEvents(new CampfireListener(this), this);
+        debugMsg("Campfire listener loaded");
         plm.registerEvents(new ComposterListener(this), this);
         debugMsg("Composter listener loaded");
         plm.registerEvents(new SpawnerDestroyListener(this), this);
@@ -67,7 +70,8 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Shulker kill listener loaded");
         plm.registerEvents(new EndTeleportListener(this), this);
         debugMsg("End restriction listener loaded");
-
+        plm.registerEvents(new KahyProtectionListener(this), this);
+        debugMsg("Kahy protection listener loaded");
 
         debugMsg("Loaded " + manager.getKelpCacheManager().getCount() + " kelp regions");
 
@@ -120,9 +124,5 @@ public class DeltaCraft extends JavaPlugin {
         if (isInDebug()) {
             getLogger().info("[Debug]: " + message);
         }
-    }
-
-    public static boolean isIdiot(Player p) {
-        return p.hasMetadata("isIdiot");
     }
 }

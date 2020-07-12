@@ -1,6 +1,7 @@
 package eu.quantumsociety.deltacraft.listeners
 
 import eu.quantumsociety.deltacraft.DeltaCraft
+import eu.quantumsociety.deltacraft.utils.Extensions
 import eu.quantumsociety.deltacraft.utils.TextHelper
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.World
@@ -9,7 +10,6 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerTeleportEvent
-import org.bukkit.metadata.FixedMetadataValue
 
 class EndTeleportListener(private val plugin: DeltaCraft) : Listener {
 
@@ -17,7 +17,7 @@ class EndTeleportListener(private val plugin: DeltaCraft) : Listener {
     fun onPlayerTeleport(event: PlayerTeleportEvent) {
         val player = event.player
 
-        if (DeltaCraft.isIdiot(player)) {
+        if (Extensions.isIdiot(player)) {
             event.isCancelled = true;
             return;
         }
@@ -31,7 +31,7 @@ class EndTeleportListener(private val plugin: DeltaCraft) : Listener {
 
                 player.teleport(player.location.subtract(0.0, 250.0, 0.0))
 
-                player.setMetadata("isIdiot", FixedMetadataValue(plugin, true))
+                player.setMetadata(Extensions.idiotKey, Extensions.getFakeMetadata(plugin))
                 player.spigot().sendMessage(*TextHelper.attentionText("You can't travel to the End just yet"))
                 player.spigot().sendMessage(*TextHelper.attentionText("Follow the rules pls"))
                 player.server.spigot().broadcast(*ComponentBuilder("")
@@ -46,12 +46,12 @@ class EndTeleportListener(private val plugin: DeltaCraft) : Listener {
     fun onPlayerDeath(event: PlayerDeathEvent) {
         val player = event.entity;
 
-        if (!DeltaCraft.isIdiot(player)) {
+        if (!Extensions.isIdiot(player)) {
             return;
         }
 
         if (player.lastDamageCause?.cause == EntityDamageEvent.DamageCause.VOID) {
-            player.removeMetadata("isIdiot", plugin);
+            player.removeMetadata(Extensions.idiotKey, plugin);
         }
         event.deathMessage = "${player.displayName} died while reading the rules"
     }

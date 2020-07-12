@@ -12,7 +12,9 @@ public enum Permissions {
     HOMEUSE("home.use"),
     HOMELISTSELF("home.list.self"),
     HOMELISTANYONE("home.list.all"),
-    HOMEDELETE("home.delete");
+    HOMEDELETE("home.delete"),
+
+    KAHYUSE("kahy.use");
 
     private final String path;
 

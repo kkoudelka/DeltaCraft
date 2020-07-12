@@ -23,6 +23,9 @@ commands:
   kelp:
     description: Kelp farms
     usage: /kelp ?
+  kahy:
+    description: Protection against kahy
+    usage: /kahy
 permissions:
   delta.*:
     default: op
@@ -72,4 +75,9 @@ permissions:
           delta.kelp.remove:
             description: Remove kelp farm
             default: true
-
+      delta.kahy.*:
+        default: op
+        children:
+          delta.kahy.use:
+            description: Use protection against kahy
+            default: true
