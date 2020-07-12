@@ -3,10 +3,12 @@ package eu.quantumsociety.deltacraft.listeners
 import eu.quantumsociety.deltacraft.DeltaCraft
 import org.bukkit.Material
 import org.bukkit.block.Campfire
+import org.bukkit.block.Dispenser
 import org.bukkit.block.data.Directional
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDispenseEvent
+import org.bukkit.inventory.ItemStack
 
 class CampfireListener(private val plugin: DeltaCraft) : Listener {
 
@@ -21,7 +23,6 @@ class CampfireListener(private val plugin: DeltaCraft) : Listener {
         val direction = emitterDirectional.facing.direction
         val destination = emitter.location.clone()
                 .add(direction).block
-
 
         if (destination.type != Material.CAMPFIRE &&
                 destination.type != Material.SOUL_CAMPFIRE) {
@@ -62,6 +63,7 @@ class CampfireListener(private val plugin: DeltaCraft) : Listener {
                 position = 3
             }
         }
+
         if (position >= 0) {
             item.amount = 1
 
@@ -71,7 +73,14 @@ class CampfireListener(private val plugin: DeltaCraft) : Listener {
             campfire.update()
 
             event.isCancelled = true
-            // TODO: Remove item
+
+            plugin.server.scheduler.runTaskLater(plugin, Runnable {
+                val origState = event.block.state
+                if (origState is Dispenser) {
+                    val inv = origState.inventory;
+                    inv.removeItem(ItemStack(event.item.type, 1))
+                }
+            }, 2)
         }
     }
 }
