@@ -95,15 +95,17 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
                                     .append(TextHelper.infoText(" anyway.")).create()))
                             .create()))
 
-
             player.spigot().sendMessage(*text.create())
             return true;
         }
 
+        if (DeltaCraft.isIdiot(player)) {
+            player.spigot().sendMessage(*TextHelper.attentionText("You cannot use home, because you're an idiot!"))
+            return true;
+        }
 
         player.teleport(homeLocation)
         player.sendMessage("Welcome home!")
-
 
         // Effects on teleport
         val world = player.location.world!!
@@ -141,5 +143,4 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
 
         return list
     }
-
 }
