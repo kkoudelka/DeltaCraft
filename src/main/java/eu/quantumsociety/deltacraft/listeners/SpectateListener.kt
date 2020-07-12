@@ -3,6 +3,7 @@ package eu.quantumsociety.deltacraft.listeners
 import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.managers.cache.FakePlayerManager
 import eu.quantumsociety.deltacraft.managers.cache.SpectateCacheManager
+import eu.quantumsociety.deltacraft.utils.Extensions
 import eu.quantumsociety.deltacraft.utils.TextHelper
 import eu.quantumsociety.deltacraft.utils.enums.Permissions
 import eu.quantumsociety.deltacraft.utils.enums.Settings
@@ -60,10 +61,10 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         l.add(d.normalize().multiply(blocks))
 
         // Set metadata (correction teleport)
-        player.setMetadata(this.spectateCacheManager.correctionKey, this.spectateCacheManager.getFakeMetadata())
+        player.setMetadata(this.spectateCacheManager.correctionKey, Extensions.getFakeMetadata(plugin))
 
         if (playerToOriginalDirection) {
-           val l2 = l.setDirection(pDirection)
+            val l2 = l.setDirection(pDirection)
             player.teleport(l2)
             return
         }

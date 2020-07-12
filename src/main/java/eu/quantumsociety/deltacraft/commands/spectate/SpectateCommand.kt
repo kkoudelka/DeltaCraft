@@ -4,6 +4,7 @@ import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.managers.SpectateManager
 import eu.quantumsociety.deltacraft.managers.cache.SpectateCacheManager
 import eu.quantumsociety.deltacraft.managers.cache.FakePlayerManager
+import eu.quantumsociety.deltacraft.utils.Extensions
 import eu.quantumsociety.deltacraft.utils.KeyHelper
 import eu.quantumsociety.deltacraft.utils.TextHelper
 import eu.quantumsociety.deltacraft.utils.enums.Permissions
@@ -54,7 +55,7 @@ class SpectateCommand(private val configManager: SpectateManager, private val pl
     }
 
     private fun switchBack(p: Player, l: Location, gm: GameMode, velocity: Vector, fallDistance: Float): Boolean {
-        p.setMetadata(this.spectateCache.teleportBackKey, this.spectateCache.getFakeMetadata())
+        p.setMetadata(this.spectateCache.teleportBackKey, Extensions.getFakeMetadata(plugin))
 
         val id = p.uniqueId
         spectateCache.removeItem(id)

@@ -5,6 +5,7 @@ import eu.quantumsociety.deltacraft.commands.home.HomeCommand;
 import eu.quantumsociety.deltacraft.commands.home.HomesCommand;
 import eu.quantumsociety.deltacraft.commands.home.SetHomeCommand;
 import eu.quantumsociety.deltacraft.commands.kelp.KelpCommand;
+import eu.quantumsociety.deltacraft.commands.other.KahyCommand;
 import eu.quantumsociety.deltacraft.commands.spectate.SpectateCommand;
 import eu.quantumsociety.deltacraft.listeners.*;
 import eu.quantumsociety.deltacraft.managers.*;
@@ -50,6 +51,8 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Spectate loaded");
         this.getCommand("kelp").setExecutor(new KelpCommand(kelpConfigManager, this));
         debugMsg("Kelp farms loaded");
+        this.getCommand("kahy").setExecutor(new KahyCommand(this));
+        debugMsg("Kahy commands loaded");
 
         // Events
         PluginManager plm = this.getServer().getPluginManager();
@@ -120,9 +123,5 @@ public class DeltaCraft extends JavaPlugin {
         if (isInDebug()) {
             getLogger().info("[Debug]: " + message);
         }
-    }
-
-    public static boolean isIdiot(Player p) {
-        return p.hasMetadata("isIdiot");
     }
 }

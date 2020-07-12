@@ -1,0 +1,32 @@
+package eu.quantumsociety.deltacraft.utils;
+
+import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class Extensions {
+    public static final String idiotKey = "isIdiot";
+    public static final String kahyProtectionKey = "kahyProtection";
+
+
+    public static boolean isIdiot(Player p) {
+        return p.hasMetadata(idiotKey);
+    }
+
+    public static boolean hasProtection(Player p) {
+        return p.hasMetadata(kahyProtectionKey);
+    }
+
+    public static FixedMetadataValue getFakeMetadata(JavaPlugin plugin) {
+        return new FixedMetadataValue(plugin, true);
+    }
+
+    public static boolean isKahy(Player p) {
+        return isKahy(p.getDisplayName());
+    }
+
+    public static boolean isKahy(String name) {
+        return name.toLowerCase().contains("kahy");
+    }
+
+}
