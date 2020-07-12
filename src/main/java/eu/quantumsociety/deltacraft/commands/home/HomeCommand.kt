@@ -129,18 +129,18 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
 
         if (cmd.name.equals("home", true) && p3.isNotEmpty() && p3.size < 2) {
 
-
-            if (configManager.homeExists(player, "default")) {
-                list.add("default")
-            }
-
+            val typedIn = p3[0].toLowerCase()
 
             val homes = configManager.getPlayerHomes(player)
 
             for (h in homes) {
-                list.add(h.homeName)
+                if (h.homeName.startsWith(typedIn)) {
+                    list.add(h.homeName)
+                }
             }
         }
+
+
 
         return list
     }

@@ -67,16 +67,14 @@ class DelHomeCommand(private val homeConfigManager: HomesManager) : CommandExecu
         // first argument autocomplete
         if (cmd.name.equals("delhome", true) && p3.isNotEmpty() && p3.size < 2) {
 
-
-
-            if (homeConfigManager.homeExists(player, "default")) {
-                list.add("default")
-            }
+            val typedIn = p3[0].toLowerCase()
 
             val homes = homeConfigManager.getPlayerHomes(player)
 
             for (h in homes) {
-                list.add(h.homeName)
+                if (h.homeName.startsWith(typedIn)) {
+                    list.add(h.homeName)
+                }
             }
         }
 
