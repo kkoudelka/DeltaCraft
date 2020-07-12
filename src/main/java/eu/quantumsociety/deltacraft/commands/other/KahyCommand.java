@@ -4,6 +4,7 @@ import eu.quantumsociety.deltacraft.DeltaCraft;
 import eu.quantumsociety.deltacraft.utils.Extensions;
 import eu.quantumsociety.deltacraft.utils.TextHelper;
 import eu.quantumsociety.deltacraft.utils.enums.Permissions;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -59,7 +60,7 @@ public class KahyCommand implements CommandExecutor {
         }
 
         p.setMetadata(Extensions.kahyProtectionKey, Extensions.getFakeMetadata(plugin));
-        p.spigot().sendMessage(TextHelper.infoText("Kahy protection enabled"));
+        p.spigot().sendMessage(TextHelper.infoText("Kahy protection enabled", ChatColor.GREEN));
         return true;
     }
 }
