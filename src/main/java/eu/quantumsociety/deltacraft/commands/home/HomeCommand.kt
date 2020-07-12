@@ -2,6 +2,7 @@ package eu.quantumsociety.deltacraft.commands.home
 
 import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.managers.HomesManager
+import eu.quantumsociety.deltacraft.utils.Extensions
 import eu.quantumsociety.deltacraft.utils.TextHelper
 import eu.quantumsociety.deltacraft.utils.enums.Permissions
 import net.md_5.bungee.api.ChatColor
@@ -95,15 +96,17 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
                                     .append(TextHelper.infoText(" anyway.")).create()))
                             .create()))
 
-
             player.spigot().sendMessage(*text.create())
             return true;
         }
 
+        if (Extensions.isIdiot(player)) {
+            player.spigot().sendMessage(*TextHelper.attentionText("You cannot use home, because you're an idiot!"))
+            return true;
+        }
 
         player.teleport(homeLocation)
         player.sendMessage("Welcome home!")
-
 
         // Effects on teleport
         val world = player.location.world!!
@@ -141,5 +144,4 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
 
         return list
     }
-
 }

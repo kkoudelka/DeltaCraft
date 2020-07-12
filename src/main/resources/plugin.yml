@@ -1,7 +1,9 @@
 name: DeltaCraft
-version: 1.0
+version: 1.1
 main: eu.quantumsociety.deltacraft.DeltaCraft
 api-version: 1.16
+authors: [koudy008 (Karel Koudelka), Fjarik (Jiří Falta)]
+website: deltacraft.eu
 commands:
   sethome:
     description: Set new home
@@ -21,6 +23,9 @@ commands:
   kelp:
     description: Kelp farms
     usage: /kelp ?
+  kahy:
+    description: Protection against kahy
+    usage: /kahy
 permissions:
   delta.*:
     default: op
@@ -70,4 +75,9 @@ permissions:
           delta.kelp.remove:
             description: Remove kelp farm
             default: true
-
+      delta.kahy.*:
+        default: op
+        children:
+          delta.kahy.use:
+            description: Use protection against kahy
+            default: true

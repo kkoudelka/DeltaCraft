@@ -12,7 +12,7 @@ class AfkCommand : CommandExecutor {
             return true;
         }
 
-        val player: Player = sender
+//        val player: Player = sender
 
         return true
     }

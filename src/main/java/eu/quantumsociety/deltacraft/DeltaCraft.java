@@ -5,13 +5,12 @@ import eu.quantumsociety.deltacraft.commands.home.HomeCommand;
 import eu.quantumsociety.deltacraft.commands.home.HomesCommand;
 import eu.quantumsociety.deltacraft.commands.home.SetHomeCommand;
 import eu.quantumsociety.deltacraft.commands.kelp.KelpCommand;
+import eu.quantumsociety.deltacraft.commands.other.KahyCommand;
 import eu.quantumsociety.deltacraft.commands.spectate.SpectateCommand;
-import eu.quantumsociety.deltacraft.listeners.ComposterListener;
-import eu.quantumsociety.deltacraft.listeners.KelpGrowListener;
-import eu.quantumsociety.deltacraft.listeners.SpawnerDestroyListener;
-import eu.quantumsociety.deltacraft.listeners.SpectateListener;
+import eu.quantumsociety.deltacraft.listeners.*;
 import eu.quantumsociety.deltacraft.managers.*;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -52,6 +51,8 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Spectate loaded");
         this.getCommand("kelp").setExecutor(new KelpCommand(kelpConfigManager, this));
         debugMsg("Kelp farms loaded");
+        this.getCommand("kahy").setExecutor(new KahyCommand(this));
+        debugMsg("Kahy commands loaded");
 
         // Events
         PluginManager plm = this.getServer().getPluginManager();
@@ -59,10 +60,18 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Spectate listener loaded");
         plm.registerEvents(new KelpGrowListener(this), this);
         debugMsg("Kelp listener loaded");
+        plm.registerEvents(new CampfireListener(this), this);
+        debugMsg("Campfire listener loaded");
         plm.registerEvents(new ComposterListener(this), this);
         debugMsg("Composter listener loaded");
         plm.registerEvents(new SpawnerDestroyListener(this), this);
         debugMsg("Spawner destroy listener loaded");
+        plm.registerEvents(new ShulkerKillListener(), this);
+        debugMsg("Shulker kill listener loaded");
+        plm.registerEvents(new EndTeleportListener(this), this);
+        debugMsg("End restriction listener loaded");
+        plm.registerEvents(new KahyProtectionListener(this), this);
+        debugMsg("Kahy protection listener loaded");
 
         debugMsg("Loaded " + manager.getKelpCacheManager().getCount() + " kelp regions");
 
@@ -116,5 +125,4 @@ public class DeltaCraft extends JavaPlugin {
             getLogger().info("[Debug]: " + message);
         }
     }
-
 }

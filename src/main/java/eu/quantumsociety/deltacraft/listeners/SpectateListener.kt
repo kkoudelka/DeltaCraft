@@ -3,6 +3,7 @@ package eu.quantumsociety.deltacraft.listeners
 import eu.quantumsociety.deltacraft.DeltaCraft
 import eu.quantumsociety.deltacraft.managers.cache.FakePlayerManager
 import eu.quantumsociety.deltacraft.managers.cache.SpectateCacheManager
+import eu.quantumsociety.deltacraft.utils.Extensions
 import eu.quantumsociety.deltacraft.utils.TextHelper
 import eu.quantumsociety.deltacraft.utils.enums.Permissions
 import eu.quantumsociety.deltacraft.utils.enums.Settings
@@ -25,7 +26,7 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         get() = this.plugin.manager.fakePlayerManager
 
     @EventHandler(ignoreCancelled = true)
-    fun OnMoveEvent(e: PlayerMoveEvent?) {
+    fun onMoveEvent(e: PlayerMoveEvent?) {
         if (e == null) {
             return
         }
@@ -41,23 +42,12 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         val cache = spectateCacheManager.get(id) ?: return
 
         val origin = cache.originalLocation
-/*        var distance = 0.0
-        distance = try {
-            MathHelper.calcDistance(origin, curr)
-        } catch (ex: Exception) {
-            plugin.logger.warning(ex.toString())
-            p.sendMessage(ChatColor.RED.toString() + "ERROR in calculating distance: " + ex.toString())
-            return
-        }*/
 
         val distance = origin.distance(p.location)
-
-
         if (distance < maxDistance) {
             return
         }
         p.sendMessage(ChatColor.RED.toString() + "You've reached maximum distance (" + maxDistance + ")")
-        // p.teleport(origin)
 
         teleportTowardsOrigin(p, origin, playerToOriginalDirection = true)
         return
@@ -70,14 +60,16 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         val l = player.location.setDirection(d)
         l.add(d.normalize().multiply(blocks))
 
+        // Set metadata (correction teleport)
+        player.setMetadata(this.spectateCacheManager.correctionKey, Extensions.getFakeMetadata(plugin))
+
         if (playerToOriginalDirection) {
-           val l2 = l.setDirection(pDirection)
+            val l2 = l.setDirection(pDirection)
             player.teleport(l2)
             return
         }
 
         player.teleport(l)
-
     }
 
     @EventHandler
@@ -110,13 +102,16 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onPlayerTeleport(event: PlayerTeleportEvent) {
         val player = event.player
 
         if (!this.spectateCacheManager.isPlayerSpectating(player.uniqueId)) {
             return
         }
+
+        player.removeMetadata(this.spectateCacheManager.correctionKey, plugin)
+        player.removeMetadata(this.spectateCacheManager.teleportBackKey, plugin)
 
         val playerLocation = player.location
 
