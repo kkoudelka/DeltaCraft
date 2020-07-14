@@ -371,27 +371,43 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             return list;
         }
 
-        if (args.length < 1 || args[0].isEmpty() || args[0].length() < 3) {
-            list.add("set");
-//            list.add("age");
-            list.add("test");
-            list.add("create");
-            list.add("remove");
+        if (args.length < 2 || args[0].isEmpty()) {
+            String typedIn = "";
+            if (args.length == 1) {
+                typedIn = args[0].toLowerCase();
+            }
+            String[] cmds = {"set", "test", "create", "remove"};
+
+            for (String cmd : cmds) {
+                if (cmd.startsWith(typedIn)) {
+                    list.add(cmd);
+                }
+            }
             return list;
         }
 
-        String first = args[0];
+        String first = args[0].toLowerCase();
 
-        switch (first.toLowerCase()) {
+        switch (first) {
             case "set":
                 list.add("1");
                 list.add("2");
                 break;
             case "remove":
+                String typedIn = "";
+                if (args.length > 1) {
+                    typedIn = args[1].toLowerCase();
+                }
+
                 Player p = (Player) sender;
                 UUID id = p.getUniqueId();
 
-                list = this.getMgr().getKelpFarmNames(id);
+                List<String> names = this.getMgr().getKelpFarmNames(id);
+                for (String name : names) {
+                    if (name.toLowerCase().startsWith(typedIn)) {
+                        list.add(name);
+                    }
+                }
                 break;
         }
 
