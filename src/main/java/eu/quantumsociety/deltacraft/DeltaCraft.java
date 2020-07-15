@@ -10,9 +10,16 @@ import eu.quantumsociety.deltacraft.commands.spectate.SpectateCommand;
 import eu.quantumsociety.deltacraft.listeners.*;
 import eu.quantumsociety.deltacraft.managers.*;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class DeltaCraft extends JavaPlugin {
     private DeltaCraftManager manager;
@@ -22,6 +29,7 @@ public class DeltaCraft extends JavaPlugin {
     private KelpManager kelpConfigManager;
 
     private boolean isDebug;
+    private String newestVersion;
 
     @Override
     public void onEnable() {
@@ -31,6 +39,9 @@ public class DeltaCraft extends JavaPlugin {
         if (this.isDebug) {
             this.debugMsg("Debugging enabled");
         }
+
+        // Check version
+        this.newestVersion = this.getRemoteVersion();
 
         // Create managers
         this.manager = new DeltaCraftManager(this);
@@ -72,6 +83,8 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("End restriction listener loaded");
         plm.registerEvents(new KahyProtectionListener(this), this);
         debugMsg("Kahy protection listener loaded");
+        plm.registerEvents(new UpdateCheckListener(this), this);
+        debugMsg("UpdateCheck listener loaded");
 
         debugMsg("Loaded " + manager.getKelpCacheManager().getCount() + " kelp regions");
 
@@ -124,5 +137,43 @@ public class DeltaCraft extends JavaPlugin {
         if (isInDebug()) {
             getLogger().info("[Debug]: " + message);
         }
+    }
+
+    private String getRemoteVersion() {
+        StringBuilder builder = new StringBuilder();
+        HttpURLConnection connection = null;
+        try {
+            // TODO: Public repository
+            URL url = new URL("https://raw.githubusercontent.com/kkoudelka/DeltaCraft/master/VERSION");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(3000);
+
+            // Buffer
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                builder.append(line);
+            }
+            in.close();
+        } catch (MalformedURLException ex) {
+            this.debugMsg(ex.toString());
+            return "Url is not formatted correctly";
+        } catch (FileNotFoundException ex) {
+            return "Version file not found";
+        } catch (IOException ex) {
+            this.debugMsg(ex.toString());
+            return "Could not check version";
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+        return builder.toString();
+    }
+
+    public String getNewestVersion() {
+        return newestVersion;
     }
 }
