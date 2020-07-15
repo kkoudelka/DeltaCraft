@@ -5,6 +5,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -42,6 +43,7 @@ public class CachePlayer {
         return this.prevGameMode;
     }
 
+    @NotNull
     public Player getPlayer() {
         return player;
     }
