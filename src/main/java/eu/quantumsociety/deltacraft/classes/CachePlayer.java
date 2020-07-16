@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -17,17 +18,13 @@ public class CachePlayer {
     private Vector originalVelocity;
     private float fallDistance;
 
-    public CachePlayer(Player p, Location originalLocation, GameMode prevGameMode, Vector originalVelocity, float fallDistance) {
-        this.id = p.getUniqueId();
+    public CachePlayer(UUID id, Location originalLocation, GameMode prevGameMode, Vector originalVelocity, float fallDistance) {
+        this.id = id;
         this.originalLocation = originalLocation;
         this.prevGameMode = prevGameMode;
-        this.player = p;
+        this.player = Bukkit.getPlayer(id);
         this.originalVelocity = originalVelocity;
         this.fallDistance = fallDistance;
-    }
-
-    public CachePlayer(UUID id, Location originalLocation, GameMode prevGameMode, Vector originalVelocity, float fallDistance) {
-        this(Bukkit.getPlayer(id), originalLocation, prevGameMode, originalVelocity, fallDistance);
     }
 
 
@@ -43,7 +40,7 @@ public class CachePlayer {
         return this.prevGameMode;
     }
 
-    @NotNull
+    @Nullable
     public Player getPlayer() {
         return player;
     }

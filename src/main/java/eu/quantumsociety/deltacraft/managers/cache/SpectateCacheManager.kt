@@ -17,7 +17,7 @@ class SpectateCacheManager(private val plugin: DeltaCraft) : CacheManager<UUID, 
         this.addItem(
                 player.uniqueId,
                 CachePlayer(
-                        player,
+                        player.uniqueId,
                         origin,
                         gm,
                         velocity,
