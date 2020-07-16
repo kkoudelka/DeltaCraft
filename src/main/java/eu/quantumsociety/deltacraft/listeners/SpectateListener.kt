@@ -88,8 +88,8 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         val spectatePlayers = this.spectateCacheManager.values
 
         for (sp in spectatePlayers) {
-            if (sp != null && sp.player.isOnline) {
-                this.fakePlayerManager.spawnFakePlayer(sp.player, observer, sp.originalLocation)
+            if (sp != null && sp.player?.isOnline == true) {
+                sp.player?.let { this.fakePlayerManager.spawnFakePlayer(it, observer, sp.originalLocation) }
             }
         }
     }
