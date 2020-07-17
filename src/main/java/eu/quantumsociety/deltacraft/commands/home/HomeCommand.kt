@@ -34,7 +34,6 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
         val player: Player = sender
 
         if (!player.hasPermission(Permissions.HOMEUSE.path)) {
-
             player.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.HOMEUSE))
             return true
         }
@@ -54,7 +53,6 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
 
         if (homeName == overrideString) {
             sender.sendMessage("Home name is invalid");
-
             return true
         }
 
@@ -64,9 +62,6 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
         }
 
         val homeLocation = configManager.getHome(player, homeName)
-
-
-
 
         if (homeLocation == null) {
             val output = ComponentBuilder()
@@ -79,7 +74,6 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
 
 
         val isObstructed = configManager.isObstructed(homeLocation);
-
         if (isObstructed.first && !overrideTp) {
             val text = ComponentBuilder()
                     .append(isObstructed.second)
@@ -113,8 +107,6 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
 
         world.spawnParticle(Particle.EXPLOSION_NORMAL, player.location.add(0.0, 0.1, 0.0), 10)
         world.playSound(player.location, Sound.UI_TOAST_IN, SoundCategory.MASTER, 10f, 1f)
-
-
         return true
     }
 
@@ -139,9 +131,6 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
                 }
             }
         }
-
-
-
         return list
     }
 }

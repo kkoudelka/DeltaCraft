@@ -22,10 +22,7 @@ class DelHomeCommand(private val homeConfigManager: HomesManager) : CommandExecu
 
         val player: Player = sender
 
-
         val homeName = if (params.isEmpty()) "default" else params[0].toLowerCase()
-
-
 
         val success = homeConfigManager.delHome(player, homeName)
 
@@ -35,7 +32,6 @@ class DelHomeCommand(private val homeConfigManager: HomesManager) : CommandExecu
                     .append(homeName).color(ChatColor.WHITE)
                     .append(" not found").color(ChatColor.YELLOW)
             player.spigot().sendMessage(*output.create())
-
             return true
         }
 
@@ -45,14 +41,11 @@ class DelHomeCommand(private val homeConfigManager: HomesManager) : CommandExecu
                 .append(" has been deleted!").color(ChatColor.YELLOW)
         player.spigot().sendMessage(*output.create())
 
-
-
         val location = success.second
         val world = location?.world!!
 
         world.spawnParticle(Particle.VILLAGER_ANGRY, location.add(0.0, 0.5, 0.0), 1)
         world.playSound(location, Sound.BLOCK_CHAIN_BREAK, SoundCategory.MASTER, 2f, 1f)
-
         return true
     }
 

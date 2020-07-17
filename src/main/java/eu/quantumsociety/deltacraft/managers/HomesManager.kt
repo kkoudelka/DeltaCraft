@@ -56,11 +56,11 @@ class HomesManager(val plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") 
         return config.contains(kh[homeName])
     }
 
-    fun isLava(block: Block): Boolean {
+    private fun isLava(block: Block): Boolean {
         return block.type == Material.LAVA || block.type == Material.LAVA_BUCKET
     }
 
-    fun isWater(block: Block): Boolean {
+    private fun isWater(block: Block): Boolean {
         return block.type == Material.LAVA || block.type == Material.LAVA_BUCKET
     }
 
@@ -101,7 +101,7 @@ class HomesManager(val plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") 
         return this.setHome(p.uniqueId, homeName, p.location)
     }
 
-    fun setHome(playerId: UUID, homeName: String, location: Location): Boolean {
+    private fun setHome(playerId: UUID, homeName: String, location: Location): Boolean {
         location.x = floor(location.x)
         location.z = floor(location.z)
         val centred = location.add(0.5, 0.0, 0.5)
