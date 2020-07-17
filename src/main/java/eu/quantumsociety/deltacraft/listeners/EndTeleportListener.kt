@@ -18,8 +18,8 @@ class EndTeleportListener(private val plugin: DeltaCraft) : Listener {
         val player = event.player
 
         if (Extensions.isIdiot(player)) {
-            event.isCancelled = true;
-            return;
+            event.isCancelled = true
+            return
         }
 
         //TODO: To config
@@ -44,14 +44,14 @@ class EndTeleportListener(private val plugin: DeltaCraft) : Listener {
 
     @EventHandler(ignoreCancelled = true)
     fun onPlayerDeath(event: PlayerDeathEvent) {
-        val player = event.entity;
+        val player = event.entity
 
         if (!Extensions.isIdiot(player)) {
-            return;
+            return
         }
 
         if (player.lastDamageCause?.cause == EntityDamageEvent.DamageCause.VOID) {
-            player.removeMetadata(Extensions.idiotKey, plugin);
+            player.removeMetadata(Extensions.idiotKey, plugin)
         }
         event.deathMessage = "${player.displayName} died while reading the rules"
     }

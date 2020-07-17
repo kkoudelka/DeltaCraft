@@ -75,7 +75,7 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Campfire listener loaded");
         plm.registerEvents(new ComposterListener(this), this);
         debugMsg("Composter listener loaded");
-        plm.registerEvents(new SpawnerDestroyListener(this), this);
+        plm.registerEvents(new SpawnerDestroyListener(), this);
         debugMsg("Spawner destroy listener loaded");
         plm.registerEvents(new ShulkerKillListener(), this);
         debugMsg("Shulker kill listener loaded");
