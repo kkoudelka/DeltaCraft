@@ -93,8 +93,6 @@ public class DeltaCraft extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.saveConfig();
-
         super.onDisable();
     }
 
