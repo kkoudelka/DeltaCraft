@@ -1,6 +1,7 @@
 system:
   debug: false
 settings:
+  end: false
   spectate:
     maxdistance: 100
   kelp:

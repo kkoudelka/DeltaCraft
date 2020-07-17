@@ -5,10 +5,12 @@ import eu.quantumsociety.deltacraft.managers.cache.AfkCacheManager;
 import eu.quantumsociety.deltacraft.managers.cache.FakePlayerManager;
 import eu.quantumsociety.deltacraft.managers.cache.KelpCacheManager;
 import eu.quantumsociety.deltacraft.managers.cache.SpectateCacheManager;
+import eu.quantumsociety.deltacraft.utils.enums.Settings;
 
 public class DeltaCraftManager {
     private final DeltaCraft plugin;
 
+    private boolean endAccess;
 
     private final KelpCacheManager kelpCacheManager;
     private final SpectateCacheManager spectateCacheManager;
@@ -17,6 +19,8 @@ public class DeltaCraftManager {
 
     public DeltaCraftManager(DeltaCraft plugin) {
         this.plugin = plugin;
+
+        this.endAccess = plugin.getConfig().getBoolean(Settings.END.getPath());
 
         this.kelpCacheManager = new KelpCacheManager(plugin);
         this.spectateCacheManager = new SpectateCacheManager(plugin);
@@ -36,5 +40,14 @@ public class DeltaCraftManager {
         return afkCacheManager;
     }
 
-    public FakePlayerManager getFakePlayerManager() { return fakePlayerHelper; }
+    public FakePlayerManager getFakePlayerManager() {
+        return fakePlayerHelper;
+    }
+
+    /**
+     * @return If player can enter end dimension
+     */
+    public boolean getEndAccess() {
+        return endAccess;
+    }
 }

@@ -23,7 +23,7 @@ class EndTeleportListener(private val plugin: DeltaCraft) : Listener {
         }
 
         //TODO: To config
-        val canTravelToEnd = false
+        val canTravelToEnd = this.plugin.manager.endAccess
 
         if (event.to?.world?.environment == World.Environment.THE_END) {
             if (!canTravelToEnd) {
