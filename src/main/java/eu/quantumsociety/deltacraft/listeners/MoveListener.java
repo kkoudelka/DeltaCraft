@@ -2,7 +2,7 @@ package eu.quantumsociety.deltacraft.listeners;
 
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
-import eu.quantumsociety.deltacraft.classes.CacheRegion;
+import eu.quantumsociety.deltacraft.classes.KelpFarm;
 import eu.quantumsociety.deltacraft.managers.cache.KelpCacheManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -30,7 +30,7 @@ public class MoveListener implements Listener {
         Player p = e.getPlayer();
         Location l = p.getLocation();
 
-        CacheRegion reg = this.getMgr().getKelpFarm(l);
+        KelpFarm reg = this.getMgr().getKelpFarm(l);
 
         if (reg == null) {
             return;

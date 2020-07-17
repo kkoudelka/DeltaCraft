@@ -1,10 +1,9 @@
 package eu.quantumsociety.deltacraft.commands.kelp;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
-import eu.quantumsociety.deltacraft.classes.CacheRegion;
+import eu.quantumsociety.deltacraft.classes.KelpFarm;
 import eu.quantumsociety.deltacraft.managers.KelpManager;
 import eu.quantumsociety.deltacraft.managers.cache.KelpCacheManager;
-import eu.quantumsociety.deltacraft.utils.KeyHelper;
 import eu.quantumsociety.deltacraft.utils.TextHelper;
 import eu.quantumsociety.deltacraft.utils.enums.Permissions;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
@@ -26,22 +25,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class KelpCommand implements CommandExecutor, TabCompleter {
-    private final KelpManager configManager;
+    private final KelpManager manager;
     private final DeltaCraft plugin;
 
-    private final String TempKey = "temp";
-
-    private KelpCacheManager getMgr() {
-        return this.configManager.getManager();
+    private KelpCacheManager getCacheMgr() {
+        return this.manager.getManager();
     }
 
     public KelpCommand(KelpManager dataMgr, DeltaCraft plugin) {
-        this.configManager = dataMgr;
+        this.manager = dataMgr;
         this.plugin = plugin;
 
-        FileConfiguration config = this.configManager.getConfig();
+        FileConfiguration config = this.manager.getConfig();
         config.set("players", null);
-        this.configManager.saveConfig();
+        this.manager.saveConfig();
     }
 
     @Override
@@ -89,19 +86,19 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
                 case "1":
                 case "one":
                 case "first":
-                    setPointOne(p);
+                    this.setPointOne(p);
                     break;
                 case "2":
                 case "two":
                 case "second":
-                    setPointTwo(p);
+                    this.setPointTwo(p);
                     break;
                 default:
                     p.sendMessage(ChatColor.YELLOW + "You can only set point '1' or '2'");
                     return true;
             }
 
-            if (pointsAreSet(p)) {
+            if (this.pointsAreSet(p)) {
                 p.sendMessage(ChatColor.GREEN + "Well done! You can now create farm by " + ChatColor.YELLOW + "/kelp create <name of the farm>");
             }
             return true;
@@ -121,7 +118,6 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
                 p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.KELPFARMREMOVE));
                 return true;
             }
-
             return this.deleteFarm(p, arg);
         }
 
@@ -134,59 +130,47 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             try {
                 age = Integer.parseInt(arg);
             } catch (NumberFormatException ignored) {
-
+                p.spigot().sendMessage(TextHelper.attentionText("This is not valid number"));
             }
             this.setAge(p, age);
         }
-
         return true;
     }
 
     private void setPointOne(Player p) {
-        saveTempLoc(p, this.configManager.PointOneKey, "1");
+        saveTempLoc(p, this.manager.PointOneKey, "1");
     }
 
     private void setPointTwo(Player p) {
-        saveTempLoc(p, this.configManager.PointTwoKey, "2");
+        saveTempLoc(p, this.manager.PointTwoKey, "2");
     }
 
     private void saveTempLoc(Player p, String key, String pointName) {
         if (this.isSpectating(p)) {
-            p.spigot().sendMessage(TextHelper.infoText("You cannot set home while spectating"));
+            p.spigot().sendMessage(TextHelper.infoText("You cannot set point while spectating"));
             return;
         }
 
         Location loc = p.getLocation();
-
-        if (this.getMgr().isInKelpFarm(loc)) {
+        if (this.getCacheMgr().isInKelpFarm(loc)) {
             p.spigot().sendMessage(TextHelper.infoText("This location is already in farm"));
             return;
         }
 
-        UUID id = p.getUniqueId();
-
-        loc.setYaw(0);
-        loc.setPitch(0);
-
-        KeyHelper keys = new KeyHelper(id);
-
-        this.configManager.setLocation(keys.get(TempKey, key), loc);
-
-        this.configManager.saveConfig();
-
+        this.manager.saveTempLocation(p.getUniqueId(), loc, key);
         p.sendMessage(ChatColor.GREEN + "Point " + ChatColor.YELLOW + pointName + ChatColor.GREEN + " saved");
     }
 
     private boolean pointsAreSet(Player p) {
-        KeyHelper tempKeys = new KeyHelper(p.getUniqueId());
-        String tempKeyOne = tempKeys.get(TempKey, this.configManager.PointOneKey);
-        String tempKeyTwo = tempKeys.get(TempKey, this.configManager.PointTwoKey);
+        return this.pointsAreSet(p.getUniqueId());
+    }
 
-        Location one = this.configManager.getLocation(tempKeyOne);
+    private boolean pointsAreSet(UUID id) {
+        Location one = this.manager.getPointOne(id);
         if (one == null) {
             return false;
         }
-        Location two = this.configManager.getLocation(tempKeyTwo);
+        Location two = this.manager.getPointTwo(id);
         //noinspection RedundantIfStatement
         if (two == null) {
             return false;
@@ -196,34 +180,29 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
 
     private void createFarm(Player p, String name) {
         UUID playerId = p.getUniqueId();
-        KeyHelper tempKeys = new KeyHelper(playerId);
-
         if (this.isSpectating(p)) {
             p.spigot().sendMessage(TextHelper.infoText("You cannot set home while spectating"));
             return;
         }
 
         int maxFarms = this.plugin.getConfig().getInt(Settings.KELPMAXFARMS.getPath());
-        int existing = this.getMgr().getKelpFarmCount(playerId);
+        int existing = this.getCacheMgr().getKelpFarmCount(playerId);
         if (existing >= maxFarms) {
             p.spigot().sendMessage(TextHelper.infoText("You have reached quota of +" + maxFarms + " farms"));
             return;
         }
 
-        if (this.configManager.farmExists(name)) {
+        if (this.manager.farmExists(name)) {
             p.spigot().sendMessage(TextHelper.infoText("Farm with this name already exists"));
             return;
         }
 
-        String tempKeyOne = tempKeys.get(TempKey, this.configManager.PointOneKey);
-        String tempKeyTwo = tempKeys.get(TempKey, this.configManager.PointTwoKey);
-
-        Location one = this.configManager.getLocation(tempKeyOne);
+        Location one = this.manager.getPointOne(playerId);
         if (one == null) {
             p.sendMessage(ChatColor.RED + "Point 1 is not set");
             return;
         }
-        Location two = this.configManager.getLocation(tempKeyTwo);
+        Location two = this.manager.getPointTwo(playerId);
         if (two == null) {
             p.sendMessage(ChatColor.RED + "Point 2 is not set");
             return;
@@ -243,48 +222,23 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        KeyHelper keys = new KeyHelper(name, this.configManager.FarmPrefix);
-        String tempKey = tempKeys.get(TempKey);
-
-        String keyOne = keys.get(this.configManager.PointOneKey);
-        String keyTwo = keys.get(this.configManager.PointTwoKey);
-        String ownerKey = keys.get(this.configManager.OwnerKey);
-
-        FileConfiguration config = this.configManager.getConfig();
-
-        config.set(keyOne, one);
-        config.set(keyTwo, two);
-        config.set(ownerKey, playerId.toString());
-        config.set(tempKey, null);
-
-        this.configManager.saveConfig();
-
-        this.getMgr().addItem(one, two, name, playerId);
+        this.manager.addFarm(one, two, name, playerId);
 
         p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully created");
     }
 
     private boolean deleteFarm(Player p, String name) {
         UUID playerId = p.getUniqueId();
-        KeyHelper farmKeys = new KeyHelper(name, this.configManager.FarmPrefix);
 
-        FileConfiguration config = this.configManager.getConfig();
-
-        String ownerId = config.getString(farmKeys.get(this.configManager.OwnerKey));
-
+        String ownerId = this.manager.getOwnerId(name);
         if (!playerId.toString().equalsIgnoreCase(ownerId)) {
             p.sendMessage(ChatColor.RED + "You are not owner");
             return true;
         }
 
-        config.set(farmKeys.getPlayerKey(), null);
-
-        this.configManager.saveConfig();
-
-        this.getMgr().removeItem(name);
+        this.manager.removeFarm(name);
 
         p.sendMessage(ChatColor.GREEN + "Farm " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully deleted");
-
         return true;
     }
 
@@ -341,7 +295,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
     private void isInFarm(Player p) {
         Location l = p.getLocation();
 
-        CacheRegion reg = this.getMgr().getKelpFarm(l);
+        KelpFarm reg = this.getCacheMgr().getKelpFarm(l);
 
         if (reg != null) {
             p.sendMessage("You " + ChatColor.GREEN + "are " + ChatColor.WHITE + "in a kelp farm "
@@ -402,7 +356,7 @@ public class KelpCommand implements CommandExecutor, TabCompleter {
                 Player p = (Player) sender;
                 UUID id = p.getUniqueId();
 
-                List<String> names = this.getMgr().getKelpFarmNames(id);
+                List<String> names = this.getCacheMgr().getKelpFarmNames(id);
                 for (String name : names) {
                     if (name.toLowerCase().startsWith(typedIn)) {
                         list.add(name);

@@ -6,7 +6,7 @@ import org.bukkit.OfflinePlayer;
 
 import java.util.UUID;
 
-public class CacheRegion {
+public class KelpFarm {
 
     public final String name;
     public final UUID ownerId;
@@ -21,8 +21,8 @@ public class CacheRegion {
     private final double minZ;
 
 
-    public CacheRegion(Location firstPoint, Location secondPoint,
-                       String name, UUID ownerId) {
+    public KelpFarm(Location firstPoint, Location secondPoint,
+                    String name, UUID ownerId) {
         this.worldUniqueId = firstPoint.getWorld().getUID();
         this.name = name;
         this.ownerId = ownerId;

@@ -36,7 +36,7 @@ public class KelpGrowListener implements Listener {
         }
 
 //        this.plugin.debugMsg(b.getType().toString()); // KELP
-//        this.plugin.debugMsg(b.getBlockData().getAsString()); //minecraft:kelp[age=1]
+//        this.plugin.debugMsg(b.getBlockData().getAsString()); // minecraft:kelp[age=1]
 
         Location loc = b.getLocation();
 
