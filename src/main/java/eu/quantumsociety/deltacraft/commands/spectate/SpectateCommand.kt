@@ -76,7 +76,7 @@ class SpectateCommand(private val configManager: SpectateManager, private val pl
         val vel = p.velocity
         val dis = p.fallDistance
         configManager.save(keys, loc, gm, vel, dis)
-        spectateCache.addItem(p, loc, gm, vel, dis)
+        spectateCache.addItem(p.uniqueId, loc, gm, vel, dis)
         p.gameMode = GameMode.SPECTATOR
 
         p.spigot().sendMessage(*TextHelper.infoText("You are now Spectating!"))
