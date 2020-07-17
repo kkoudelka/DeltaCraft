@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class CachePlayer {
+public class SpectatePlayer {
     private UUID id;
     private Location originalLocation;
     private GameMode prevGameMode;
@@ -17,7 +17,7 @@ public class CachePlayer {
     private Vector originalVelocity;
     private float fallDistance;
 
-    public CachePlayer(UUID id, Location originalLocation, GameMode prevGameMode, Vector originalVelocity, float fallDistance) {
+    public SpectatePlayer(UUID id, Location originalLocation, GameMode prevGameMode, Vector originalVelocity, float fallDistance) {
         this.id = id;
         this.originalLocation = originalLocation;
         this.prevGameMode = prevGameMode;
@@ -41,5 +41,20 @@ public class CachePlayer {
     @Nullable
     public Player getPlayer() {
         return player;
+    }
+
+    public Vector getOriginalVelocity() {
+        return originalVelocity;
+    }
+
+    public float getFallDistance() {
+        return fallDistance;
+    }
+
+    public boolean isValid() {
+        return this.id != null &&
+                this.originalLocation != null &&
+                this.prevGameMode != null &&
+                this.originalVelocity != null;
     }
 }

@@ -7,7 +7,6 @@ import eu.quantumsociety.deltacraft.utils.Extensions
 import eu.quantumsociety.deltacraft.utils.TextHelper
 import eu.quantumsociety.deltacraft.utils.enums.Permissions
 import eu.quantumsociety.deltacraft.utils.enums.Settings
-import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -38,12 +37,12 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         if (p.hasPermission(Permissions.SPECTATEUNLIMITED.path)) {
             return
         }
-        val maxDistance = plugin.config.getDouble(Settings.SPECTATEMAXDISTANCE.path)
         val cache = spectateCacheManager.get(id) ?: return
 
         val origin = cache.originalLocation
-
         val distance = origin.distance(p.location)
+
+        val maxDistance = spectateCacheManager.maxDistance
         if (distance < maxDistance) {
             return
         }
@@ -81,14 +80,13 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
             val pl = this.spectateCacheManager.get(observer.uniqueId)
 
             this.fakePlayerManager.spawnFakePlayerToAll(observer, pl?.originalLocation)
-
             return
         }
 
         val spectatePlayers = this.spectateCacheManager.values
 
         for (sp in spectatePlayers) {
-            if (sp != null && sp.player?.isOnline == true) {
+            if (sp?.player?.isOnline == true) {
                 sp.player?.let { this.fakePlayerManager.spawnFakePlayer(it, observer, sp.originalLocation) }
             }
         }
@@ -126,7 +124,7 @@ class SpectateListener(private val plugin: DeltaCraft) : Listener {
         }
 
         val distance = playerLocation.distance(event.to!!)
-        val maxDistance = plugin.config.getDouble(Settings.SPECTATEMAXDISTANCE.path)
+        val maxDistance = this.spectateCacheManager.maxDistance
         if (distance > maxDistance) {
             event.isCancelled = true
             player.spigot().sendMessage(*TextHelper.attentionText("That is too far away!"))
