@@ -1,11 +1,11 @@
 package eu.quantumsociety.deltacraft.commands.spectate
 
 import eu.quantumsociety.deltacraft.DeltaCraft
+import eu.quantumsociety.deltacraft.classes.SpectatePlayer
 import eu.quantumsociety.deltacraft.managers.SpectateManager
 import eu.quantumsociety.deltacraft.managers.cache.SpectateCacheManager
 import eu.quantumsociety.deltacraft.managers.cache.FakePlayerManager
 import eu.quantumsociety.deltacraft.utils.Extensions
-import eu.quantumsociety.deltacraft.utils.KeyHelper
 import eu.quantumsociety.deltacraft.utils.TextHelper
 import eu.quantumsociety.deltacraft.utils.enums.Permissions
 import org.bukkit.ChatColor
@@ -28,38 +28,36 @@ class SpectateCommand(private val configManager: SpectateManager, private val pl
         }
         val p: Player = sender
         if (!p.hasPermission(Permissions.SPECTATEUSE.path)) {
-            p.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.SPECTATEUSE));
+            p.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.SPECTATEUSE))
             return true
         }
         return executeSwitch(p)
     }
 
     private fun executeSwitch(p: Player): Boolean {
-        val keys = KeyHelper(p.uniqueId)
-        val exists = configManager.exists(keys)
+        val exists = configManager.exists(p.uniqueId)
         return if (!exists) {
-            switchToSpectate(p, keys)
-        } else switchBack(p, keys)
+            switchToSpectate(p)
+        } else switchBack(p)
     }
 
-    private fun switchBack(p: Player, keys: KeyHelper): Boolean {
-        val l = configManager.getLocation(keys)
-        val g = configManager.getGamemode(keys)
-        val vel = configManager.getVelocity(keys)
-        val fallDis = configManager.getFallDistance(keys)
+    private fun switchBack(p: Player): Boolean {
+        val spec = this.configManager.getPlayer(p.uniqueId)
         p.setPlayerListName(p.name)
 
         fakePlayerHelper.despawnFakePlayerToAll(p)
+        return switchBack(p, spec)
+    }
 
-        return switchBack(p, l, g, vel, fallDis)
+    private fun switchBack(p: Player, spec: SpectatePlayer): Boolean {
+        return this.switchBack(p, spec.originalLocation, spec.prevGameMode, spec.originalVelocity, spec.fallDistance)
     }
 
     private fun switchBack(p: Player, l: Location, gm: GameMode, velocity: Vector, fallDistance: Float): Boolean {
         p.setMetadata(this.spectateCache.teleportBackKey, Extensions.getFakeMetadata(plugin))
 
-        val id = p.uniqueId
-        spectateCache.removeItem(id)
-        configManager.delete(id)
+        configManager.delete(p.uniqueId)
+
         p.teleport(l)
         p.gameMode = gm
         p.velocity = velocity
@@ -68,15 +66,11 @@ class SpectateCommand(private val configManager: SpectateManager, private val pl
         return true
     }
 
-    private fun switchToSpectate(p: Player, keys: KeyHelper): Boolean {
+    private fun switchToSpectate(p: Player): Boolean {
         fakePlayerHelper.spawnFakePlayerToAll(p, p.location)
 
-        val loc = p.location
-        val gm = p.gameMode
-        val vel = p.velocity
-        val dis = p.fallDistance
-        configManager.save(keys, loc, gm, vel, dis)
-        spectateCache.addItem(p, loc, gm, vel, dis)
+        configManager.addPlayer(SpectatePlayer(p.uniqueId, p.location, p.gameMode, p.velocity, p.fallDistance))
+
         p.gameMode = GameMode.SPECTATOR
 
         p.spigot().sendMessage(*TextHelper.infoText("You are now Spectating!"))

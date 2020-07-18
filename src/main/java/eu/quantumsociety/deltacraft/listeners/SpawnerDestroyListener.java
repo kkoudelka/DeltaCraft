@@ -1,11 +1,8 @@
 package eu.quantumsociety.deltacraft.listeners;
 
-import eu.quantumsociety.deltacraft.DeltaCraft;
 import eu.quantumsociety.deltacraft.utils.TextHelper;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
@@ -23,12 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SpawnerDestroyListener implements Listener {
-
-    private final DeltaCraft plugin;
-
-    public SpawnerDestroyListener(DeltaCraft plugin) {
-        this.plugin = plugin;
-    }
 
     @EventHandler(ignoreCancelled = true)
     public void onSpawnerDestroy(BlockBreakEvent e) {

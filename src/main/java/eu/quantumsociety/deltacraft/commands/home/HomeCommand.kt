@@ -9,6 +9,7 @@ import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.hover.content.Text
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
@@ -34,7 +35,6 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
         val player: Player = sender
 
         if (!player.hasPermission(Permissions.HOMEUSE.path)) {
-
             player.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.HOMEUSE))
             return true
         }
@@ -53,8 +53,7 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
         var homeName = if (args.isEmpty()) "default" else args[0].toLowerCase()
 
         if (homeName == overrideString) {
-            sender.sendMessage("Home name is invalid");
-
+            sender.sendMessage("Home name is invalid")
             return true
         }
 
@@ -64,9 +63,6 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
         }
 
         val homeLocation = configManager.getHome(player, homeName)
-
-
-
 
         if (homeLocation == null) {
             val output = ComponentBuilder()
@@ -78,8 +74,7 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
         }
 
 
-        val isObstructed = configManager.isObstructed(homeLocation);
-
+        val isObstructed = configManager.isObstructed(homeLocation)
         if (isObstructed.first && !overrideTp) {
             val text = ComponentBuilder()
                     .append(isObstructed.second)
@@ -90,19 +85,23 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
                     .append("\n")
                     .append(TextHelper.createActionButton(ComponentBuilder("TELEPORT ANYWAY")
                             .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/home $homeName$overrideString"))
-                            .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder()
-                                    .append(TextHelper.infoText("Proceed to teleport to "))
-                                    .append(TextHelper.varText(homeName))
-                                    .append(TextHelper.infoText(" anyway.")).create()))
+                            .event(
+                                    HoverEvent(
+                                            HoverEvent.Action.SHOW_TEXT,
+                                            Text(TextHelper.infoText("Proceed to teleport to ")),
+                                            Text(TextHelper.varText(homeName)),
+                                            Text(TextHelper.infoText(" anyway."))
+                                    )
+                            )
                             .create()))
 
             player.spigot().sendMessage(*text.create())
-            return true;
+            return true
         }
 
         if (Extensions.isIdiot(player)) {
             player.spigot().sendMessage(*TextHelper.attentionText("You cannot use home, because you're an idiot!"))
-            return true;
+            return true
         }
 
         player.teleport(homeLocation)
@@ -113,8 +112,6 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
 
         world.spawnParticle(Particle.EXPLOSION_NORMAL, player.location.add(0.0, 0.1, 0.0), 10)
         world.playSound(player.location, Sound.UI_TOAST_IN, SoundCategory.MASTER, 10f, 1f)
-
-
         return true
     }
 
@@ -139,9 +136,6 @@ class HomeCommand(private val configManager: HomesManager) : CommandExecutor, Ta
                 }
             }
         }
-
-
-
         return list
     }
 }

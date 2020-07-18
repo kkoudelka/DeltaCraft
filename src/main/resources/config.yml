@@ -1,9 +1,11 @@
 system:
   debug: false
 settings:
+  end: false
   spectate:
     maxdistance: 100
   kelp:
+    debug: false
     maxfarms: 5
     maxdistance: 50
   home:

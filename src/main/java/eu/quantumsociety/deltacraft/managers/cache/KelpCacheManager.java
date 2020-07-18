@@ -1,8 +1,9 @@
 package eu.quantumsociety.deltacraft.managers.cache;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
-import eu.quantumsociety.deltacraft.classes.CacheRegion;
+import eu.quantumsociety.deltacraft.classes.KelpFarm;
 import eu.quantumsociety.deltacraft.managers.templates.CacheManager;
+import eu.quantumsociety.deltacraft.utils.enums.Settings;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -12,20 +13,28 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class KelpCacheManager extends CacheManager<String, CacheRegion> {
+public class KelpCacheManager extends CacheManager<String, KelpFarm> {
+    private final boolean isDebug;
+
     public KelpCacheManager(DeltaCraft plugin) {
         super(plugin, true);
+
+        this.isDebug = plugin.getConfig().getBoolean(Settings.KELPDEBUG.getPath());
+    }
+
+    public boolean isDebug() {
+        return isDebug;
     }
 
     public void addItem(Location one, Location two,
                         String name, UUID ownerId) {
-        CacheRegion region = new CacheRegion(one, two, name, ownerId);
+        KelpFarm region = new KelpFarm(one, two, name, ownerId);
 
         this.addItem(name, region);
     }
 
-    public CacheRegion getKelpFarm(Location l) {
-        for (CacheRegion region : this.getValues()) {
+    public KelpFarm getKelpFarm(Location l) {
+        for (KelpFarm region : this.getValues()) {
             if (region.contains(l)) {
                 return region;
             }
@@ -37,21 +46,21 @@ public class KelpCacheManager extends CacheManager<String, CacheRegion> {
         return this.getKelpFarm(l) != null;
     }
 
-    public List<CacheRegion> getKelpFarms(Player p) {
+    public List<KelpFarm> getKelpFarms(Player p) {
         return this.getKelpFarms(p.getUniqueId());
     }
 
-    public List<CacheRegion> getKelpFarms(UUID ownerId) {
-        Collection<CacheRegion> all = this.getValues();
+    public List<KelpFarm> getKelpFarms(UUID ownerId) {
+        Collection<KelpFarm> all = this.getValues();
 
-        Stream<CacheRegion> r = all.stream()
+        Stream<KelpFarm> r = all.stream()
                 .filter(x -> x.ownerId.equals(ownerId));
 
         return r.collect(Collectors.toList());
     }
 
     public List<String> getKelpFarmNames(UUID ownerId) {
-        Collection<CacheRegion> farms = this.getKelpFarms(ownerId);
+        Collection<KelpFarm> farms = this.getKelpFarms(ownerId);
 
         Stream<String> res = farms.stream()
                 .map(x -> x.name);
@@ -64,7 +73,7 @@ public class KelpCacheManager extends CacheManager<String, CacheRegion> {
     }
 
     public int getKelpFarmCount(UUID ownerId) {
-        Collection<CacheRegion> all = this.getValues();
+        Collection<KelpFarm> all = this.getValues();
 
         long count = all.stream()
                 .filter(x -> x.ownerId.equals(ownerId))
@@ -73,4 +82,9 @@ public class KelpCacheManager extends CacheManager<String, CacheRegion> {
         return (int) count;
     }
 
+    public void debugMsg(String message) {
+        if (isDebug()) {
+            plugin.getServer().getLogger().info("[Kelp DEBUG]: " + message);
+        }
+    }
 }

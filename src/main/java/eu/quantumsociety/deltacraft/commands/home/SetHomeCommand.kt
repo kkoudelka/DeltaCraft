@@ -9,13 +9,14 @@ import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.hover.content.Text
 import org.bukkit.Particle
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-class SetHomeCommand(private val configManager: HomesManager, val deltaCraft: DeltaCraft) : CommandExecutor {
+class SetHomeCommand(private val configManager: HomesManager, private val plugin: DeltaCraft) : CommandExecutor {
 
     private val overrideString: String = "::override::"
 
@@ -28,27 +29,16 @@ class SetHomeCommand(private val configManager: HomesManager, val deltaCraft: De
         val player: Player = commandSender
 
         if (!player.hasPermission(Permissions.HOMESET.path)) {
-
             player.spigot().sendMessage(*TextHelper.insufficientPermissions(Permissions.HOMESET))
             return true
         }
 
-        if (this.deltaCraft.manager.spectateCacheManager.isPlayerSpectating(player.uniqueId)) {
+        if (this.plugin.manager.spectateCacheManager.isPlayerSpectating(player.uniqueId)) {
             player.spigot().sendMessage(*TextHelper.infoText("You cannot set home while spectating"))
             return true
         }
 
-        val maxHomes = deltaCraft.config.getInt(Settings.HOMEMAXHOMES.path)
-
-        if (configManager.getPlayerHomesCount(player) > (maxHomes - 1)) {
-
-            player.spigot().sendMessage(*TextHelper.infoText("You have reached quota of $maxHomes homes"))
-
-            return true
-        }
-
-
-        var overrideSave: Boolean = false
+        var overrideSave = false
 
         if (strings.size > 1) {
             player.sendMessage("Correct usage of this command is /sethome <name>")
@@ -57,7 +47,7 @@ class SetHomeCommand(private val configManager: HomesManager, val deltaCraft: De
         var homeName = if (strings.isEmpty()) "default" else strings[0].toLowerCase()
 
         if (homeName == overrideString) {
-            player.sendMessage("Home name is invalid");
+            player.sendMessage("Home name is invalid")
             return true
         }
 
@@ -66,7 +56,13 @@ class SetHomeCommand(private val configManager: HomesManager, val deltaCraft: De
             overrideSave = true
         }
 
-        if (configManager.homeExists(player, homeName) && !overrideSave) {
+        val exists = configManager.homeExists(player, homeName)
+        if (exists) {
+            if (overrideSave) {
+                this.saveHome(player, homeName)
+                return true
+            }
+
             val text = ComponentBuilder()
                     .append(TextHelper.getDivider())
                     .append(TextHelper.infoText("Home "))
@@ -78,31 +74,50 @@ class SetHomeCommand(private val configManager: HomesManager, val deltaCraft: De
                     .append(TextHelper.createActionButton(
                             ComponentBuilder("OVERWRITE")
                                     .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sethome $homeName$overrideString"))
-                                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder()
-                                            .append(TextHelper.infoText("Proceed to create home "))
-                                            .append(TextHelper.varText(homeName))
-                                            .append(TextHelper.infoText(".")).create()))
+                                    .event(
+                                            HoverEvent(
+                                                    HoverEvent.Action.SHOW_TEXT,
+                                                    Text(TextHelper.infoText("Proceed to create home ")),
+                                                    Text(TextHelper.varText(homeName)),
+                                                    Text(TextHelper.infoText("."))
+                                            )
+                                    )
                                     .create(), ChatColor.DARK_GREEN
                     ))
                     .append("")
                     .reset()
                     .append(TextHelper.getDivider())
 
-
             player.spigot().sendMessage(*text.create())
             return true
         }
 
-        //TODO: Check whether home with this name is already being used
-        configManager.setHome(player, homeName)
+        val maxHomes = plugin.config.getInt(Settings.HOMEMAXHOMES.path)
+        if (configManager.getPlayerHomesCount(player) > (maxHomes - 1)) {
+            player.spigot().sendMessage(*TextHelper.infoText("You have reached quota of $maxHomes homes"))
+            return true
+        }
 
+        this.saveHome(player, homeName)
+        return true
+    }
+
+    private fun saveHome(player: Player, homeName: String) {
+        val res = configManager.setHome(player, homeName)
+        if (res) {
+            this.sendSuccess(player, homeName)
+        } else {
+            player.spigot().sendMessage(*TextHelper.attentionText("Could not save home"))
+        }
+    }
+
+    private fun sendSuccess(player: Player, homeName: String) {
         val output = ComponentBuilder()
                 .append(TextHelper.infoText("Home "))
                 .append(TextHelper.varText(homeName))
                 .append(TextHelper.infoText(" has been saved successfully!"))
         player.spigot().sendMessage(*output.create())
         player.location.world?.spawnParticle(Particle.HEART, player.location.add((player.location.direction.multiply(2))).add(0.0, 1.0, 0.0), 1)
-        return true
     }
 
 }
