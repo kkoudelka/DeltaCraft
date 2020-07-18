@@ -90,4 +90,4 @@ permissions:
         children:
           delta.frame.use:
             description: Switch visibility of item frame
-            default: true
+            default: op

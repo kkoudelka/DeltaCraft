@@ -4,16 +4,21 @@ import eu.quantumsociety.deltacraft.DeltaCraft;
 import eu.quantumsociety.deltacraft.managers.cache.ItemFrameCacheManager;
 import eu.quantumsociety.deltacraft.utils.TextHelper;
 import eu.quantumsociety.deltacraft.utils.enums.Permissions;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.hanging.HangingPlaceEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 
 import java.util.UUID;
 
@@ -56,7 +61,23 @@ public class ItemFrameListener implements Listener {
         }
         Player p = e.getPlayer();
         UUID id = p.getUniqueId();
+        ItemFrame frame = (ItemFrame) entity;
         if (!manager.contains(id)) {
+            if (frame.getItem().getType() != Material.AIR) {
+                if (!frame.isVisible()) {
+                    Location original = entity.getLocation().clone();
+                    BlockFace behind = frame.getFacing().getOppositeFace();
+                    original.add(behind.getDirection());
+                    Block b = original.getBlock();
+                    BlockState state = b.getState();
+                    if (state instanceof InventoryHolder) {
+                        InventoryHolder ih = (InventoryHolder) state;
+                        Inventory inv = ih.getInventory();
+                        p.openInventory(inv);
+                    }
+                    e.setCancelled(true);
+                }
+            }
             return;
         }
         if (!this.checkPermissions(p)) {
@@ -65,11 +86,10 @@ public class ItemFrameListener implements Listener {
         if (!p.isSneaking()) {
             return;
         }
-        if (p.getInventory().getItemInMainHand().getType() != Material.AIR){
+        if (p.getInventory().getItemInMainHand().getType() != Material.AIR) {
             return;
         }
 
-        ItemFrame frame = (ItemFrame) entity;
         frame.setVisible(!frame.isVisible());
         e.setCancelled(true);
     }
