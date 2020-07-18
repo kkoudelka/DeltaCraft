@@ -1,5 +1,5 @@
 name: DeltaCraft
-version: 1.0.4
+version: 1.0.5
 main: eu.quantumsociety.deltacraft.DeltaCraft
 api-version: 1.16
 authors: [koudy008 (Karel Koudelka), Fjarik (Jiří Falta)]
@@ -90,4 +90,4 @@ permissions:
         children:
           delta.frame.use:
             description: Switch visibility of item frame
-            default: true
+            default: op
