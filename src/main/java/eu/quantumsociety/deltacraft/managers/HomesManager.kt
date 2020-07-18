@@ -8,6 +8,7 @@ import eu.quantumsociety.deltacraft.utils.TextHelper
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.hover.content.Text
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -93,7 +94,12 @@ class HomesManager(val plugin: DeltaCraft?) : ConfigManager(plugin, "home.yml") 
 
         return Pair(true, ComponentBuilder()
                 .append(TextHelper.attentionText("Home location is obstructed"))
-                .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Obstructed by: '${block.type} and ${up.type}'").create()))
+                .event(
+                        HoverEvent(
+                                HoverEvent.Action.SHOW_TEXT,
+                                Text("Obstructed by: '${block.type} and ${up.type}'")
+                        )
+                )
                 .create())
     }
 

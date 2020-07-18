@@ -7,6 +7,7 @@ import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.hover.content.Text
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -16,7 +17,7 @@ class HomesCommand(private val configManager: HomesManager) : CommandExecutor {
     override fun onCommand(commandSender: CommandSender, command: Command, s: String, strings: Array<String>): Boolean {
         if (commandSender !is Player) {
             commandSender.sendMessage("Only players can use this command")
-            return true;
+            return true
         }
         val player: Player = commandSender
 
@@ -43,14 +44,24 @@ class HomesCommand(private val configManager: HomesManager) : CommandExecutor {
                         .append(" - ").color(ChatColor.DARK_GRAY)
                         .append(TextHelper.createActionButton(ComponentBuilder("✗")
                                 .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/delhome " + ph.homeName))
-                                .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Delete '" + ph.homeName + "'").create()))
+                                .event(
+                                        HoverEvent(
+                                                HoverEvent.Action.SHOW_TEXT,
+                                                Text("Delete '" + ph.homeName + "'")
+                                        )
+                                )
                                 .create(), ChatColor.RED))
                         .append("   ")
                         .reset()
                         .append(TextHelper.createActionButton(
                                 ComponentBuilder(ph.homeName)
                                         .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/home " + ph.homeName))
-                                        .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Teleport to '${ph.homeName}' in ${ph.location.world?.name}").create()))
+                                        .event(
+                                                HoverEvent(
+                                                        HoverEvent.Action.SHOW_TEXT,
+                                                        Text("Teleport to '${ph.homeName}' in ${ph.location.world?.name}")
+                                                )
+                                        )
                                         .create(),
                                 ChatColor.YELLOW
                         ))

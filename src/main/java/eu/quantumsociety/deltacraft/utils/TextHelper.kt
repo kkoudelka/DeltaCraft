@@ -5,6 +5,7 @@ import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.hover.content.Text
 
 class TextHelper {
     companion object {
@@ -15,7 +16,7 @@ class TextHelper {
                     .append("\n")
                     .append(divider).color(ChatColor.GRAY)
                     .append("\n")
-                    .create();
+                    .create()
         }
 
         @JvmStatic
@@ -36,7 +37,12 @@ class TextHelper {
         fun insufficientPermissions(customMsg: String = "Insufficient permissions!", permission: String = "¯\\_(ツ)_/¯"): Array<BaseComponent> {
             return ComponentBuilder("")
                     .append(customMsg).color(ChatColor.DARK_RED)
-                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Missing permission: '$permission'").create()))
+                    .event(
+                            HoverEvent(
+                                    HoverEvent.Action.SHOW_TEXT,
+                                    Text("Missing permission: '$permission'")
+                            )
+                    )
                     .create()
         }
 

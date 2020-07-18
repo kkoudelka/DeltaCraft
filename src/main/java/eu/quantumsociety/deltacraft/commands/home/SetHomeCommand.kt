@@ -9,6 +9,7 @@ import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.hover.content.Text
 import org.bukkit.Particle
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -73,10 +74,14 @@ class SetHomeCommand(private val configManager: HomesManager, private val plugin
                     .append(TextHelper.createActionButton(
                             ComponentBuilder("OVERWRITE")
                                     .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sethome $homeName$overrideString"))
-                                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder()
-                                            .append(TextHelper.infoText("Proceed to create home "))
-                                            .append(TextHelper.varText(homeName))
-                                            .append(TextHelper.infoText(".")).create()))
+                                    .event(
+                                            HoverEvent(
+                                                    HoverEvent.Action.SHOW_TEXT,
+                                                    Text(TextHelper.infoText("Proceed to create home ")),
+                                                    Text(TextHelper.varText(homeName)),
+                                                    Text(TextHelper.infoText("."))
+                                            )
+                                    )
                                     .create(), ChatColor.DARK_GREEN
                     ))
                     .append("")
