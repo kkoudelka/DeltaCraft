@@ -14,7 +14,9 @@ public enum Permissions {
     HOMELISTANYONE("home.list.all"),
     HOMEDELETE("home.delete"),
 
-    KAHYUSE("kahy.use");
+    KAHYUSE("kahy.use"),
+
+    ITEMFRAMEUSE("frame.use");
 
     private final String path;
 

@@ -26,6 +26,10 @@ commands:
   kahy:
     description: Protection against kahy
     usage: /kahy
+  inv:
+    description: Invisible item frames
+    usage: /inv
+    aliases: [frame, itemframe]
 permissions:
   delta.*:
     default: op
@@ -80,4 +84,10 @@ permissions:
         children:
           delta.kahy.use:
             description: Use protection against kahy
+            default: true
+      delta.frame.*:
+        default: op
+        children:
+          delta.frame.use:
+            description: Switch visibility of item frame
             default: true
