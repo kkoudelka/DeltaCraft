@@ -30,6 +30,10 @@ commands:
     description: Invisible item frames
     usage: /inv
     aliases: [frame, itemframe]
+  deltacraft:
+    description: Main command for DeltaCraft plugin
+    usage: /deltacraft
+    aliases: [delta]
 permissions:
   delta.*:
     default: op
@@ -90,4 +94,16 @@ permissions:
         children:
           delta.frame.use:
             description: Switch visibility of item frame
+            default: op
+      delta.main.*:
+        default: op
+        children:
+          delta.main.show:
+            description: Show config
+            default: op
+          delta.main.reload:
+            description: Reload config
+            default: op
+          delta.main.change:
+            description: Change config value
             default: op

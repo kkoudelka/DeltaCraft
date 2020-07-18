@@ -6,6 +6,7 @@ import eu.quantumsociety.deltacraft.commands.home.HomesCommand;
 import eu.quantumsociety.deltacraft.commands.home.SetHomeCommand;
 import eu.quantumsociety.deltacraft.commands.itemframe.InvCommand;
 import eu.quantumsociety.deltacraft.commands.kelp.KelpCommand;
+import eu.quantumsociety.deltacraft.commands.main.MainCommand;
 import eu.quantumsociety.deltacraft.commands.other.KahyCommand;
 import eu.quantumsociety.deltacraft.commands.spectate.SpectateCommand;
 import eu.quantumsociety.deltacraft.listeners.*;
@@ -67,6 +68,8 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Kahy command loaded");
         this.getCommand("inv").setExecutor(new InvCommand(this));
         debugMsg("ItemFrame command loaded");
+        this.getCommand("deltacraft").setExecutor(new MainCommand(this));
+        debugMsg("Main command loaded");
 
         // Events
         PluginManager plm = this.getServer().getPluginManager();

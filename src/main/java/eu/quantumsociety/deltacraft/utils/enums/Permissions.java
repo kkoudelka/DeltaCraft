@@ -16,7 +16,11 @@ public enum Permissions {
 
     KAHYUSE("kahy.use"),
 
-    ITEMFRAMEUSE("frame.use");
+    ITEMFRAMEUSE("frame.use"),
+
+    CONFIGSHOW("main.show"),
+    CONFIGRELOAD("main.reload"),
+    CONFIGCHANGE("main.change");
 
     private final String path;
 

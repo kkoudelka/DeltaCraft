@@ -26,7 +26,7 @@ public abstract class ConfigManager {
         saveDefaultConfig();
     }
 
-    public void reloadConfig() {
+    public void reloadAll() {
         if (configFile == null) {
             configFile = new File(plugin.getDataFolder(), fileName);
         }
@@ -42,7 +42,7 @@ public abstract class ConfigManager {
 
     public FileConfiguration getConfig() {
         if (dataConfig == null) {
-            reloadConfig();
+            reloadAll();
         }
         return dataConfig;
     }

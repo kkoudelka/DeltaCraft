@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 
-public abstract class CacheManager<TKey, T extends Object> {
+public abstract class CacheManager<TKey, T> {
     private boolean isLoaded;
     private final boolean needsLoad;
 
@@ -50,12 +50,10 @@ public abstract class CacheManager<TKey, T extends Object> {
         return this.cache.get(key);
     }
 
-    @NotNull
     public int getCount() {
         return this.cache.size();
     }
 
-    @NotNull
     public boolean contains(TKey key) {
         return this.cache.containsKey(key);
     }
@@ -81,5 +79,9 @@ public abstract class CacheManager<TKey, T extends Object> {
         if (!isLoaded) {
             throw new Exception("Manager is not loaded");
         }
+    }
+
+    protected void clearCache() {
+        this.cache.clear();
     }
 }
