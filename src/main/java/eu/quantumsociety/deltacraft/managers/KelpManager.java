@@ -62,7 +62,7 @@ public class KelpManager extends CacheConfigManager<KelpCacheManager> {
             KelpFarm region = new KelpFarm(one, two, key, uid);
             regions.put(key, region);
         }
-        this.plugin.debugMsg("Loaded " + regions.size() + " farms");
+        this.getManager().debugMsg("Loaded " + regions.size() + " farms");
         return regions;
     }
 

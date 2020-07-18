@@ -11,7 +11,7 @@ public abstract class CacheManager<TKey, T extends Object> {
     private boolean isLoaded;
     private final boolean needsLoad;
 
-    private final DeltaCraft plugin;
+    protected final DeltaCraft plugin;
 
     private HashMap<TKey, T> cache;
 

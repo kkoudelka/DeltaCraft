@@ -5,6 +5,7 @@ public enum Settings {
     END("settings.end"),
     SPECTATEMAXDISTANCE("settings.spectate.maxdistance"),
     HOMEMAXHOMES("settings.home.maxhomes"),
+    KELPDEBUG("settings.kelp.debug"),
     KELPMAXFARMS("settings.kelp.maxfarms"),
     KELPMAXDISTANCE("settings.kelp.maxdistance");
 

@@ -3,6 +3,7 @@ package eu.quantumsociety.deltacraft.managers.cache;
 import eu.quantumsociety.deltacraft.DeltaCraft;
 import eu.quantumsociety.deltacraft.classes.KelpFarm;
 import eu.quantumsociety.deltacraft.managers.templates.CacheManager;
+import eu.quantumsociety.deltacraft.utils.enums.Settings;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -13,8 +14,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class KelpCacheManager extends CacheManager<String, KelpFarm> {
+    private final boolean isDebug;
+
     public KelpCacheManager(DeltaCraft plugin) {
         super(plugin, true);
+
+        this.isDebug = plugin.getConfig().getBoolean(Settings.KELPDEBUG.getPath());
+    }
+
+    public boolean isDebug() {
+        return isDebug;
     }
 
     public void addItem(Location one, Location two,
@@ -73,4 +82,9 @@ public class KelpCacheManager extends CacheManager<String, KelpFarm> {
         return (int) count;
     }
 
+    public void debugMsg(String message) {
+        if (isDebug()) {
+            plugin.getServer().getLogger().info("[Kelp DEBUG]: " + message);
+        }
+    }
 }

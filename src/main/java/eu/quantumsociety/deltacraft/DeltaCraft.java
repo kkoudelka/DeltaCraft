@@ -92,8 +92,6 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("ItemFrame listener loaded");
 
         debugMsg("Loaded " + manager.getKelpCacheManager().getCount() + " kelp regions");
-
-//        super.onEnable();
     }
 
     @Override
@@ -136,7 +134,7 @@ public class DeltaCraft extends JavaPlugin {
         return this.isDebug;
     }
 
-    public void debugMsg(String message) {
+    private void debugMsg(String message) {
         if (isInDebug()) {
             getLogger().info("[Debug]: " + message);
         }
