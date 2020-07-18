@@ -22,21 +22,20 @@ Currently, Minecraft has a mechanic that won't allow kelp to grow after it reach
 - `/kelp create <name>` - Create a kelp farm in the selected area
 - `/kelp remove <name>` - Remove a kelp farm
 - `/kelp test` - Test whether you're currently standing in a kelp farm
-- `/kelp age` - Get age of kelp in front of you
+- `/kelp age` - Get the age of a kelp you're looking at
 
-### Features
-Features without commands:
+### Commandless Features
 
 #### Campfires
 Dispensers can put food in campfires.
 #### Composters
-__Rotten flesh__ can be composted in composters. (Even with hoppers)
+__Rotten flesh__ can be composted in composters.
 #### End protection
-Protection against forbidden End dimension entry.
+Players are forbidden from entering the end.
 #### Shulker drop
-Shulker drops 2 __shulker shell__ on death.
+Shulker drops 2 __shulker shells__ when killed.
 #### Spawners
-Spawners can be mined by pickaxe with __Silk touch__.
+Spawners will drop when mined with __Silk touch__.
 
 ## New features
 We'd love to hear your suggestions. Feel free to open an issue or text us using our Discord server.
