@@ -37,5 +37,9 @@ Shulker drops 2 __shulker shells__ when killed.
 #### Spawners
 Spawners will drop when mined with __Silk touch__.
 
+### Custom recipes
+#### Quartz
+__Nether quartz__ can be crafted from __Block of Quartz__.
+
 ## New features
 We'd love to hear your suggestions. Feel free to open an issue or text us using our Discord server.

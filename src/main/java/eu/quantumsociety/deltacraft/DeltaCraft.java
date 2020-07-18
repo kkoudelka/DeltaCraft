@@ -10,6 +10,7 @@ import eu.quantumsociety.deltacraft.commands.other.KahyCommand;
 import eu.quantumsociety.deltacraft.commands.spectate.SpectateCommand;
 import eu.quantumsociety.deltacraft.listeners.*;
 import eu.quantumsociety.deltacraft.managers.*;
+import eu.quantumsociety.deltacraft.recipes.QuartzRecipe;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -92,6 +93,10 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("ItemFrame listener loaded");
 
         debugMsg("Loaded " + manager.getKelpCacheManager().getCount() + " kelp regions");
+
+        // Recipes
+        QuartzRecipe.registerRecipe(this);
+        debugMsg("Quartz recipe registered");
     }
 
     @Override
