@@ -1,10 +1,7 @@
 package eu.quantumsociety.deltacraft.managers;
 
 import eu.quantumsociety.deltacraft.DeltaCraft;
-import eu.quantumsociety.deltacraft.managers.cache.AfkCacheManager;
-import eu.quantumsociety.deltacraft.managers.cache.FakePlayerManager;
-import eu.quantumsociety.deltacraft.managers.cache.KelpCacheManager;
-import eu.quantumsociety.deltacraft.managers.cache.SpectateCacheManager;
+import eu.quantumsociety.deltacraft.managers.cache.*;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
 
 public class DeltaCraftManager {
@@ -15,6 +12,7 @@ public class DeltaCraftManager {
     private final KelpCacheManager kelpCacheManager;
     private final SpectateCacheManager spectateCacheManager;
     private final AfkCacheManager afkCacheManager;
+    private final ItemFrameCacheManager itemFrameCacheManager;
     private final FakePlayerManager fakePlayerHelper;
 
     public DeltaCraftManager(DeltaCraft plugin) {
@@ -26,6 +24,7 @@ public class DeltaCraftManager {
         this.spectateCacheManager = new SpectateCacheManager(plugin);
         this.afkCacheManager = new AfkCacheManager(plugin);
         this.fakePlayerHelper = new FakePlayerManager(plugin);
+        this.itemFrameCacheManager = new ItemFrameCacheManager(plugin);
     }
 
     public KelpCacheManager getKelpCacheManager() {
@@ -42,6 +41,10 @@ public class DeltaCraftManager {
 
     public FakePlayerManager getFakePlayerManager() {
         return fakePlayerHelper;
+    }
+
+    public ItemFrameCacheManager getItemFrameCacheManager() {
+        return itemFrameCacheManager;
     }
 
     /**

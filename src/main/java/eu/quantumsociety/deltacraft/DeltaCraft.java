@@ -4,6 +4,7 @@ import eu.quantumsociety.deltacraft.commands.home.DelHomeCommand;
 import eu.quantumsociety.deltacraft.commands.home.HomeCommand;
 import eu.quantumsociety.deltacraft.commands.home.HomesCommand;
 import eu.quantumsociety.deltacraft.commands.home.SetHomeCommand;
+import eu.quantumsociety.deltacraft.commands.itemframe.InvCommand;
 import eu.quantumsociety.deltacraft.commands.kelp.KelpCommand;
 import eu.quantumsociety.deltacraft.commands.other.KahyCommand;
 import eu.quantumsociety.deltacraft.commands.spectate.SpectateCommand;
@@ -63,7 +64,9 @@ public class DeltaCraft extends JavaPlugin {
         this.getCommand("kelp").setExecutor(new KelpCommand(kelpConfigManager, this));
         debugMsg("Kelp farms loaded");
         this.getCommand("kahy").setExecutor(new KahyCommand(this));
-        debugMsg("Kahy commands loaded");
+        debugMsg("Kahy command loaded");
+        this.getCommand("inv").setExecutor(new InvCommand(this));
+        debugMsg("ItemFrame command loaded");
 
         // Events
         PluginManager plm = this.getServer().getPluginManager();
@@ -85,6 +88,8 @@ public class DeltaCraft extends JavaPlugin {
         debugMsg("Kahy protection listener loaded");
         plm.registerEvents(new UpdateCheckListener(this), this);
         debugMsg("UpdateCheck listener loaded");
+        plm.registerEvents(new ItemFrameListener(this), this);
+        debugMsg("ItemFrame listener loaded");
 
         debugMsg("Loaded " + manager.getKelpCacheManager().getCount() + " kelp regions");
 
