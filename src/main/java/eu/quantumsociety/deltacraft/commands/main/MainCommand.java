@@ -3,11 +3,18 @@ package eu.quantumsociety.deltacraft.commands.main;
 import eu.quantumsociety.deltacraft.DeltaCraft;
 import eu.quantumsociety.deltacraft.utils.TextHelper;
 import eu.quantumsociety.deltacraft.utils.enums.Permissions;
-import org.bukkit.ChatColor;
+import eu.quantumsociety.deltacraft.utils.enums.Settings;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,12 +32,12 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         this.plugin = plugin;
     }
 
-    private Permissions[] getAllPermissions() {
-        return Permissions.values();
+    private Settings[] getAllSettings() {
+        return Settings.values();
     }
 
-    private List<String> getAllPermissionKeys() {
-        return Arrays.stream(this.getAllPermissions()).map(x -> x.getPath()).collect(Collectors.toList());
+    private List<String> getAllSettingsKeys() {
+        return Arrays.stream(this.getAllSettings()).map(Settings::getPath).collect(Collectors.toList());
     }
 
     @Override
@@ -111,9 +118,11 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 
         String[] cmds = {"show", "reload", "change", "version"};
 
-        String typedIn = "";
+        String typedIn;
         if (args.length == 1) {
             typedIn = args[0].toLowerCase();
+        } else {
+            return list;
         }
 
         for (String cmd : cmds) {
@@ -163,6 +172,47 @@ public class MainCommand implements CommandExecutor, TabCompleter {
     }
 
     private void showCurrentSettings(Player p) {
-        // TODO: Show clickable current settings
+        p.spigot().sendMessage(TextHelper.getDivider());
+
+        FileConfiguration config = this.plugin.getConfig();
+        for (String key : getAllSettingsKeys()) {
+            String value = config.getString(key);
+            if (value == null || value.isEmpty()) {
+                value = "null";
+            }
+            String newVal = "";
+            if (value.equalsIgnoreCase("true")) {
+                newVal = "false";
+            }
+            if (value.equalsIgnoreCase("false")) {
+                newVal = "true";
+            }
+
+            BaseComponent[] toSend = new ComponentBuilder()
+                    .append(
+                            TextHelper.createActionButton(
+                                    new ComponentBuilder(value)
+                                            .event(
+                                                    new ClickEvent(
+                                                            ClickEvent.Action.SUGGEST_COMMAND, "/deltacraft change " + key + " " + newVal
+                                                    )
+                                            )
+                                            .event(
+                                                    new HoverEvent(
+                                                            HoverEvent.Action.SHOW_TEXT, new Text("Change value")
+                                                    )
+                                            )
+                                            .create(),
+                                    ChatColor.GREEN
+                            )
+                    )
+                    .append("   ")
+                    .reset()
+                    .append(key.replace("settings.", ""))
+                    .create();
+            p.spigot().sendMessage(toSend);
+        }
+
+        p.spigot().sendMessage(TextHelper.getDivider());
     }
 }
