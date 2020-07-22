@@ -98,6 +98,9 @@ permissions:
       delta.main.*:
         default: op
         children:
+          delta.main.version:
+            description: Show curent version
+            default: true
           delta.main.show:
             description: Show config
             default: op

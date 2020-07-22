@@ -4,10 +4,19 @@ import eu.quantumsociety.deltacraft.DeltaCraft;
 import eu.quantumsociety.deltacraft.managers.cache.*;
 import eu.quantumsociety.deltacraft.utils.enums.Settings;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class DeltaCraftManager {
     private final DeltaCraft plugin;
 
     private boolean endAccess;
+    private String newestVersion;
 
     private final KelpCacheManager kelpCacheManager;
     private final SpectateCacheManager spectateCacheManager;
@@ -53,4 +62,49 @@ public class DeltaCraftManager {
     public boolean getEndAccess() {
         return endAccess;
     }
+
+
+    /**
+     * @return The newest (cached) version on github
+     */
+    public String getNewestVersion() {
+        return newestVersion;
+    }
+
+    public String checkNewestVersion() {
+        StringBuilder builder = new StringBuilder();
+        HttpURLConnection connection = null;
+        try {
+            // TODO: Public repository
+            URL url = new URL("https://raw.githubusercontent.com/kkoudelka/DeltaCraft/master/VERSION");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(3000);
+
+            // Buffer
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                builder.append(line);
+            }
+            in.close();
+        } catch (MalformedURLException ex) {
+            this.plugin.getLogger().warning(ex.toString());
+            return "Url is not formatted correctly";
+        } catch (FileNotFoundException ex) {
+            return "Version file not found";
+        } catch (IOException ex) {
+            this.plugin.getLogger().warning(ex.toString());
+            return "Could not check version";
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+        String version = builder.toString();
+        this.newestVersion = version;
+        return version;
+    }
+
 }

@@ -18,7 +18,7 @@ public class UpdateCheckListener implements Listener {
 
     public UpdateCheckListener(DeltaCraft plugin) {
         this.localVersion = plugin.getDescription().getVersion();
-        this.newestVersion = plugin.getNewestVersion();
+        this.newestVersion = plugin.getManager().getNewestVersion();
     }
 
     @EventHandler(ignoreCancelled = true)

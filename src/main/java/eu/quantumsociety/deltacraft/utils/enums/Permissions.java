@@ -18,6 +18,7 @@ public enum Permissions {
 
     ITEMFRAMEUSE("frame.use"),
 
+    SHOWVERSION("main.version"),
     CONFIGSHOW("main.show"),
     CONFIGRELOAD("main.reload"),
     CONFIGCHANGE("main.change");
