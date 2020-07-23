@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class KelpCacheManager extends CacheManager<String, KelpFarm> {
-    private final boolean isDebug;
+    private boolean isDebug;
 
     public KelpCacheManager(DeltaCraft plugin) {
         super(plugin, true);
@@ -24,6 +24,13 @@ public class KelpCacheManager extends CacheManager<String, KelpFarm> {
 
     public boolean isDebug() {
         return isDebug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.isDebug = debug;
+
+        this.plugin.getConfig().set(Settings.KELPDEBUG.getPath(), this.isDebug);
+        this.plugin.saveConfig();
     }
 
     public void addItem(Location one, Location two,

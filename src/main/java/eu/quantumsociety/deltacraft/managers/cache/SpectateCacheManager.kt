@@ -12,7 +12,7 @@ import java.util.UUID
 class SpectateCacheManager : CacheManager<UUID, SpectatePlayer> {
     val correctionKey = "teleportCorrection"
     val teleportBackKey = "teleportBack"
-    val maxDistance: Double;
+    var maxDistance: Double
 
     constructor(plugin: DeltaCraft) : super(plugin, true) {
         maxDistance = plugin.config.getDouble(Settings.SPECTATEMAXDISTANCE.path)
@@ -33,4 +33,5 @@ class SpectateCacheManager : CacheManager<UUID, SpectatePlayer> {
     fun isPlayerSpectating(uuid: UUID): Boolean {
         return this.contains(uuid)
     }
+
 }

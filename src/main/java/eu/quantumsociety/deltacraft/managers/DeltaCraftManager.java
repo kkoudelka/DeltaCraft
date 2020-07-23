@@ -63,6 +63,12 @@ public class DeltaCraftManager {
         return endAccess;
     }
 
+    public void setEndAccess(boolean endAccess) {
+        this.endAccess = endAccess;
+
+        this.plugin.getConfig().set(Settings.END.getPath(), this.endAccess);
+        this.plugin.saveConfig();
+    }
 
     /**
      * @return The newest (cached) version on github

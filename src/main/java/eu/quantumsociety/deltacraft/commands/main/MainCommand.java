@@ -15,6 +15,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,62 +50,53 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 
         String cmd = args[0];
         if (cmd.equalsIgnoreCase("reload")) {
-            if (sender instanceof Player) {
-                Player p = (Player) sender;
-                if (!p.hasPermission(Permissions.CONFIGRELOAD.getPath())) {
-                    p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.CONFIGRELOAD));
-                    return true;
-                }
+            if (!sender.hasPermission(Permissions.CONFIGRELOAD.getPath())) {
+                sender.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.CONFIGRELOAD));
+                return true;
             }
-
             this.reloadConfig(sender);
             return true;
         }
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this commands");
-            return true;
-        }
-        Player p = (Player) sender;
         if (cmd.equalsIgnoreCase("version")) {
-            if (!p.hasPermission(Permissions.SHOWVERSION.getPath())) {
-                p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.SHOWVERSION));
+            if (!sender.hasPermission(Permissions.SHOWVERSION.getPath())) {
+                sender.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.SHOWVERSION));
                 return true;
             }
-            this.versionCommand(p);
+            this.versionCommand(sender);
             return true;
         }
         if (cmd.equalsIgnoreCase("help") || cmd.equalsIgnoreCase("?")) {
-            this.sendHelp(p);
+            this.sendHelp(sender);
             return true;
         }
         if (cmd.equalsIgnoreCase("change")) {
-            if (!p.hasPermission(Permissions.CONFIGCHANGE.getPath())) {
-                p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.CONFIGCHANGE));
+            if (!sender.hasPermission(Permissions.CONFIGCHANGE.getPath())) {
+                sender.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.CONFIGCHANGE));
                 return true;
             }
             if (args.length < 2 || args[1].isEmpty()) {
-                p.spigot().sendMessage(TextHelper.attentionText("Key is empty"));
+                sender.spigot().sendMessage(TextHelper.attentionText("Key is empty"));
                 return true;
             }
             if (args.length < 3 || args[2].isEmpty()) {
-                p.spigot().sendMessage(TextHelper.attentionText("Value is empty"));
+                sender.spigot().sendMessage(TextHelper.attentionText("Value is empty"));
                 return true;
             }
             String key = args[1];
             String newVal = args[2];
-            this.changeConfig(p, key, newVal);
+            this.changeConfig(sender, key, newVal);
             return true;
         }
         if (cmd.equalsIgnoreCase("show")) {
-            if (!p.hasPermission(Permissions.CONFIGSHOW.getPath())) {
-                p.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.CONFIGSHOW));
+            if (!sender.hasPermission(Permissions.CONFIGSHOW.getPath())) {
+                sender.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.CONFIGSHOW));
                 return true;
             }
-            this.showCurrentSettings(p);
+            this.showCurrentSettings(sender);
             return true;
         }
 
-
+        sender.sendMessage("This is not a valid command");
         return true;
     }
 
@@ -133,7 +125,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         return list;
     }
 
-    private void versionCommand(Player p) {
+    private void versionCommand(CommandSender p) {
         String localVersion = this.plugin.getDescription().getVersion();
         p.spigot().sendMessage(TextHelper.infoText("Current version: §a" + localVersion, net.md_5.bungee.api.ChatColor.WHITE));
 
@@ -145,7 +137,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         p.spigot().sendMessage(TextHelper.infoText("Newest version: §a" + newestVersion, net.md_5.bungee.api.ChatColor.WHITE));
     }
 
-    private void sendHelp(Player p) {
+    private void sendHelp(CommandSender p) {
         String text = "DeltaCraft main commands =========================\n";
         if (p.hasPermission(Permissions.SHOWVERSION.getPath())) {
             text += ChatColor.YELLOW + "/deltacraft version " + ChatColor.GREEN + " Show current version of the plugin \n";
@@ -167,11 +159,63 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         // TODO: Reload config
     }
 
-    private void changeConfig(Player p, String key, String value) {
-        // TODO: Check key and change value of settings
+    private void changeConfig(CommandSender p, String key, String value) {
+        if (!key.startsWith("settings.") && !key.startsWith("system.")) {
+            key = "settings." + key;
+        }
+
+        if (!getAllSettingsKeys().contains(key)) {
+            p.spigot().sendMessage(TextHelper.attentionText(key + " is not a valid config key "));
+            return;
+        }
+        boolean success = false;
+
+        // Boolean section
+        if (key.equalsIgnoreCase(Settings.DEBUG.getPath())) {
+            boolean newVal = this.getBoolean(value);
+            this.plugin.setDebug(newVal);
+            success = true;
+        }
+        if (key.equalsIgnoreCase(Settings.END.getPath())) {
+            boolean newVal = this.getBoolean(value);
+            this.plugin.getManager().setEndAccess(newVal);
+            success = true;
+        }
+        if (key.equalsIgnoreCase(Settings.KELPDEBUG.getPath())) {
+            boolean newVal = this.getBoolean(value);
+            this.plugin.getManager().getKelpCacheManager().setDebug(newVal);
+            success = true;
+        }
+
+        if (success) {
+            p.sendMessage(key + "'s value successfully changed to " + value);
+            return;
+        }
+
+        // Number parsing
+        if (!NumberUtils.isParsable(value)) {
+            p.sendMessage(value + " is not a valid number");
+            return;
+        }
+        int val = Integer.parseInt(value);
+        if (val < 0) {
+            p.sendMessage("Number cannot be negative number");
+            return;
+        }
+
+        // Number section
+        if (key.equalsIgnoreCase(Settings.SPECTATEMAXDISTANCE.getPath())) {
+            this.plugin.getManager().getSpectateCacheManager().setMaxDistance(val);
+        }
+
+        // Save config
+        this.plugin.getConfig().set(key, val);
+        this.plugin.saveConfig();
+
+        p.sendMessage(key + "'s value successfully changed to " + val);
     }
 
-    private void showCurrentSettings(Player p) {
+    private void showCurrentSettings(CommandSender p) {
         p.spigot().sendMessage(TextHelper.getDivider());
 
         FileConfiguration config = this.plugin.getConfig();
@@ -214,5 +258,15 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         }
 
         p.spigot().sendMessage(TextHelper.getDivider());
+    }
+
+    private boolean getBoolean(String value) {
+        if (value.equalsIgnoreCase("on")) {
+            return true;
+        }
+        if (value.equalsIgnoreCase("1")) {
+            return true;
+        }
+        return Boolean.parseBoolean(value);
     }
 }
