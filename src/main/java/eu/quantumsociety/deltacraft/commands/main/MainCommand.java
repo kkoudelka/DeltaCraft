@@ -69,7 +69,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             this.sendHelp(sender);
             return true;
         }
-        if (cmd.equalsIgnoreCase("change")) {
+        if (cmd.equalsIgnoreCase("change") || cmd.equalsIgnoreCase("set")) {
             if (!sender.hasPermission(Permissions.CONFIGCHANGE.getPath())) {
                 sender.spigot().sendMessage(TextHelper.insufficientPermissions(Permissions.CONFIGCHANGE));
                 return true;
@@ -219,8 +219,11 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         p.spigot().sendMessage(TextHelper.getDivider());
 
         FileConfiguration config = this.plugin.getConfig();
-        for (String key : getAllSettingsKeys()) {
+        for (Settings settings : getAllSettings()) {
+            String key = settings.getPath();
+            String description = settings.getDesc();
             String value = config.getString(key);
+
             if (value == null || value.isEmpty()) {
                 value = "null";
             }
@@ -250,9 +253,22 @@ public class MainCommand implements CommandExecutor, TabCompleter {
                                     ChatColor.GREEN
                             )
                     )
-                    .append("   ")
                     .reset()
-                    .append(key.replace("settings.", ""))
+                    .append(" - ")
+                    .append(
+                            new ComponentBuilder(description)
+                                    .color(ChatColor.YELLOW)
+                                    .event(
+                                            new HoverEvent(
+                                                    HoverEvent.Action.SHOW_TEXT,
+                                                    new Text(key.replace("settings.", ""))
+                                            )
+                                    )
+                                    .create()
+                    )
+                    .append(" ")
+                    .reset()
+                    .append(settings.getType())
                     .create();
             p.spigot().sendMessage(toSend);
         }
